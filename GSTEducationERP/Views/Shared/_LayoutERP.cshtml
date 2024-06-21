@@ -179,7 +179,48 @@
                             }
                         </li>
 
+                    } else if (staffPositionId == 7) 
+                    {
+                        <!-- Left navbar links -->
+                        <li class="nav-item">
+                            <!-- Left navbar links -->
+                            @if (ViewBag.Breadcrumbs != null)
+                            {
+                                <ol class="breadcrumb" style="background-color:transparent !important; margin-bottom:-7px !important">
+                                    @foreach (var breadcrumb in ViewBag.Breadcrumbs as List<GSTEducationERP.Controllers.AccountantController.BreadcrumbItem>)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            @if (!string.IsNullOrEmpty(breadcrumb.Url))
+                                            {
+                                                <a href="@breadcrumb.Url">@breadcrumb.Name</a>
+                                            } else
+                                            {
+                                                @breadcrumb.Name
+                                            }
+                                        </li>
+                                    }
+                                </ol>
+                            } else if (ViewBag.Breadcrumb != null)
+                            {
+                                <ol class="breadcrumb" style="background-color:transparent !important; margin-bottom:-7px !important">
+                                    @foreach (var breadcrumb in ViewBag.Breadcrumb as List<GSTEducationERP.Controllers.BindController.BreadcrumbItem>)
+                                    {
+                                        <li class="breadcrumb-item">
+                                            @if (!string.IsNullOrEmpty(breadcrumb.Url))
+                                            {
+                                                <a href="@breadcrumb.Url">@breadcrumb.Name</a>
+                                            } else
+                                            {
+                                                @breadcrumb.Name
+                                            }
+                                        </li>
+                                    }
+                                </ol>
+                            }
+                        </li>
+
                     }
+
 
                 }
             </ul>
