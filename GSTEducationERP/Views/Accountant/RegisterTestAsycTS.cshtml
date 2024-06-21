@@ -522,35 +522,7 @@
             <script src="~/Content/plugins/bootstrap/js/bootstrap.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.css" />
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.10.0/jquery.timepicker.min.js"></scri*@
-    <script>
-        $(document).ready(function () {
-            debugger
-            $("#CourseName").change(function () {
-                var id = $(this).val();
-                $("#SectionName").empty();
-                // alert("Course is selected!");
-                $.get("Section_BindTS", { CourseCode: id }, function (data) {
-                    var v = "<option>---Select---</option>";
-                    $.each(data, function (i, v1) {
-                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
-                    });
-                    $("#SectionName").html(v);
-                });
-            });
-            $("#SectionName").change(function () {
-                var id = $(this).val();
-                $("#TopicName").empty();
-                // alert("Section is selected!");
-                $.get("Topic_Bind", { SectionId: id }, function (data) {
-                    var v = "<option>---Select---</option>";
-                    $.each(data, function (i, v1) {
-                        v += "<option value=" + v1.Value + ">" + v1.Text + "</option>";
-                    });
-                    $("#TopicName").html(v);
-                });
-            });
-        });
-    </script>
+
 
 
 
