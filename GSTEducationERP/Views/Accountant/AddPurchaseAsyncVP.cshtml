@@ -1,0 +1,748 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+@{
+    ViewBag.Title = "AddPurchaseAsyncVP";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<html>
+<head>
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    <style>
+                .form-container {
+                    max-width: 500px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    background-color: #f8f8f8;
+                }
+                .dropdown-container {
+                    display: flex;
+                    align-items: center;
+                }
+
+                .form-group select {
+                    margin-right: 10px;
+                }
+
+                .dropdown-container {
+                    width: 300px;
+                    margin-bottom: 10px;
+                }
+
+                .dropdown-container label {
+                    display: block;
+                    margin-bottom: 5px;
+                }
+
+                .dropdown-container select {
+                    width: 100%;
+                    padding: 8px;
+                    box-sizing: border-box;
+                }
+                 
+        
+                .text-danger {
+                    color: #a94442;
+                }
+
+                .form-group label {
+                    display: block;
+                    margin-bottom: 5px;
+                }
+
+                .form-group div {
+                    margin-bottom: 10px;
+                }
+
+                 Additional styles for select element 
+                select.form-control {
+                    height: 34px;
+                }
+
+                 Additional styles for labels 
+                label.form-control {
+                    display: inline-block;
+                    width: 100%;
+                    padding: 8px;
+                    margin-bottom: 0;
+                    font-size: 14px;
+                    line-height: 1.42857143;
+                    color: #555;
+                    background-color: #fff;
+                    border: 1px solid #ccc;
+                    border-radius: 3px;
+                }
+
+                .comment-textarea {
+                    max-height: 100px;  /*Set maximum height */
+                resize: vertical;  /*Allow vertical resizing */
+                }
+
+                h2 {
+                    padding-top: 10px;
+                    margin-bottom: 10px;
+                    font-family: Verdana;
+                    font-weight: bold;
+                    font-size: medium;
+                    color: #33CCCC;
+                }
+
+                h3 {
+                    padding-top: 10px;
+                    margin-bottom: 10px;
+                    font-family: Verdana;
+                    text-align: center;
+                    font-weight: bold;
+                    font-size: medium;
+                    color: #33CCCC;
+                }
+
+                #paymentModeIsBank/*, #hideforever*/ {
+                    display: none;
+                }
+
+                #addexpbutton {
+                    align-self: center;
+                    text-align: center;
+                }
+    </style>
+    <style>
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #33CCCC;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th, td {
+            text-align: left;
+        }
+
+        .remove {
+            cursor: pointer;
+            color: red;
+        }
+    </style>
+</head>
+@*
+            miscelinus things
+                @Html.DropDownList("VendorName", (IEnumerable<SelectListItem>)ViewBag.CourseList, "Select Course", new { @class = "form-control", required = "required" })
+            <label class="control-label col-md-4" for="ItemQuantityVP">Quantity</label>
+        <input type="text" id="ItemQuantityVP" class="form-control col-md-8 datepicker" />
+        @Html.LabelFor(model => model.ItemName, htmlAttributes: new { @class = "control-label col-md-4" })
+    @Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control col-md-4" } })
+*@
+<body>
+    <br />
+    <form id="AddPurchaseFormVP" action="/Accountant/AddPurchaseAsyncVP" method="post" enctype="multipart/form-data">
+
+        <div class="card col-md-18 mx-auto p-3">
+            <h2>Add Purchase</h2>
+            @*hidden statuses or code needed for the purchaes*@
+            @Html.HiddenFor(model => model.TransactionCode)
+
+            @Html.HiddenFor(model => model.StatusId)
+            <hr>
+
+            @*1st row for the venodor and the date*@
+            <div class="row">
+                <div class="input-group col-md-6">
+                    <label for="VendorName" class="control-label col-md-4">Vendor Name: </label>
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.VendorName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="input-group col-md-6">
+                    @Html.LabelFor(model => model.TransactionDate, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.TransactionDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TransactionDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <br />
+            @*
+        items that are brough are here and down here willbe list for the items brough
+            *@
+            <h3>List Items of purchase </h3>
+            <div class="card py-4 col-md-10 mx-auto">
+                @*item name hsn code*@
+                <div class="row mb-4">
+                    <div class="input-group col-md-6">
+                        @Html.LabelFor(model => model.ItemName, htmlAttributes: new { @class = "control-label col-md-4" })
+                        @Html.EditorFor(model => model.ItemName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ItemName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="input-group col-md-6">
+                        @Html.LabelFor(model => model.HSNCode, htmlAttributes: new { @class = "control-label col-md-4" })
+                        @Html.EditorFor(model => model.HSNCode, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.HSNCode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*quantity unit price*@
+                <div class="row mb-4">
+                    <div class="input-group col-md-6">
+                        @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-4" })
+                        @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @class = "form-control", @id = "Quantity" } })
+                        @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="input-group col-md-6">
+                        @Html.LabelFor(model => model.UnitPrice, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <div class="input-group-prepend ">
+                            <select class="btn btn-warning dropdown-toggle" data-toggle="dropdown" style="width:103px" id="Currency" name="Currency" onclick="currrency()">
+                                <option value="&#8377;">INR</option>
+                                @*<option value="&cent;">CENT</option>*@
+                                <option value="&dollar;">USD</option>
+                                <option value="&pound;">POUND</option>
+                                <option value="&euro;">EURO</option>
+                                <option value="&yen;">YEN</option>
+                            </select>
+                        </div>
+                        <!-- /btn-group -->
+                        @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*discount tax*@
+                <div class="row">
+                    <div class="input-group col-md-6">
+                        @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-4" })
+                        @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="dropdown-container col-md-6">
+                        @Html.LabelFor(model => model.AppliedTax, htmlAttributes: new { @class = "control-label col-md-4" })
+                        <select class="form-control" id="AppliedTax" name="Applied Tax">
+                            <option value="0">Select Tax</option>
+                            <option value="18">SGST + CGST</option>
+                            <option value="18">IGST</option>
+                        </select>
+                        @*@Html.EditorFor(model => model.AppliedTax, new { htmlAttributes = new { @class = "form-control col-md-8 " } })*@
+                        @Html.ValidationMessageFor(model => model.AppliedTax, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*add button*@
+                <br />
+                <button type="button" class="btn" id="addexpbutton"><img src="~/Content/Admin/icon/Add.jpeg" style="height:50px; width:50px;" /> </button>
+
+                @*<input type="button" class="btn-primary btn-sm" value="Add" id="addexpbutton">*@
+                <br />
+                @*table for the items to save*@
+                <table class="table table-bordered" id="PurchaseItemTable">
+                    <thead>
+                        <tr>
+                            @*<th scope="col">Sr.No.</th>*@
+                            <th hidden scope="col">Transaction Code</th>
+                            <th scope="col">Item Name</th>
+                            <th scope="col">HSN Code</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Unit Price</th>
+                            <th scope="col">Discount</th>
+                            <th scope="col">AppliedTax</th>
+                            <th hidden scope="col">Tax</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="row" id="divptmDetails">
+                    <table id="tblpymtDtl" class="form-group col-md-4" style="margin-left:100px">
+                        <tr>
+                            <th>Amount :</th>
+                            <td id="currencyptm"></td>
+                            <td id="pymamt"> 0 </td>
+                        </tr>
+                        <tr>
+                            <th>Discount :</th>
+                            <td id="currencyptm1"></td>
+                            <td id="pymdiscount"> 0</td>
+                        </tr>
+                        <tr>
+                            <th>Tax Amount :</th>
+                            <td id="currencyptm2"></td>
+                            <td id="pymtotaltax">  0</td>
+                        </tr>
+                        <tr>
+                            <th>Total Amount :</th>
+                            <td id="currencyptm3"></td>
+                            <td id="pymtotalamt"> 0</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            @*3rd row for the amount  and Payment mode*@
+            <div class="row">
+                <div class="input-group col-md-6">
+                    @Html.LabelFor(model => model.TransactionAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+
+                    <div class="input-group-prepend ">
+                        <select class="btn btn-warning dropdown-toggle" data-toggle="dropdown" style="width:103px" id="Currency1" name="Currency">
+                            <option value="&#8377;">INR</option>
+                            @*<option value="&cent;">CENT</option>*@
+                            <option value="&dollar;">USD</option>
+                            <option value="&pound;">POUND</option>
+                            <option value="&euro;">EURO</option>
+                            <option value="&yen;">YEN</option>
+                        </select>
+                    </div>
+                    @Html.EditorFor(model => model.TransactionAmount, new { htmlAttributes = new { @class = "form-control",@onfocusout = "calculateBalance()" } })
+                    @Html.ValidationMessageFor(model => model.TransactionAmount, "", new { @class = "text-danger" })
+
+                </div>
+                <div class="dropdown-container col-md-6">
+                    @Html.LabelFor(model => model.PaymentMode, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        <select class="form-control" id="PaymentMode" name="Payment Mode">
+                            <option value="">-Select-</option>
+                            <option value="CASH">CASH</option>
+                            <option value="BANK">BANK</option>
+                        </select>
+                        @Html.ValidationMessageFor(model => model.PaymentMode, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <br />
+            @*4rth row for balance amount and the status *@
+            <div id="hideforever">
+                <div class="input-group col-md-6">
+                    @Html.LabelFor(model => model.BalanceAmount, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.BalanceAmount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.BalanceAmount, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="dropdown-container col-md-6">
+                    @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("StatusId", (IEnumerable<SelectListItem>)ViewBag.StatusId, new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            @*5rth row if Payment mode is bank then this div will be visible *@
+            <div id="paymentModeIsBank">
+                <div class="input-group col-md-6">
+                    @Html.LabelFor(model => model.TranId_CheqNo, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.EditorFor(model => model.TranId_CheqNo, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TranId_CheqNo, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="dropdown-container col-md-6">
+                    @Html.LabelFor(model => model.BankId, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-8">
+                        @Html.DropDownList("BankId", (IEnumerable<SelectListItem>)ViewBag.BankId, "Select Bank", new { @class = "form-control", required = "required" })
+                        @Html.ValidationMessageFor(model => model.BankId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            @* description box for the purchase*@
+            <div class="form-group col-md-12">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 2, required = "required", maxlength = "50" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group" style="text-align: center;">
+                <input type="submit" value="Save" class="btn btn-success" id="SaveButton" onclick="submitForm()">
+                <a href="@Url.Action("DetailsPurchaseItemsAsyncVP")" class="btn btn-danger">Cancel</a>
+
+            </div>
+            <div>
+                <a href="@Url.Action("DetailsPurchaseItemsAsyncVP")" class="back-link">
+                    <video width="30" height="30" playsinline loop>
+                        <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
+                    </video>
+                </a>
+            </div>
+        </div>
+</form>
+
+
+
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/toastr/toastr.min.js"></script>
+    <link rel="stylesheet" href="~/Content/plugins/toastr/toastr.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        @*this is load here*@
+        $(document).ready(function () {
+            currrency();
+            enable();
+        });
+    </script>
+    <script>
+        document.getElementById('PaymentMode').addEventListener('change', function () {
+            var paymentMode = this.value;
+            var bankDiv = document.getElementById('paymentModeIsBank');
+
+            if (paymentMode === 'BANK') {
+                bankDiv.style.display = 'flex';
+            } else {
+                bankDiv.style.display = 'none';
+            }
+        });
+        function currrency() {
+            
+            let currrency = $('#Currency').val();
+            $('#Currency1').val(currrency);
+            document.getElementById("currencyptm").innerText = currrency;
+            document.getElementById("currencyptm1").innerText = currrency;
+            document.getElementById("currencyptm2").innerText = currrency;
+            document.getElementById("currencyptm3").innerText = currrency;
+            $('#currencyptm').val(currrency);
+        };
+        function disable() {
+            document.getElementById("Currency1").disabled = true;
+            document.getElementById("Currency").disabled = true;
+        }
+        function enable() {
+            document.getElementById("Currency1").disabled = false;
+            document.getElementById("Currency").disabled = false;
+        }
+    </script>
+    
+    @*
+        validations here---------------------------------------------------------------------------------------------
+    *@
+
+    <script>
+        $(document).ready(function () {
+            $('#Quantity').on('input', function () {
+                var enteredValue = $(this).val();
+                // Remove non-numeric characters except for the decimal point
+                var numericValue = enteredValue.replace(/[^\d.]/g, '');
+                
+                // Update the CTC input field with the entire value (including "LPA") only if there is a non-empty numeric value
+                $('#Quantity').val(numericValue !== '' ? numericValue : '');
+            });
+
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#UnitPrice').on('input', function () {
+                var enteredValue = $(this).val();
+                // Remove non-numeric characters except for the decimal point
+                var numericValue = enteredValue.replace(/[^\d.]/g, '');
+                const currrency = $('#Currency').val();
+               
+                $('#UnitPrice').val(numericValue !== '' ? numericValue : '');
+                $('.currencyptm').val(currrency !== '' ? currrency : '');
+
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#Discount').on('input', function () {
+                var enteredValue = $(this).val();
+                // Remove non-numeric characters except for the decimal point
+                var numericValue = enteredValue.replace(/[^\d.]/g, '');
+
+                // Update the CTC input field with the entire value (including "LPA") only if there is a non-empty numeric value
+                $('#Discount').val(numericValue !== '' ? numericValue : '');
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Function to clear all input fields
+            function clearFields() {
+                $('#VendorName').text(''); // Clear  label
+                $('#UnitPrice').text(''); // Clear e label
+                $('#ItemName').text(''); // Clear  label
+                $('#Quantity').text(''); // Clear
+                $('#TransactionDate').val(''); // Clear
+                $('#Discount').text(''); // Clear
+                $('#Description').val(''); // Clear
+                /*$('.').val('');*/ // Clear
+            }
+            // Event handler for CourseName change
+            $('#Course').change(function () {
+                clearFields(); // Call the clearFields function to reset all fields
+            });
+            $('#StudentName').change(function () {
+                clearFields(); // Call the clearFields function to reset all fields
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            calculateTotals();
+            calculateBalance();
+        });
+
+        function calculateTotals() {
+            let totalPrice = 0;
+            let totalDiscount = 0;
+            let totalTax = 0;
+            let tamount = 0;
+            const rows = document.querySelectorAll("#PurchaseItemTable tbody tr");
+            rows.forEach(row => {
+                const price = parseFloat(row.querySelector(".UnitPrice").innerText);
+                const quantity = parseInt(row.querySelector(".Quantity").innerText);
+                const discount = parseFloat(row.querySelector(".Discount").innerText);
+                const tax = parseFloat(row.querySelector(".itemTax").innerText);
+
+                const itemTotal = price * quantity;
+                const itemDiscount = itemTotal * (discount / 100);
+                const itemTax = itemTotal * (tax / 100);
+
+                totalPrice += itemTotal;
+                totalDiscount += itemDiscount;
+                totalTax += itemTax;
+                 tamount = (totalPrice - itemDiscount) + itemTax;
+            });
+
+            document.getElementById("pymamt").innerText = totalPrice.toFixed(2);
+            document.getElementById("pymdiscount").innerText = totalDiscount.toFixed(2);
+            document.getElementById("pymtotaltax").innerText = totalTax.toFixed(2);
+            document.getElementById("pymtotalamt").innerText = tamount.toFixed(2);
+
+        }
+        function calculateBalance() {
+            debugger;
+            let balamount = 0;
+            const Totalamount = parseFloat(document.getElementById("pymtotalamt").innerText);
+            const Paidamount = $("#TransactionAmount").val();
+            if (Paidamount == Totalamount) {
+                document.getElementById("BalanceAmount").innerText = 0;
+                document.getElementsByName('BalanceAmount')[0].value = 0;
+                document.getElementsByName('StatusId')[0].value = 66;
+                document.getElementById("StatusId").innerText = 66;
+            }
+            else {
+                debugger;
+                balamount = Totalamount - Paidamount;
+                document.getElementById("BalanceAmount").innerText = balamount.toFixed(2);
+                document.getElementsByName('BalanceAmount')[0].value = balamount;
+                document.getElementsByName('StatusId')[0].value = 6;
+                document.getElementById("StatusId").innerText = 6;
+            }
+        }
+
+    </script>
+    <script type="text/javascript">
+        var studentDetailsModels = []; // Declare the array globally
+        $(document).ready(function () {
+            $("#addexpbutton").click(function () {
+                SaveItems();
+                disable();
+                // updateButtonState(); // Enable the Save button after calling SaveExperience
+            });
+        });
+        // remove the row on click
+        $('#PurchaseItemTable').on('click', '.remove', function () {
+           
+            $(this).closest('tr').remove();
+            calculateTotals();
+            var table = document.getElementById("PurchaseItemTable");
+            var length = table.tBodies[0].rows.length;;
+            if (length == 0) {
+                enable();
+            }
+        });
+        function SaveItems() {
+           
+            // Get values from modal form
+            var TransactionCode = $("#TransactionCode").val();
+            var ItemName = $("#ItemName").val();
+            var HSNCode = $("#HSNCode").val();
+            var Quantity = $("#Quantity").val();
+            var UnitPrice = $('#UnitPrice').val();
+            var Discount = $('#Discount').val();
+            var AppliedTax = $('#AppliedTax option:selected').text();
+            var Tax = $('#AppliedTax').val();
+            //var Experience = $('#Experience').val();
+            //var JobType = $('#JobType').val();
+
+            //Validation for required fields
+            if (!TransactionCode || !ItemName || !HSNCode || !Quantity || !UnitPrice || !Discount || !AppliedTax) {
+                // Show validation error
+                Swal.fire({
+                    title: 'Validation Error',
+                    text: 'Please fill in all the required fields.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Append a row to the table
+
+            $("#PurchaseItemTable tbody").append(
+                '<tr>' +
+                /*'<td>' + serialNumber + '</td>' +*/
+                '<td hidden class="TransactionCode">' + TransactionCode + '</td>' +
+                '<td class="ItemName">' + ItemName + '</td>' +
+                '<td class="HSNCode">' + HSNCode + '</td>' +
+                '<td class="Quantity">' + Quantity + '</td>' +
+                '<td class="UnitPrice">' + UnitPrice + '</td>' +
+                '<td class="Discount">' + Discount + '</td>' +
+                '<td class="AppliedTax">' + AppliedTax + '</td>' +
+                '<td hidden class="itemTax">' + Tax + '</td>' +
+                '<td class="remove">' + "X" + '</td>' +
+                '</tr>'
+            );
+            calculateTotals();
+            // Clear the input fields
+            $('#ItemName').val("");
+            $('#HSNCode').val("");
+            $('#Quantity').val("");
+            $("#UnitPrice").val("");
+            $("#Discount").val("");
+            $("#AppliedTax").val("");
+        }
+        //function updateButtonState() {
+        //    const saveButton = $(".btn-success");
+        //    saveButton.prop('disabled', currentStep !== 3);
+        //}
+        function submitForm() {
+            // Show confirmation alert before proceeding
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to submit the form data?',
+                icon: 'information',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit it!',
+                cancelButtonText: 'No, cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var PurchaseItemsVPModels = [];
+                    $("#PurchaseItemTable tbody tr").each(function () {
+                        var TransactionCode = $('#TransactionCode').val();
+                        var ItemName = $(this).find(".ItemName").text();
+                        var HSNCode = $(this).find(".HSNCode").text();
+                        var Quantity = $(this).find(".Quantity").text();
+                        var UnitPrice = $(this).find(".UnitPrice").text();
+                        var Discount = $(this).find(".Discount").text();
+                        var AppliedTax = $(this).find(".AppliedTax").text();
+
+                        var PurchaseItemsVP = {
+                            TransactionCode: TransactionCode,
+                            ItemName: ItemName,
+                            HSNCode: HSNCode,
+                            Quantity: Quantity,
+                            UnitPrice: UnitPrice,
+                            Discount: Discount,
+                            AppliedTax: AppliedTax
+                        };
+
+                        PurchaseItemsVPModels.push(PurchaseItemsVP);
+                    });
+                    debugger;
+                    var formData = new FormData(document.getElementById('AddPurchaseFormVP'));
+                    formData.append('PaymentMode', $('#PaymentMode').val());
+                    formData.append('BalanceAmount', $('#BalanceAmount').val());
+                    formData.append('StatusId', $('#StatusId').val());
+                   
+                    // Create an array to store the promises
+                    var promises = [];
+                    // Check if both form data and JSON data are filled
+                    if (jsonDataNotEmpty(PurchaseItemsVPModels)) {
+                        console.log("Form Data:", formData);
+                        console.log("JSON Data:", PurchaseItemsVPModels);
+
+                        // First AJAX call
+                        var ajax1 = $.ajax({
+                            type: 'POST',
+                            url: '/Accountant/AddPurchaseAsyncVP',
+                            data: formData,
+                            contentType: false,
+                            processData: false
+                        });
+                        promises.push(ajax1);
+
+                        // Second AJAX call
+                        var ajax2 = $.ajax({
+                            url: '/Accountant/AddPurchaseItemAsyncVP',
+                            type: 'POST',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ PurchaseItemsAsyncVP: PurchaseItemsVPModels })
+                        });
+                        promises.push(ajax2);
+
+                        //// Use Promise.all to wait for both promises to complete
+                        //Promise.all(promises)
+                        //    .then(function (responses) {
+                        //        // Handle success for both AJAX calls
+                        //        var response1 = responses[0];
+                        //        var response2 = responses[1];
+
+                        //        console.log('Form submitted successfully:', response1);
+                        //        console.log(response2);
+
+                        //        // Display success SweetAlert
+                        //        Swal.fire({
+                        //            title: 'Success!',
+                        //            text: 'Purchase Completed successfully.',
+                        //            icon: 'success',
+                        //            confirmButtonText: 'OK'
+                        //        }).then((result) => {
+                        //            if (result.isConfirmed) {
+                        //                // Optionally, you can redirect the user or perform other actions here
+                        //                // For example, you can reload the page
+                        //                location.reload();
+                        //            }
+                        //        });
+                        //    })
+                        //    .catch(function (error) {
+                        //        // Handle errors
+                        //        console.error('Error submitting form:', error);
+                        //        // Display error SweetAlert
+                        //        Swal.fire({
+                        //            title: 'Error!',
+                        //            text: 'Registration failed. Please try again.',
+                        //            icon: 'error',
+                        //            confirmButtonText: 'OK'
+                        //        });
+                        //    });
+                    //} else {
+                    //    // Show validation error
+                    //    Swal.fire({
+                    //        title: 'Validation Error',
+                    //        text: 'Please fill in the required fields.',
+                    //        icon: 'error',
+                    //        confirmButtonText: 'OK'
+                    //    });
+                    }
+                }
+            });
+        }
+
+        // Function to check if JSON data is not empty
+        function jsonDataNotEmpty(studentDetailsModels) {
+            return studentDetailsModels.length > 0;
+        }
+    </script>
+</body>
+</html >

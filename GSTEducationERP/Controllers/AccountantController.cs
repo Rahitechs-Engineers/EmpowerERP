@@ -16,6 +16,7 @@ namespace GSTEducationERP.Controllers
     public class AccountantController : Controller
     {
         private readonly BALAccountant objbal = new BALAccountant();
+        private readonly Accountant objac = new Accountant();
         public class BreadcrumbItem
         {
             public string Name { get; set; }
@@ -317,5 +318,193 @@ namespace GSTEducationERP.Controllers
             }
             
         }
+        //------------------------------------Vishal's Purchase Modules strts here------------------------------------------------------------
+        [HttpGet]
+        public ActionResult AccountantDashboardAsyncVP()
+        {
+            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+             {
+                new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncVP" },
+                //new BreadcrumbItem { Name = "Purchase", Url = "DetailsPurchaseItemsAsyncVP" },
+             };
+            ViewBag.Breadcrumbs = breadcrumbs;
+            return View("AccountantDashboardAsyncVP");
+        }
+        [HttpGet]
+        public async Task<ActionResult> DetailsPurchaseItemsAsyncVP()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return await Task.Run(() => RedirectToAction("Login", "Account"));
+            }
+            else
+            {
+                try
+                {
+                    objac.BranchCode = Session["BranchCode"].ToString();
+                    objac.StaffCode = Session["StaffCode"].ToString();
+                    //ViewBag.Induastry = await objBalaccountant.GetInduastryPB();
+                    ViewBag.Purchase = await objbal.ListPurchasesAsyncVP(objac);
+                    List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+            {
+            new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncVP" },
+            new BreadcrumbItem { Name = "Purchase", Url = "DetailsPurchaseItemsAsyncVP" },
+            };
+                    ViewBag.Breadcrumbs = breadcrumbs;
+                }
+                catch (Exception ex)
+                {
+                    throw (ex);
+                }
+                return await Task.Run(() => View("DetailsPurchaseItemsAsyncVP"));
+
+            }
+        }
+        [HttpGet]
+        public async Task<ActionResult> AddPurchaseAsyncVP()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                try
+                {
+                    objac.BranchCode = Session["BranchCode"].ToString();
+                    objac.StaffCode = Session["StaffCode"].ToString();
+                    //breadcrumbs here
+                    List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+                {
+
+            new BreadcrumbItem { Name = "Dashboard", Url =Url.Action("AccountantDashboardAsyncVP", "Accountant")  },
+            new BreadcrumbItem { Name = "Purchase", Url = Url.Action("DetailsPurchaseItemsAsyncVP","Accountant") },
+            new BreadcrumbItem { Name = "Add Purchase", Url = Url.Action("AddPurchaseAsyncVP", "Accountant") },
+                };
+                    ViewBag.Breadcrumbs = breadcrumbs;
+                    //getting the last purchase code and making increment to it and inserting it to database
+                    objac.TransactionCode = await GetPurchaseCoedAsyncVP(objac);
+                    //fetching the banks here for the add purchase 
+                    ViewBag.BankId = await ListBankAsyncVP(objac);
+                    //fetching the status here i don't know why
+                    ViewBag.StatusId = await ListStatusAsyncVP();
+                    //setting the date by default todays
+                    objac.TransactionDate = DateTime.Now;
+                    return await Task.Run(() => PartialView("AddPurchaseAsyncVP", objac));
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = "An error occurred while processing the request." + ex;
+                    return View("Error");
+                }
+            }
+        }
+        /*
+         * Param.Add("@TransactionCode", ObjA.TransactionCode);
+            Param.Add("@VendorName", ObjA.VendorName);
+            Param.Add("@TransactionDate", ObjA.TransactionDate.ToString("d"));
+            Param.Add("@TransactionAmount", ObjA.TransactionDate.ToString());
+            Param.Add("@BalanceAmount", ObjA.BalanceAmount.ToString());
+            Param.Add("@PaymentMode", ObjA.PaymentMode);
+            Param.Add("@TranId_CheqNo", ObjA.TranId_CheqNo);
+            Param.Add("@BankId", ObjA.TransactionDate.ToString());//our bank from which the amount debited
+            Param.Add("@LogInStaffCode", ObjA.StaffCode);
+            Param.Add("@StatusId", ObjA.StatusId.ToString());//completed-66 or pending-6
+            Param.Add("@Description", ObjA.Description);
+         */
+        [HttpPost]
+        public async Task<ActionResult> AddPurchaseAsyncVP(Accountant objac)
+        {
+            //saving the details to database about the purchase
+            try
+            {
+                objac.StaffCode = Session["StaffCode"].ToString();
+                await objbal.SaveAddPurchaseAsyncVP(objac);
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+            return await Task.Run(() => RedirectToAction("DetailsPurchaseItemsAsyncVP"));
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddPurchaseItemAsyncVP(List<Accountant> PurchaseItemsAsyncVP)
+        {
+            //saving the details to database about the purchase
+            Accountant objpi = new Accountant();
+            foreach (var item in PurchaseItemsAsyncVP)
+            {
+                objpi.TransactionCode = item.TransactionCode;
+                objpi.ItemName = item.ItemName;
+                objpi.Quantity = item.Quantity;
+                objpi.HSNCode = item.HSNCode;
+                objpi.UnitPrice = item.UnitPrice;
+                objpi.Discount = item.Discount;
+                objpi.AppliedTax = item.AppliedTax;
+                await objbal.SaveAddPurchasedItemsAsyncVP(objpi);
+            }
+            return await Task.Run(() => RedirectToAction("DetailsPurchaseItemsAsyncVP"));
+        }
+        [HttpGet]
+        public async Task<ActionResult> ViewPurchaseAsyncVP()
+        {
+            return await Task.Run(() => PartialView("ViewPurchaseAsyncVP"));
+        }
+        [HttpGet]
+        public async Task<ActionResult> UpdatePurchaseAsyncVP(string TransactionCode)
+        {
+            return await Task.Run(() => PartialView("AddPurchaseAsyncVP", objac));
+        }
+        /// <summary>
+        /// fetching the banks here any bropdown in purchase i need
+        /// </summary>
+        /// <param name="Bank"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<List<SelectListItem>> ListBankAsyncVP(Accountant obj)
+        {
+            obj.BranchCode = Session["BranchCode"].ToString();
+            //fetching the banks here for the add purchase 
+            DataSet ds = await objbal.ListBankAsyncVP(obj);
+            List<SelectListItem> BankList = new List<SelectListItem>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                BankList.Add(new SelectListItem { Text = dr["BankName"].ToString(), Value = dr["BankId"].ToString() });
+            }
+            return BankList;
+        }
+        /// <summary>
+        /// fetching the last purchase code and making the increment by 1 and sending it to add purchase form
+        /// </summary>
+        /// <param name="PurchaseCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<string> GetPurchaseCoedAsyncVP(Accountant obj)
+        {
+            obj.BranchCode = Session["BranchCode"].ToString();
+            obj.StaffCode = Session["StaffCode"].ToString();
+            string newPurchaseCode = await objbal.GetTaskPurchaseCode(obj);
+            return newPurchaseCode;
+        }
+        /// <summary>
+        /// fetching the status here any bropdown in purchase i need
+        /// </summary>
+        /// <param name="Bank"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<List<SelectListItem>> ListStatusAsyncVP()
+        {
+            //obj.BranchCode = Session["BranchCode"].ToString();
+            //fetching the banks here for the add purchase 
+            DataSet ds = await objbal.ListStatusAsyncVP();
+            List<SelectListItem> BankList = new List<SelectListItem>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                BankList.Add(new SelectListItem { Text = dr["Status"].ToString(), Value = dr["StatusId"].ToString() });
+            }
+            return BankList;
+        }
+        //------------------------------------Vishal's Purchase Modules ends here------------------------------------------------------------
     }
 }
