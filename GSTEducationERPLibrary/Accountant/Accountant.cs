@@ -37,6 +37,7 @@ namespace GSTEducationERPLibrary.Accountant
         public string StaffCode { get; set; }
         public int StatusId { get; set; }
         public List<Accountant> lstVoucher { get; set; }
+	public List<Accountant> lstPendingVoucher { get; set; }
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
 
     }
