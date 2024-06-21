@@ -40,5 +40,23 @@ namespace GSTEducationERPLibrary.Accountant
 	public List<Accountant> lstPendingVoucher { get; set; }
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
 
+
+        //------------------Shrikant StaffPayRoll Start ----------------------------------------------------------//
+
+        public string StaffName { get; set; }
+        public string DepartmentName { get; set; }
+        public string Designation { get; set; }
+        public string BankName { get; set; }
+        public long AccountNo { get; set; }
+        public string IFSCCode { get; set; }
+        public Double GrossSalary { get; set; }
+        public List<Accountant> lstEmp { get; set; }
+        public List<Accountant> DepartmentList { get; set; }
+        public int DepartmentID { get; set; }
+
+
+        //------------------Shrikant StaffPayRoll End ----------------------------------------------------------//
+
+
     }
 }

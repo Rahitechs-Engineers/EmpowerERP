@@ -119,5 +119,26 @@ namespace GSTEducationERPLibrary.Accountant
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
+
+        //------------------Shrikant StaffPayRoll Start ----------------------------------------------------------//
+
+        public async Task<DataSet> StaffListSSAsync(string BranchCode)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "StaffListSSAsync");
+            Param.Add("@BranchCode", BranchCode);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+        public async Task<DataSet> DeparmentBindSSAsync()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "DeparmentBindSSAsync");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+        //------------------Shrikant StaffPayRoll End ----------------------------------------------------------//
+
     }
 }

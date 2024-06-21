@@ -23,6 +23,8 @@ namespace GSTEducationERP.Controllers
         }
 
         // GET: Accountant
+
+
         public ActionResult AccountantDashboardAsyncSGS()
         {
             return View();
@@ -317,5 +319,125 @@ namespace GSTEducationERP.Controllers
             }
             
         }
+
+        //-----------------Shrikant StaffPayRoll Start -----------------------------------------------------------------------//
+
+        /// <summary>
+        /// This method is Used for just checking user is loged or not 
+        /// if loged than show main view of staff payRoll
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> GetStaffForPaySSAsync()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
+            new BreadcrumbItem { Name = "StaffPayRoll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") }
+        };
+
+                ViewBag.Breadcrumbs = breadcrumbs;
+
+                return View();
+            }
+        }
+
+        /// <summary>
+        /// This method is Partial View of StaffDetailes Page
+        /// we call this method when page is load
+        /// </summary>
+        /// <returns> partial View</returns>
+        public async Task<ActionResult> ListOfStaffSSAsync()
+        {
+            /*            this.DepartmentID = DepartmentID;
+            */
+            List<Accountant> model = await StaffBindSSAsync();
+            await DeparmentBindSSAsync();
+            Accountant obj = new Accountant();
+            obj.lstEmp = model;
+            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
+            new BreadcrumbItem { Name = "StaffPayRoll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
+            new BreadcrumbItem { Name = "ListOFStaff", Url = Url.Action("_ListOfStaffSSAsync", "Accountant") }
+        };
+
+            ViewBag.Breadcrumbs = breadcrumbs;
+            return PartialView("_ListOfStaffSSAsync", obj);
+
+        }
+
+        /// <summary>
+        /// This is nonAction method used for jst get List of Staff
+        /// </summary>
+        /// <returns>List</returns>
+
+        [HttpGet]
+        private async Task<List<Accountant>> StaffBindSSAsync()
+        {
+
+            string BranchCode = Session["BranchCode"].ToString();
+            DataSet ds = await objbal.StaffListSSAsync(BranchCode);
+            List<Accountant> AllStaff = new List<Accountant>();
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+
+
+                    Accountant objP = new Accountant
+                    {
+                        DepartmentID = Convert.ToInt32(dr["DepartmentId"]),
+                        StaffName = dr["Staff Name"].ToString(),
+                        DepartmentName = dr["Department"].ToString(),
+                        Designation = dr["Designation"].ToString(),
+                        BankName = dr["Bank"].ToString(),
+                        AccountNo = Convert.ToInt64(dr["Account Number"].ToString()),
+                        IFSCCode = dr["IFSCCode"].ToString(),
+                        GrossSalary = Convert.ToInt64(dr["GrossSalary"])
+                    };
+                    AllStaff.Add(objP);
+
+
+                }
+            }
+            return AllStaff;
+        }
+
+        [HttpGet]
+        private async Task DeparmentBindSSAsync()
+        {
+            DataSet ds = await objbal.DeparmentBindSSAsync();
+            List<SelectListItem> DepList = new List<SelectListItem>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                DepList.Add(new SelectListItem
+                {
+                    Text = dr["DepartmentName"].ToString(),
+                    Value = dr["DepartmentId"].ToString()
+                });
+            }
+            ViewBag.Department = new SelectList(DepList, "Value", "Text");
+            ViewBag.StateList = new List<SelectListItem>();
+        }
+
+        /*public async Task<ActionResult> WithIdListOfStaffSSAsync(int DepartmentID)
+        {
+            if (DepartmentID == 0)
+            {
+                return PartialView("_ListOfStaffSSAsync", Globalobjlist);
+
+            }
+
+        }*/
+
+
+
     }
 }
