@@ -40,5 +40,36 @@ namespace GSTEducationERPLibrary.Accountant
 	public List<Accountant> lstPendingVoucher { get; set; }
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
 
+        //--------------------------Siddhi Cheque Details Start--------------------------------------------------------//
+        public List<Accountant> lstChequeExpense { get; set; }
+        public List<Accountant> lstChequeReceipt { get; set; }
+        public string TransactionCode { get; set; }
+        public DateTime TransactionDate { get; set; }
+        public string ChequeNumber { get; set; }
+        public DateTime ChequeDate { get; set; }
+        public string Name { get; set; }
+        //public long Amount { get; set; }
+        public DateTime ChequeClearanceDate { get; set; }
+        public string branchcode { get; set; }
+        public string ProvisionalReceiptNo { get; set; }
+        public DateTime ReceiptDate { get; set; }
+        public string EnrollmentNumber { get; set; }
+        public string Batch { get; set; }
+        //public string PaymentMode { get; set; }
+        //public string TransactionId { get; set; }
+        public decimal Discount { get; set; }
+        public decimal RemainingFee { get; set; }
+        public DateTime NextInstallmentDate { get; set; }
+        public decimal NextInstallmentAmount { get; set; }
+        public string InstallmentNo { get; set; }
+        public string DrawnOn { get; set; }
+        public string AdmissionType { get; set; }
+        public string Comment { get; set; }
+        public string Course { get; set; }
+        public string BankName { get; set; }
+        public int Id { get; set; }
+
+        //--------------------------Siddhi Cheque Details End--------------------------------------------------------//
+
     }
 }

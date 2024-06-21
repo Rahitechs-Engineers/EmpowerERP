@@ -1,0 +1,117 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+<link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+<div class="card-body">
+    <table id="ChequeReceiptTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+            <tr>
+                <th>Receipt No.</th>
+                <th>Received Date</th>
+                <th>Cheque No.</th>
+                <th>Cheque Date</th>
+                <th>Student Name</th>
+                <th>Amount</th>
+                <th>Cheque Clearance Date</th>           
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.lstChequeReceipt)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ChequeNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ChequeDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ChequeClearanceDate)</td>
+                    <td>
+                        <a class="Detailes" href="javascript:;" tooltip="View Batch Details" flow="down">
+                            <video width="35" height="35" playsinline loop>
+                                <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                            </video>
+                        </a>
+
+                        <a class="Update" href="javascript:;" tooltip="Update Batch Details" flow="down">
+                            <video width="35" height="35" playsinline loop>
+                                <source src="~/Content/Admin/icon/Edit Details.mp4" type="video/mp4">
+                            </video>
+                        </a>
+
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts {
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#ChequeReceiptTable').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "stateSave": true,
+                "buttons": [
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        titleAttr: 'Export to PDF',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        titleAttr: 'Export to Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fas fa-file-csv"></i> CSV',
+                        titleAttr: 'Export to CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        text: '<i class="fas fa-copy"></i> Copy',
+                        titleAttr: 'Copy to clipboard',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print"></i> Print',
+                        titleAttr: 'Print table'
+                    }
+                ]
+            });
+
+            // Append buttons to a specific container (optional)
+            table.buttons().container().appendTo($('#ChequeReceiptTable_wrapper .col-md-6:eq(0)'));
+        });
+    </script>
+}

@@ -317,5 +317,79 @@ namespace GSTEducationERP.Controllers
             }
             
         }
+
+        //----------------------Siddhi Start--------------------------------------------------------------//
+
+        [HttpGet]
+        public async Task<ActionResult> ListAllChequeReceiptAsyncSM()
+        {
+            //if (Session["StaffCode"] == null)
+            //{
+            //    return RedirectToAction("Login", "Account");
+            //}
+            //else
+            //{
+            DataSet ds = await objbal.ListAllChequeReceiptAsyncSM();
+            List<Accountant> lstData1 = new List<Accountant>();
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                Accountant objAcc = new Accountant();
+                objAcc.TransactionCode = ds.Tables[0].Rows[i]["RECEIPT NO."].ToString();
+                objAcc.TransactionDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RECEIVED DATE"].ToString());
+                objAcc.ChequeNumber = ds.Tables[0].Rows[i]["CHEQUE NO."].ToString();
+                objAcc.ChequeDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CHEQUE DATE"].ToString());
+                objAcc.Name = ds.Tables[0].Rows[i]["STUDENT NAME"].ToString();
+                //objAcc.BranchCode = ds.Tables[0].Rows[i]["BranchCode"].ToString();
+                objAcc.Amount = Convert.ToInt64(ds.Tables[0].Rows[i]["Amount"].ToString());
+                //DateTime clearancedate = Convert.ToDateTime(ds.Tables[0].Rows[i]["FollowUpTakenDate"].ToString());
+                //objAcc.ChequeClearanceDate = clearancedate.ToString("dd-MM-yyyy");
+                objAcc.ChequeClearanceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CHEQUE CLEARANCE DATE"].ToString());
+                lstData1.Add(objAcc);
+            }
+            Accountant obj = new Accountant();
+            obj.lstChequeReceipt = lstData1;
+            return PartialView("ListAllChequeReceiptAsyncSM", obj);
+            //}
+        }
+
+        public async Task<ActionResult> ListAllChequesAsyncSM()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> _ListAllChequeExpenseAsyncSM()
+        {
+            //if (Session["StaffCode"] == null)
+            //{
+            //    return RedirectToAction("Login", "Account");
+            //}
+            //else
+            //{
+            DataSet ds = await objbal.ListAllChequeExpenseAsyncSM();
+            List<Accountant> lstData1 = new List<Accountant>();
+
+            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+            {
+                Accountant objAcc = new Accountant();
+                objAcc.TransactionCode = ds.Tables[0].Rows[i]["RECEIPT NO."].ToString();
+                objAcc.TransactionDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RECEIVED DATE"].ToString());
+                objAcc.ChequeNumber = ds.Tables[0].Rows[i]["CHEQUE NO."].ToString();
+                objAcc.ChequeDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CHEQUE DATE"].ToString());
+                objAcc.Name = ds.Tables[0].Rows[i]["VENDOR NAME"].ToString();
+                //objAcc.BranchCode = ds.Tables[0].Rows[i]["BranchCode"].ToString();
+                objAcc.Amount = Convert.ToInt64(ds.Tables[0].Rows[i]["Amount"].ToString());
+                objAcc.ChequeClearanceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CHEQUE CLEARANCE DATE"].ToString());
+                lstData1.Add(objAcc);
+            }
+            Accountant obj = new Accountant();
+            obj.lstChequeExpense = lstData1;
+            return PartialView("_ListAllChequeExpenseAsyncSM", obj);
+            //}
+        }
+
+        //----------------------Siddhi End--------------------------------------------------------------//
+
     }
 }

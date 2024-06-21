@@ -28,3 +28,9 @@ C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\Helper\ob
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\Helper\obj\Debug\Helper.csproj.CoreCompileInputs.cache
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\Helper\obj\Debug\Helper.dll
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\Helper\obj\Debug\Helper.pdb
+D:\GitHubSid\EmpowerERP\Helper\bin\Debug\Helper.dll
+D:\GitHubSid\EmpowerERP\Helper\bin\Debug\Helper.pdb
+D:\GitHubSid\EmpowerERP\Helper\obj\Debug\Helper.csproj.AssemblyReference.cache
+D:\GitHubSid\EmpowerERP\Helper\obj\Debug\Helper.csproj.CoreCompileInputs.cache
+D:\GitHubSid\EmpowerERP\Helper\obj\Debug\Helper.dll
+D:\GitHubSid\EmpowerERP\Helper\obj\Debug\Helper.pdb
