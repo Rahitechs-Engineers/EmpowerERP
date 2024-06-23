@@ -186,15 +186,16 @@ namespace GSTEducationERPLibrary.Accountant
             return ds;
         }
         /// <summary>
-        /// fetching the all items for purchase here for purchase dashboard
+        /// this methode is for fetching the all items for purchase here for purchase 
         /// </summary>
         /// <param name="ObjA"></param>
         /// <returns></returns>
-        public async Task<DataSet> ListPurchasedItemsAsyncVP(Accountant ObjA)
+        public async Task<DataSet> ListPurchasedItemsAsyncVP(string PurchaseCode)
         {
             Dictionary<String, String> Param = new Dictionary<String, String>();
-            Param.Add("@Flag", "ListPurchasesAsyncVP");
-            Param.Add("@BranchCode", ObjA.BranchCode);
+            Param.Add("@Flag", "ListPurchasedItemsAsyncVP");
+            Param.Add("@PurchaseCode", PurchaseCode);
+            //Param.Add("@BranchCode", ObjA.BranchCode);
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
@@ -241,8 +242,16 @@ namespace GSTEducationERPLibrary.Accountant
             Param.Add("@TransactionAmount", ObjA.TransactionAmount.ToString());
             Param.Add("@BalanceAmount", ObjA.BalanceAmount.ToString());
             Param.Add("@PaymentMode", ObjA.PaymentMode);
-            Param.Add("@TranId_CheqNo", ObjA.TranId_CheqNo);
-            Param.Add("@BankId", ObjA.BankId.ToString());//our bank from which the amount debited
+            Param.Add("@TranId_CheqNo", ObjA.TransactionId);
+            if (ObjA.BankId.ToString()=="")
+            {
+                Param.Add("@BankId", null);
+            }
+            else
+            {
+                Param.Add("@BankId", ObjA.BankId.ToString());//our bank from which the amount debited
+            }
+            
             Param.Add("@LogInStaffCode", ObjA.StaffCode);
             Param.Add("@StatusId", ObjA.StatusId.ToString());//completed-66 or pending-6
             Param.Add("@Description", ObjA.Description);

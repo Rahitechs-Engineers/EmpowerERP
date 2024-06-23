@@ -17,11 +17,14 @@ namespace GSTEducationERPLibrary.Accountant
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
         public int VoucherId { get; set; }
         public string VoucherCode { get; set; }
+        [DisplayName("Vendor Name")]
         public string VendorName { get; set; }
         public float Amount { get; set; }
         public string AmountPaidTo { get; set; }
         public string Description { get; set; }
+        [DisplayName("Payment Mode")]
         public string PaymentMode { get; set; }
+        [DisplayName("Bank Name")]
         public int? BankId { get; set; }
         public long ReceiverBankAccountNumber { get; set; }
         public string ReceiverBankAccountHolderName { get; set; }
@@ -53,11 +56,14 @@ namespace GSTEducationERPLibrary.Accountant
         /// </summary>
 
         public string PurchaseCode { get; set; }
+        [DisplayName("Item Name")]
         public string ItemName { get; set; }
         public int Quantity { get; set; }
+        [DisplayName("Unit Price")]
         public decimal UnitPrice { get; set; }
         public double Discount { get; set; }
         public string HSNCode { get; set; }
+        [DisplayName("Appiled Tax")]
         public string AppliedTax { get; set; }
         /// <summary>
         /// properties for the purchase  table here
@@ -72,13 +78,14 @@ namespace GSTEducationERPLibrary.Accountant
         [DisplayName("Paid amount")]
         public double TransactionAmount { get; set; }
         public double BalanceAmount { get; set; }
-
-        
-       
+        [DisplayName("Bank Name")]
+        public string BankName { get; set; }
+        public string Status { get; set; }
         [DisplayName("TransactionId")]
         public string TranId_CheqNo { get; set; }
         
-        public List<Accountant> lstPurchasedItemsVP = new List<Accountant>();
+        public List<Accountant> lstPurchaseVP = new List<Accountant>();
+        public List<Accountant> lstPurchaseItemVP = new List<Accountant>();
         //---------------------------vishals properties ends here-----------------------------------------------------------------------------------------------
     }
 }

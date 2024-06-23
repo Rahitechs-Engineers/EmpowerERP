@@ -6,11 +6,11 @@
 <html>
 <head>
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    @*<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">*@
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    @*<link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">*@
     <!-- Theme style -->
-    <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+    @*<link rel="stylesheet" href="../../dist/css/adminlte.min.css">*@
     <style>
                 .form-container {
                     max-width: 500px;
@@ -244,6 +244,7 @@
                             <option value="0">Select Tax</option>
                             <option value="18">SGST + CGST</option>
                             <option value="18">IGST</option>
+                            <option value="0">NA</option>
                         </select>
                         @*@Html.EditorFor(model => model.AppliedTax, new { htmlAttributes = new { @class = "form-control col-md-8 " } })*@
                         @Html.ValidationMessageFor(model => model.AppliedTax, "", new { @class = "text-danger" })
@@ -321,7 +322,7 @@
                     @Html.LabelFor(model => model.PaymentMode, htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
                         <select class="form-control" id="PaymentMode" name="Payment Mode">
-                            <option value="">-Select-</option>
+                            <option value="">-Select Mode-</option>
                             <option value="CASH">CASH</option>
                             <option value="BANK">BANK</option>
                         </select>
@@ -350,10 +351,10 @@
             @*5rth row if Payment mode is bank then this div will be visible *@
             <div id="paymentModeIsBank">
                 <div class="input-group col-md-6">
-                    @Html.LabelFor(model => model.TranId_CheqNo, htmlAttributes: new { @class = "control-label col-md-4" })
+                    @Html.LabelFor(model => model.TransactionId, htmlAttributes: new { @class = "control-label col-md-4" })
                     <div class="col-md-8">
-                        @Html.EditorFor(model => model.TranId_CheqNo, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.TranId_CheqNo, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.TransactionId, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TransactionId, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="dropdown-container col-md-6">
@@ -372,11 +373,11 @@
             </div>
             <div class="form-group" style="text-align: center;">
                 <input type="submit" value="Save" class="btn btn-success" id="SaveButton" onclick="submitForm()">
-                <a href="@Url.Action("DetailsPurchaseItemsAsyncVP")" class="btn btn-danger">Cancel</a>
+                <a href="@Url.Action("DetailsPurchaseAsyncVP")" class="btn btn-danger">Cancel</a>
 
             </div>
             <div>
-                <a href="@Url.Action("DetailsPurchaseItemsAsyncVP")" class="back-link">
+                <a href="@Url.Action("DetailsPurchaseAsyncVP")" class="back-link">
                     <video width="30" height="30" playsinline loop>
                         <source src="~/Content/Admin/icon/Back.mp4" type="video/mp4" />
                     </video>
@@ -561,7 +562,7 @@
         });
         // remove the row on click
         $('#PurchaseItemTable').on('click', '.remove', function () {
-           
+
             $(this).closest('tr').remove();
             calculateTotals();
             var table = document.getElementById("PurchaseItemTable");
@@ -571,7 +572,7 @@
             }
         });
         function SaveItems() {
-           
+
             // Get values from modal form
             var TransactionCode = $("#TransactionCode").val();
             var ItemName = $("#ItemName").val();
@@ -626,11 +627,12 @@
         //    saveButton.prop('disabled', currentStep !== 3);
         //}
         function submitForm() {
+            debugger;
             // Show confirmation alert before proceeding
             Swal.fire({
                 title: 'Are you sure?',
                 text: 'Do you want to submit the form data?',
-                icon: 'information',
+                icon: 'warning',
                 showCancelButton: true,
                 confirmButtonText: 'Yes, submit it!',
                 cancelButtonText: 'No, cancel',
@@ -658,12 +660,13 @@
 
                         PurchaseItemsVPModels.push(PurchaseItemsVP);
                     });
-                    debugger;
                     var formData = new FormData(document.getElementById('AddPurchaseFormVP'));
-                    formData.append('PaymentMode', $('#PaymentMode').val());
+                    var select = document.getElementById('PaymentMode');
+                    var paymentmode = select.options[select.selectedIndex].value;
+                    formData.append('PaymentMode', paymentMode);
                     formData.append('BalanceAmount', $('#BalanceAmount').val());
                     formData.append('StatusId', $('#StatusId').val());
-                   
+
                     // Create an array to store the promises
                     var promises = [];
                     // Check if both form data and JSON data are filled
@@ -691,49 +694,52 @@
                         });
                         promises.push(ajax2);
 
-                        //// Use Promise.all to wait for both promises to complete
-                        //Promise.all(promises)
-                        //    .then(function (responses) {
-                        //        // Handle success for both AJAX calls
-                        //        var response1 = responses[0];
-                        //        var response2 = responses[1];
+                        // Use Promise.all to wait for both promises to complete
+                        Promise.all(promises)
+                            .then(function (responses) {
+                                debugger;
+                                // Handle success for both AJAX calls
+                                var response1 = responses[0];
+                                var response2 = responses[1];
 
-                        //        console.log('Form submitted successfully:', response1);
-                        //        console.log(response2);
+                                console.log('Form submitted successfully:', response1);
+                                console.log(response2);
 
-                        //        // Display success SweetAlert
-                        //        Swal.fire({
-                        //            title: 'Success!',
-                        //            text: 'Purchase Completed successfully.',
-                        //            icon: 'success',
-                        //            confirmButtonText: 'OK'
-                        //        }).then((result) => {
-                        //            if (result.isConfirmed) {
-                        //                // Optionally, you can redirect the user or perform other actions here
-                        //                // For example, you can reload the page
-                        //                location.reload();
-                        //            }
-                        //        });
-                        //    })
-                        //    .catch(function (error) {
-                        //        // Handle errors
-                        //        console.error('Error submitting form:', error);
-                        //        // Display error SweetAlert
-                        //        Swal.fire({
-                        //            title: 'Error!',
-                        //            text: 'Registration failed. Please try again.',
-                        //            icon: 'error',
-                        //            confirmButtonText: 'OK'
-                        //        });
-                        //    });
-                    //} else {
-                    //    // Show validation error
-                    //    Swal.fire({
-                    //        title: 'Validation Error',
-                    //        text: 'Please fill in the required fields.',
-                    //        icon: 'error',
-                    //        confirmButtonText: 'OK'
-                    //    });
+                                // Display success SweetAlert
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Purchase Completed successfully.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = response.redirectToUrl;
+                                        // Optionally, you can redirect the user or perform other actions here
+                                        // For example, you can reload the page
+                                        var url = '@Url.Action("DetailsPurchaseAsyncVP", "Accountant")';
+                                        window.open(url, '_blank');
+                                    }
+                                });
+                            })
+                            .catch(function (error) {
+                                // Handle errors
+                                console.error('Error submitting form:', error);
+                                // Display error SweetAlert
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Failed',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            });
+                    } else {
+                        // Show validation error
+                        Swal.fire({
+                            title: 'Validation Error',
+                            text: 'Please fill in the required fields.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
                     }
                 }
             });

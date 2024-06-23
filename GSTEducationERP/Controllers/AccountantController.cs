@@ -1,14 +1,17 @@
 ﻿using GSTEducationERPLibrary.Account;
 using GSTEducationERPLibrary.Accountant;
+using GSTEducationERPLibrary.Placement;
 using GSTEducationERPLibrary.Trainer;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls.WebParts;
 using System.Web.Util;
 
 namespace GSTEducationERP.Controllers
@@ -325,13 +328,13 @@ namespace GSTEducationERP.Controllers
             List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
              {
                 new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncVP" },
-                //new BreadcrumbItem { Name = "Purchase", Url = "DetailsPurchaseItemsAsyncVP" },
+                //new BreadcrumbItem { Name = "Purchase", Url = "DetailsPurchaseAsyncVP" },
              };
             ViewBag.Breadcrumbs = breadcrumbs;
             return View("AccountantDashboardAsyncVP");
         }
         [HttpGet]
-        public async Task<ActionResult> DetailsPurchaseItemsAsyncVP()
+        public async Task<ActionResult> DetailsPurchaseAsyncVP()
         {
             if (Session["StaffCode"] == null)
             {
@@ -343,22 +346,84 @@ namespace GSTEducationERP.Controllers
                 {
                     objac.BranchCode = Session["BranchCode"].ToString();
                     objac.StaffCode = Session["StaffCode"].ToString();
-                    //ViewBag.Induastry = await objBalaccountant.GetInduastryPB();
-                    ViewBag.Purchase = await objbal.ListPurchasesAsyncVP(objac);
+                    List<Accountant> model = await ListPurchasesAsyncVP();
+                    objac.lstPurchaseVP= model;
                     List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
-            {
-            new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncVP" },
-            new BreadcrumbItem { Name = "Purchase", Url = "DetailsPurchaseItemsAsyncVP" },
-            };
+                        {
+                            new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncVP" },
+                            new BreadcrumbItem { Name = "Purchase", Url = "DetailsPurchaseAsyncVP" },
+                        };
                     ViewBag.Breadcrumbs = breadcrumbs;
                 }
                 catch (Exception ex)
                 {
                     throw (ex);
                 }
-                return await Task.Run(() => View("DetailsPurchaseItemsAsyncVP"));
+                return await Task.Run(() => View("DetailsPurchaseAsyncVP", objac));
 
             }
+        }
+        /// <summary>
+        /// the action is to return the list of purchase items for the select ed purchase
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> ListPurchasedItemsAsyncVP(string TransactionCode)
+        {
+            try
+            {
+                DataSet ds = await objbal.ListPurchasedItemsAsyncVP(TransactionCode);
+                List<Accountant> lstpurchase = new List<Accountant>();
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                    {
+                        Accountant objP = new Accountant();
+                        objP.ItemName = ds.Tables[0].Rows[i]["Items"].ToString();
+                        objP.Quantity = Convert.ToInt32(ds.Tables[0].Rows[i]["ItemCount"].ToString());
+                        objP.UnitPrice = Convert.ToDecimal(ds.Tables[0].Rows[i]["TransactionAmount"].ToString());
+                        objP.Discount = Convert.ToDouble(ds.Tables[0].Rows[i]["BalanceAmount"].ToString());
+                        objP.AppliedTax = (ds.Tables[0].Rows[i]["TransactionDate"].ToString());
+                        lstpurchase.Add(objP);
+                    }
+                }
+                return PartialView("_ListPurchasedItemsAsyncVP", lstpurchase);
+            }
+            catch 
+            {
+                return View("Error");
+            }
+        }
+        /// <summary>
+        /// the action is to return the list for the pending purchase list
+        /// </summary>
+        /// <returns></returns>
+        private async Task<List<Accountant>> ListPurchasesAsyncVP()
+        {
+            objac.BranchCode = Session["BranchCode"].ToString();
+            objac.StaffCode = Session["StaffCode"].ToString();
+            DataSet ds = await objbal.ListPurchasesAsyncVP(objac);
+            List<Accountant> lstpurchase = new List<Accountant>();
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    Accountant objP = new Accountant();
+                    //objP.Quantity = ds.Tables[0].Rows[i]["LabName"].ToString();
+                    objP.TransactionCode = ds.Tables[0].Rows[i]["TransactionCode"].ToString();
+                    objP.VendorName = ds.Tables[0].Rows[i]["VendorName"].ToString();
+                    objP.ItemName = ds.Tables[0].Rows[i]["Items"].ToString();
+                    objP.Quantity = Convert.ToInt32(ds.Tables[0].Rows[i]["ItemCount"].ToString());
+                    objP.TransactionAmount = Convert.ToDouble(ds.Tables[0].Rows[i]["TransactionAmount"].ToString());
+                    objP.BalanceAmount = Convert.ToDouble(ds.Tables[0].Rows[i]["BalanceAmount"].ToString());
+                    objP.TransactionDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["TransactionDate"].ToString());
+                    objP.PaymentMode = ds.Tables[0].Rows[i]["PaymentMode"].ToString();
+                    objP.TranId_CheqNo=ds.Tables[0].Rows[i]["TransactionID"].ToString();
+                    objP.BankName = ds.Tables[0].Rows[i]["BankName"].ToString();
+                    objP.Status = ds.Tables[0].Rows[i]["Status"].ToString();
+                    lstpurchase.Add(objP);
+                }
+            }
+            return lstpurchase;
         }
         [HttpGet]
         public async Task<ActionResult> AddPurchaseAsyncVP()
@@ -378,7 +443,7 @@ namespace GSTEducationERP.Controllers
                 {
 
             new BreadcrumbItem { Name = "Dashboard", Url =Url.Action("AccountantDashboardAsyncVP", "Accountant")  },
-            new BreadcrumbItem { Name = "Purchase", Url = Url.Action("DetailsPurchaseItemsAsyncVP","Accountant") },
+            new BreadcrumbItem { Name = "Purchase", Url = Url.Action("DetailsPurchaseAsyncVP","Accountant") },
             new BreadcrumbItem { Name = "Add Purchase", Url = Url.Action("AddPurchaseAsyncVP", "Accountant") },
                 };
                     ViewBag.Breadcrumbs = breadcrumbs;
@@ -413,7 +478,7 @@ namespace GSTEducationERP.Controllers
             Param.Add("@Description", ObjA.Description);
          */
         [HttpPost]
-        public async Task<ActionResult> AddPurchaseAsyncVP(Accountant objac)
+        public async Task<JsonResult> AddPurchaseAsyncVP(Accountant objac)
         {
             //saving the details to database about the purchase
             try
@@ -423,28 +488,36 @@ namespace GSTEducationERP.Controllers
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex.ToString());
             }
-
-            return await Task.Run(() => RedirectToAction("DetailsPurchaseItemsAsyncVP"));
+            return Json("Success", JsonRequestBehavior.AllowGet);
+            // return await Task.Run(() => RedirectToAction("DetailsPurchaseAsyncVP"));
         }
         [HttpPost]
         public async Task<ActionResult> AddPurchaseItemAsyncVP(List<Accountant> PurchaseItemsAsyncVP)
         {
-            //saving the details to database about the purchase
-            Accountant objpi = new Accountant();
-            foreach (var item in PurchaseItemsAsyncVP)
+            try
             {
-                objpi.TransactionCode = item.TransactionCode;
-                objpi.ItemName = item.ItemName;
-                objpi.Quantity = item.Quantity;
-                objpi.HSNCode = item.HSNCode;
-                objpi.UnitPrice = item.UnitPrice;
-                objpi.Discount = item.Discount;
-                objpi.AppliedTax = item.AppliedTax;
-                await objbal.SaveAddPurchasedItemsAsyncVP(objpi);
+                //saving the details to database about the purchase
+                Accountant objpi = new Accountant();
+                foreach (var item in PurchaseItemsAsyncVP)
+                {
+                    objpi.TransactionCode = item.TransactionCode;
+                    objpi.ItemName = item.ItemName;
+                    objpi.Quantity = item.Quantity;
+                    objpi.HSNCode = item.HSNCode;
+                    objpi.UnitPrice = item.UnitPrice;
+                    objpi.Discount = item.Discount;
+                    objpi.AppliedTax = item.AppliedTax;
+                    await objbal.SaveAddPurchasedItemsAsyncVP(objpi);
+                }
+                return await Task.Run(() => Json(new { success = true, message = "Results saved successfully." }));
             }
-            return await Task.Run(() => RedirectToAction("DetailsPurchaseItemsAsyncVP"));
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            return Json(JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
         public async Task<ActionResult> ViewPurchaseAsyncVP()

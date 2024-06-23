@@ -116,8 +116,8 @@ namespace Helper
         //****************************************************************************************
         public async Task ExecuteStoreProcedure(String SPName, Dictionary<string, string> InPara)
         {
-            try
-            {
+            //try
+            //{
                 SqlConnection con = new SqlConnection(connectionString);
                 SqlCommand cmd = new SqlCommand();
                 cmd.Parameters.Clear();
@@ -132,11 +132,11 @@ namespace Helper
                 con.Open();
                 await cmd.ExecuteScalarAsync();
                 con.Close();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
         }
         public DataSet ExecuteQueryReturnDs(string sqlQuery, Dictionary<string, string> parameters)
         {

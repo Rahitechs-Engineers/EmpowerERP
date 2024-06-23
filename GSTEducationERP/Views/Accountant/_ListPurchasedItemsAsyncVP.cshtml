@@ -1,0 +1,78 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Student List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Optional: Add your own styles here -->
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        h2 {
+            color: #64bbc9;
+            font-weight: bold;
+            font-size: 30px;
+            margin-left: 17px;
+            margin-bottom: -10px;
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        .student-card {
+            margin: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+    <div class="container-fluid">
+        <br />
+        @*<div class="card pl-6 mx-auto col-md-12">*@
+        <div class="card " style="padding:15px; margin-right:-600px; margin-left:-400px; margin-top:-15px">
+            <div class="form-horizontal">
+                <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 8px;">&times;</button>
+                <div class="card" style=" margin-top: 30px">
+                    <h2>Purchase Item List</h2>
+                    <hr />
+
+                    <div class="row">
+                        @foreach (var item in Model.lstPurchaseItemVP)
+                         {
+                            <div class="col-md-4">
+                                <div class="card student-card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">@Html.DisplayFor(modelItem => item.ItemName)</h5>
+                                        <p class="card-text">
+                                            <strong>Quantity:</strong> @Html.DisplayFor(modelItem => item.Quantity)<br />
+                                            <strong>Unit price:</strong> @Html.DisplayFor(modelItem => item.UnitPrice)<br />
+                                            <strong>Discount:</strong> @Html.DisplayFor(modelItem => item.Discount)
+                                            <strong>Applied Tax:</strong> @Html.DisplayFor(modelItem => item.AppliedTax)
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                         }
+                    </div>
+                    @*calculate the total here*@
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>
