@@ -317,5 +317,88 @@ namespace GSTEducationERP.Controllers
             }
             
         }
+
+        //---------------------SOMNATH HAMBIRE---------------------
+        public async Task<ActionResult> studentFeeMainpageasyncSH()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                return View();
+            }
+        }
+        [HttpGet]
+        public async Task<ActionResult> ListInternalStudentasyncSH()
+        {
+            List<Accountant> Mo = await InternalStudentFeeDataAsyncSH();
+            Accountant obj = new Accountant();
+            obj.StudentFees = Mo;
+            return PartialView("_ListInternalStudentasyncSH", obj);
+        }
+        public async Task<List<Accountant>> InternalStudentFeeDataAsyncSH()
+        {
+            DataSet ds = await objbal.ListofInternalStudentFeesAsyncSH();
+            List<Accountant> lstData1 = new List<Accountant>();
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+                Accountant obju = new Accountant
+                {
+
+                    StudetCode = row["CandidateCode"].ToString(),
+                    StudentName = row["FullName"].ToString(),
+                    Email = row["EmailId"].ToString(),
+                    Contact = Convert.ToInt64(row["ContactNumber"]),
+                    Course = row["CourseName"].ToString(),
+                    Batch = row["BatchName"].ToString(),
+                    CourseFee = Convert.ToDouble(row["CourseFee"]),
+                    RegistrationFee = Convert.ToDouble(row["RegistrationFees"]),
+                    Discount = Convert.ToInt32(row["Discount"]),
+                    TotalFees = Convert.ToDouble(row["TotalFee"]),
+                    PaidFees = Convert.ToDouble(row["PaidFees"]),
+                    RemainingFees = Convert.ToDouble(row["RemainingFees"]),
+                    InstallmentAmount = Convert.ToDouble(row["InstallmentAmount"]),
+                    LastInstallmentDate = Convert.ToDateTime(row["LastInstallmentDate"]).ToString("dd/MM/yyyy"),
+                    NextInstallmentDate = Convert.ToDateTime(row["NextInstallmentDate"]).ToString("dd/MM/yyyy"),
+                    Status = row["Status"].ToString()
+
+                };
+                lstData1.Add(obju);
+            }
+            return lstData1;
+        }
+        [HttpGet]
+        public async Task<ActionResult> ListOfExternalStudentasyncSH()
+        {
+            List<Accountant> Mo = await ExternalStudentFeesDetails();
+            Accountant obj = new Accountant();
+            obj.StudentFees = Mo;
+            return PartialView("_ListExternalStudentasyncSH", obj);
+        }
+        public async Task<List<Accountant>> ExternalStudentFeesDetails()
+        {
+            DataSet ds = await objbal.ListofExternalStudentFeesAsyncSH();
+            List<Accountant> lstData1 = new List<Accountant>();
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+                Accountant obju = new Accountant
+                {
+
+                    StudetCode = row["CandidateCode"].ToString(),
+                    StudentName = row["FullName"].ToString(),
+                    Email = row["EmailId"].ToString(),
+                    Contact = Convert.ToInt64(row["ContactNumber"]),
+                    OneMonthCTC = Convert.ToDouble(row["OneMonthCTC"]),
+                    PayableAmmount = Convert.ToDouble(row["PayableAmount"]),
+                    Status = row["Status"].ToString()
+
+                };
+                lstData1.Add(obju);
+            }
+            return lstData1;
+        }
+
     }
 }

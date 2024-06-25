@@ -119,5 +119,37 @@ namespace GSTEducationERPLibrary.Accountant
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
+
+
+
+
+
+
+
+        //------------------SOMNATH HAMBIRE FEES LIST Start --------------------------------------------------------------//
+
+        public async Task<DataSet> ListofInternalStudentFeesAsyncSH()
+        {
+            Dictionary<String, String> Param = new Dictionary<String, String>();
+            Param.Clear();
+            Param.Add("@Flag", "GetInternalStudentFeesInfo");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+
+
+        }
+        public async Task<DataSet> ListofExternalStudentFeesAsyncSH()
+        {
+            Dictionary<String, String> Param = new Dictionary<String, String>();
+            Param.Clear();
+            Param.Add("@Flag", "GetExternalStudentFeesInfo");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+
+
+        }
+
+
+
     }
 }

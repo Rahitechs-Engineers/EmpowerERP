@@ -40,5 +40,41 @@ namespace GSTEducationERPLibrary.Accountant
 	public List<Accountant> lstPendingVoucher { get; set; }
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
 
+
+
+
+
+
+
+        //------------------SOMNATH HAMBIRE FEES LIST Start --------------------------------------------------------------//
+
+
+
+        public string StudetCode { get; set; }
+        public string StudentName { get; set; }
+        public long Contact { get; set; }
+        public string Email { get; set; }
+        public string Course { get; set; }
+        public string Batch { get; set; }
+        public double CourseFee { get; set; }
+        public int Discount { get; set; }
+
+        public double RegistrationFee { get; set; }
+        public double TotalFees { get; set; }
+        public double PaidFees { get; set; }
+        public double RemainingFees { get; set; }
+        public double InstallmentAmount { get; set; }
+        public string LastInstallmentDate { get; set; }
+        public string NextInstallmentDate { get; set; }
+        public string Status { get; set; }
+        public double OneMonthCTC { get; set; }
+        public double PayableAmmount { get; set; }
+
+        public List<Accountant> StudentFees { get; set; }
+
+
+
+
+
     }
 }
