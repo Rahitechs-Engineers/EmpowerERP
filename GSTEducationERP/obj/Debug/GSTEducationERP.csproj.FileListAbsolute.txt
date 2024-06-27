@@ -605,3 +605,177 @@ C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducat
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERP\obj\Debug\GSTEduca.6385CEE8.Up2Date
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERP\obj\Debug\GSTEducationERP.dll
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERP\obj\Debug\GSTEducationERP.pdb
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERP.dll.config
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERP.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERP.pdb
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csc.exe
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csc.exe.config
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csc.rsp
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csi.exe
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csi.exe.config
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csi.rsp
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.Managed.Core.targets
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.Win32.Primitives.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.AppContext.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Console.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Diagnostics.StackTrace.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Globalization.Calendars.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.IO.Compression.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.IO.Compression.ZipFile.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.IO.FileSystem.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.IO.FileSystem.Primitives.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Net.Http.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Net.Sockets.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Security.Cryptography.Encoding.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Security.Cryptography.Primitives.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Text.Encoding.CodePages.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Threading.Tasks.Extensions.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.ValueTuple.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Xml.ReaderWriter.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Xml.XmlDocument.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Xml.XPath.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Xml.XPath.XDocument.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\vbc.exe
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\vbc.exe.config
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\vbc.rsp
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\VBCSCompiler.exe
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Antlr3.Runtime.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\EntityFramework.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\EntityFramework.SqlServer.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERPLibrary.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Helper.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Newtonsoft.Json.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Helpers.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Mvc.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Optimization.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Razor.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.Razor.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\WebGrease.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERPLibrary.pdb
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Helper.pdb
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\EntityFramework.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\EntityFramework.SqlServer.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Newtonsoft.Json.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Helpers.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Mvc.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Razor.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.Razor.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Optimization.xml
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Antlr3.Runtime.pdb
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.csproj.AssemblyReference.cache
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.csproj.CoreCompileInputs.cache
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEduca.6385CEE8.Up2Date
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.pdb
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERP.dll.config
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERP.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERP.pdb
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csc.exe
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csc.exe.config
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csc.rsp
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csi.exe
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csi.exe.config
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\csi.rsp
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CSharp.Core.targets
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.Managed.Core.targets
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.VisualBasic.Core.targets
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.Win32.Primitives.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.AppContext.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Collections.Immutable.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Console.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Diagnostics.DiagnosticSource.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Diagnostics.StackTrace.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Globalization.Calendars.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.IO.Compression.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.IO.Compression.ZipFile.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.IO.FileSystem.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.IO.FileSystem.Primitives.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Net.Http.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Net.Sockets.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Reflection.Metadata.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Runtime.InteropServices.RuntimeInformation.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Security.Cryptography.Encoding.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Security.Cryptography.Primitives.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Text.Encoding.CodePages.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Threading.Tasks.Extensions.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.ValueTuple.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Xml.ReaderWriter.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Xml.XmlDocument.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Xml.XPath.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\System.Xml.XPath.XDocument.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\vbc.exe
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\vbc.exe.config
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\vbc.rsp
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\VBCSCompiler.exe
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\VBCSCompiler.exe.config
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Antlr3.Runtime.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\EntityFramework.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\EntityFramework.SqlServer.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERPLibrary.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Helper.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Microsoft.Web.Infrastructure.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Newtonsoft.Json.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Helpers.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Mvc.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Optimization.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Razor.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.Deployment.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.Razor.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\WebGrease.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERPLibrary.pdb
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Helper.pdb
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\EntityFramework.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\EntityFramework.SqlServer.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Newtonsoft.Json.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Helpers.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Mvc.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Razor.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.Deployment.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.WebPages.Razor.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\System.Web.Optimization.xml
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\Antlr3.Runtime.pdb
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.csproj.AssemblyReference.cache
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.csproj.CoreCompileInputs.cache
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEduca.6385CEE8.Up2Date
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.dll
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.pdb

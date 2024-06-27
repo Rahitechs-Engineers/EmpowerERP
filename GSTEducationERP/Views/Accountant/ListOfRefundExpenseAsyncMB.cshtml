@@ -1,0 +1,120 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+<script src="~/Content/plugins/jquery/jquery.min.js"></script>
+<script src="~/Content/Admin/js/Icon.js"></script>
+
+
+<script type="text/javascript">
+    jQuery.noConflict();
+    jQuery(document).ready(function ($) {
+        $('#example1').on('click', '.icon, .icon1, .icon2', function () {
+            var MockId = $(this).data('id');
+            var url = $(this).data('action');
+            jQuery.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    jQuery('#PerformanceModal .modal-content').html(data);
+                    jQuery('#PerformanceModal').modal('show');
+                }
+            });
+        });
+    });
+</script>
+
+<div class="card">
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ExpID)
+                    </th>
+                    <th>
+                        Expense Type
+                    </th>
+                    <th>
+                        Vendor Name
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                    <th>
+                        Payment Mode
+                    </th>
+                    <th>
+                        TranscationId
+                    </th>
+                    <th>
+                        Bank Name
+                    </th>
+                    <th>
+                        Cheque Date
+                    </th>
+                    <th>
+                        Amount
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.lstRegularExpense)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpID)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpenseType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.VendorName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PaymentMode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TranscationId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BankName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ChqueDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </td>
+
+
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="modal fade custom-modal-width" id="PerformanceModal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!-- Content for Schedule Modal -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
 
 namespace GSTEducationERPLibrary.Accountant
 {
@@ -37,8 +37,22 @@ namespace GSTEducationERPLibrary.Accountant
         public string StaffCode { get; set; }
         public int StatusId { get; set; }
         public List<Accountant> lstVoucher { get; set; }
-	public List<Accountant> lstPendingVoucher { get; set; }
+        public List<Accountant> lstPendingVoucher { get; set; }
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
+
+
+        public string ExpID { get; set; }
+        public string ExpenseType { get; set; }
+       // public string VendorName { get; set; }
+        public string Date { get; set; }
+       // public string PaymentMode { get; set; }
+        public string TranscationId { get; set; }
+        public string BankName { get; set; }
+        public string ChqueDate { get; set; }
+       // public string Amount { get; set; }
+        //public string Action { get; set; }
+
+        public List<Accountant> lstRegularExpense {  get; set; }
 
     }
 }

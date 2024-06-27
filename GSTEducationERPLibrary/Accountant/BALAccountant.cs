@@ -6,15 +6,44 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 using Helper;
-using System.Runtime.Remoting.Messaging;
-using System.Web.UI.WebControls.WebParts;
 
 namespace GSTEducationERPLibrary.Accountant
 {
 	public class BALAccountant
 	{
+
         MSSQL DBHelper = new MSSQL();
         Dictionary<string, string> Param = new Dictionary<string, string>();
+
+        public async Task< DataSet> ShowListOfRegularExpense(Accountant obj)
+		{
+			
+           
+            Param.Add("@Flag", "ShowListOfRegularExpense");
+			DataSet ds=await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+			return ds;
+			
+		}
+
+		public async Task<DataSet> GetExpenceCategory()
+		{
+			
+			Param.Add("@Flag", "GetExpenceCategory");
+			DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+			return ds;
+		}
+
+       
+
+
+
+
+        /// <summary>
+        /// Shreyas Function code 
+        /// </summary>
+        /// <param name="ObjT"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
 
         public async Task AddVoucherAsyncSGS(Accountant ObjT)
         {
@@ -40,7 +69,8 @@ namespace GSTEducationERPLibrary.Accountant
                 Param.Add("@VoucherDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                 Param.Add("@StatusId", 6.ToString());
                 await DBHelper.ExecuteStoreProcedure("GSTAccountant", Param);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception("An error occurred while registering the assigned project. Details: " + ex.Message);
             }
@@ -87,7 +117,8 @@ namespace GSTEducationERPLibrary.Accountant
                 Param.Add("@flag", "GetVoucher");
                 DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
                 return ds;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception("An error occurred while fetching course names. Details: " + ex.Message);
             }
@@ -119,5 +150,11 @@ namespace GSTEducationERPLibrary.Accountant
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
+
+
+
+
+
+
     }
 }

@@ -28,3 +28,15 @@ C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\Helper\ob
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\Helper\obj\Debug\Helper.csproj.CoreCompileInputs.cache
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\Helper\obj\Debug\Helper.dll
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\Helper\obj\Debug\Helper.pdb
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\Helper\bin\Debug\Helper.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\Helper\bin\Debug\Helper.pdb
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\Helper\obj\Debug\Helper.csproj.AssemblyReference.cache
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\Helper\obj\Debug\Helper.csproj.CoreCompileInputs.cache
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\Helper\obj\Debug\Helper.dll
+C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\Helper\obj\Debug\Helper.pdb
+E:\ERPMainProject\EmpowerERP\Helper\bin\Debug\Helper.dll
+E:\ERPMainProject\EmpowerERP\Helper\bin\Debug\Helper.pdb
+E:\ERPMainProject\EmpowerERP\Helper\obj\Debug\Helper.csproj.AssemblyReference.cache
+E:\ERPMainProject\EmpowerERP\Helper\obj\Debug\Helper.csproj.CoreCompileInputs.cache
+E:\ERPMainProject\EmpowerERP\Helper\obj\Debug\Helper.dll
+E:\ERPMainProject\EmpowerERP\Helper\obj\Debug\Helper.pdb
