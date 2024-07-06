@@ -38,19 +38,32 @@ namespace GSTEducationERPLibrary.Accountant
         public int StatusId { get; set; }
         public List<Accountant> lstVoucher { get; set; }
         public List<Accountant> lstPendingVoucher { get; set; }
-        //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
+        //------------------SHREYAYAS Voucher End --------------------------------------------------------------//
 
-
+        //---------------------Mukesh Expence Properties---------------------------------------//
         public string ExpID { get; set; }
         public string ExpenseType { get; set; }
-       // public string VendorName { get; set; }
-        public string Date { get; set; }
-       // public string PaymentMode { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Transaction Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime Date { get; set; }    
         public string TranscationId { get; set; }
         public string BankName { get; set; }
-        public string ChqueDate { get; set; }
-       // public string Amount { get; set; }
-        //public string Action { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Transaction Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime ChequeDate { get; set; }
+        public string Comment { get; set; }
+        public string StudentName { get; set; }
+        public string PaidFee { get; set; }
+        public string ReferenceByName { get; set; }
+        public string ReferenceToName { get; set; }
+        public string CandidateCode { get; set; }
+        public string TranscationChequedate { get; set; }
+        public string TranscationCode { get; set; }
+        
 
         public List<Accountant> lstRegularExpense {  get; set; }
 

@@ -2783,7 +2783,7 @@ namespace GSTEducationERP.Controllers
             }
             else
             {
-                // await LabBindSHAsync();
+                // await LabBindSHAsync();0
                 await CourseBindSHAsync();
                 await StaffBindSHAsync();
                 await StatusBindSHAsync();

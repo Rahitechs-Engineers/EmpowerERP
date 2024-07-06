@@ -45,9 +45,7 @@
                     <th>
                         TranscationId
                     </th>
-                    <th>
-                        Bank Name
-                    </th>
+                    
                     <th>
                         Cheque Date
                     </th>
@@ -83,18 +81,21 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.TranscationId)
                         </td>
+                        
                         <td>
-                            @Html.DisplayFor(modelItem => item.BankName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ChqueDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Amount)
+                            @Html.DisplayFor(modelItem => item.TranscationChequedate)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Amount)
                         </td>
+                        <td >
+                            <a >
+                               
+                                <video width="25" height="25" playsinline loop>
+                                    <source src="~/Content/Admin/icon/viewEye.mp4" type="video/mp4">
+                                </video>
+                            </a>
+                        </td >
 
 
                     </tr>

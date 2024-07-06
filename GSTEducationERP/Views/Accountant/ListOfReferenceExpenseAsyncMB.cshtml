@@ -34,22 +34,16 @@
                         Expense Type
                     </th>
                     <th>
-                        Vendor Name
+                        Reference By Name
                     </th>
                     <th>
-                        Date
+                        Reference To Name
                     </th>
                     <th>
                         Payment Mode
                     </th>
                     <th>
-                        TranscationId
-                    </th>
-                    <th>
-                        Bank Name
-                    </th>
-                    <th>
-                        Cheque Date
+                        Date
                     </th>
                     <th>
                         Amount
@@ -72,28 +66,29 @@
                             @Html.DisplayFor(modelItem => item.ExpenseType)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.VendorName)
+                            @Html.DisplayFor(modelItem => item.ReferenceByName)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Date)
+                            @Html.DisplayFor(modelItem => item.ReferenceToName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.PaymentMode)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.TranscationId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.BankName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ChqueDate)
+                            @Html.DisplayFor(modelItem => item.Date)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Amount)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Amount)
+
+                            <a id="DetailPartialView" href="#" data-id="@item.ExpID">
+
+                                <video width="25" height="25" playsinline loop>
+                                    <source src="~/Content/Admin/icon/viewEye.mp4" type="video/mp4">
+                                </video>
+                            </a>
+
                         </td>
 
 
@@ -104,15 +99,51 @@
         </table>
     </div>
 </div>
-<div class="modal fade custom-modal-width" id="PerformanceModal" role="dialog" aria-hidden="true">
+
+<script>
+    $(document).ready(function() {
+        // Click event handler for the video icon link
+        $("#DetailPartialView").click(function (e) {
+            debugger;
+            var $buttonClicked = $(this);
+            var id = $buttonClicked.data('id');
+            e.preventDefault(); // Prevent default link behavior
+
+            // AJAX request to load the partial view content
+            $.ajax({
+                url: '@Url.Action("ViewTheExpenseDetailsAsyncMB", "Accountant")', // Replace with your action method and controller
+                type: 'GET',
+                data: { ExpCode: id },
+                success: function (data) {
+                    $('#PerformanceModal .modal-body').html(data);
+                    // Show the modal
+                    $('#PerformanceModal').modal('show');
+                },
+                error: function () {
+                    alert('Error loading content.');
+                }
+            });
+        });
+
+
+
+    });
+</script>
+
+<div class="modal fade " id="PerformanceModal" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content" style="background-color: white; width: 800px">
             <div class="modal-body">
                 <!-- Content for Schedule Modal -->
             </div>
         </div>
     </div>
 </div>
+
+
+
+
+
 
 
 

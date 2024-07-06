@@ -15,25 +15,115 @@ namespace GSTEducationERPLibrary.Accountant
         MSSQL DBHelper = new MSSQL();
         Dictionary<string, string> Param = new Dictionary<string, string>();
 
-        public async Task< DataSet> ShowListOfRegularExpense(Accountant obj)
+        public async Task< DataSet> ShowListOfRegularExpenseMB(Accountant obj)
 		{
-			
-           
-            Param.Add("@Flag", "ShowListOfRegularExpense");
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+
+            Param.Add("@Flag", "ShowListOfRegularExpenseMB");
 			DataSet ds=await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
 			return ds;
 			
 		}
 
-		public async Task<DataSet> GetExpenceCategory()
+        public async Task<DataSet> ShowListOfReferenceExpenseMB(Accountant obj)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "ShowListOfReferenceExpenseMB");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+
+        }
+
+        public async Task<DataSet> ShowListOfRefundExpenseMB(Accountant obj)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "ShowListOfRefundExpenseMB");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+
+        }
+
+        public async Task<DataSet> GetExpenceCategoryMB()
 		{
-			
-			Param.Add("@Flag", "GetExpenceCategory");
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+
+            Param.Add("@Flag", "GetExpenceCategoryMB");
 			DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
 			return ds;
 		}
 
-       
+        public async Task<DataSet> GetRefundCandidateMB()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetRefundCandidateMB");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+        public async Task SavetheExpenceMB(Accountant obj)
+        {
+            int id=Convert.ToInt32(1);
+            int TYd=Convert.ToInt32(68);
+            Dictionary<string,string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "SavetheExpenceMB");
+            Param.Add("@TranscationCode", obj.TranscationCode);
+            Param.Add("@VendorName", obj.VendorName);
+            Param.Add("@TransactionDate", obj.Date.ToString());
+            Param.Add("@TransactionAmount", obj.Amount.ToString());
+            Param.Add("@ExpenseCategoryId", obj.ExpID);
+            Param.Add("@StaffCode", obj.StaffCode);
+            Param.Add("@PaymentMode", obj.PaymentMode);
+            Param.Add("@TransactionId", obj.TranscationId);
+            Param.Add("@ChequeDate", obj.ChequeDate.ToShortDateString());
+            Param.Add("@LoggedStaffCode", obj.StaffCode);
+            Param.Add("@StatusId","6");
+            Param.Add("@Description", obj.Comment);
+            Param.Add("@TransactionType","68");
+            await DBHelper.ExecuteStoreProcedure("GSTAccountant", Param);
+
+           
+        }
+
+        public async Task<SqlDataReader> GetMaxExpenseCodeForAutoIncrement()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetMaxExpenseCodeForAutoIncrement");
+            SqlDataReader dr;
+            dr= await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
+            return dr;
+        }
+
+        public async Task<SqlDataReader> GetTheExpenceTypeAsyncMB(Accountant obj)
+        {
+            Dictionary<string,string> Param= new Dictionary<string, string>();
+            Param.Add("@Flag", "GetExpenceTypeMB");
+            Param.Add("@ExpenseCategoryId",obj.ExpID );
+            SqlDataReader dr;
+            dr = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
+            return dr;
+        }
+
+        public async Task<DataSet> GetReferenceByCandidatesAsyncMB()
+        {
+            Dictionary<string,string> Param= new Dictionary<string, string>();
+            Param.Add("@Flag", "GetReferenceByCandidates");
+            DataSet ds =await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            
+            return ds;
+        }
+
+        public async Task<DataSet> GetReferenceToCandidatesAsyncMB(Accountant obj)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetReferenceToCandidates");
+            Param.Add("@CandidateCode", obj.CandidateCode);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+
+            return ds;
+        }
+
+
+
 
 
 

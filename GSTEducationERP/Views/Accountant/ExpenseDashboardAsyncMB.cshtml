@@ -161,11 +161,9 @@
                 <div class="col-6">
                     <div class="row justify-content-end">
                         <!-- Align items to the right -->
-                        <div class="col-auto">
-                            <a id="scheduleLink" href="#" class="icon" title="Schedule">
-                                <video width="35" height="35" playsinline loop>
-                                    <source src="~/Content/Admin/icon/Add Event.mp4" type="video/mp4">
-                                </video>
+                        <div class="col-md-6 text-right mt-1" style="padding-right:10px;">
+                            <a id="AddExpenseLink" title="Add New Expense">
+                                <img src="~/Content/Admin/icon/Add.jpeg" style="height:30px; width:30px;" />
                             </a>
                         </div>
                     </div>
@@ -221,6 +219,7 @@
 
 
             function loadTabContent(tabContentUrl, statusId) {
+
                 $.ajax({
                     url: tabContentUrl,
                     data: { id: statusId },
@@ -266,7 +265,7 @@
                                 }
                             ]
                         });
-                        table.buttons().container().appendTo('#MockList .col-md-6:eq(0)');
+                        table.buttons().container().appendTo('#ExpenseList .col-md-6:eq(0)');
                     },
                     error: function () {
                         alert('Error loading content.');
@@ -334,7 +333,7 @@
                 loadTabContent('@Url.Action("ListOfRefundExpenseAsyncMB", "Accountant")');
             });
 
-            $("#scheduleLink").click(function () {
+            $("#AddExpenseLink").click(function () {
                // var isInternal = $("#internalButton").hasClass("active");
                 redirectToAssignMock();
             });
@@ -354,9 +353,9 @@
                     url: url,
                     type: 'GET',
                     success: function (data) {
-                        $('#ScheduleModal .modal-body').html(data);
+                        $('#NewExpenseModal .modal-body').html(data);
                         // Show the modal
-                        $('#ScheduleModal').modal('show');
+                        $('#NewExpenseModal').modal('show');
                     },
                     error: function () {
                         alert('Error loading content.');
@@ -373,7 +372,7 @@
 
     
 
-    <div class="modal fade" id="ScheduleModal" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="NewExpenseModal" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content" style="background-color: white; width: 800px;">
 

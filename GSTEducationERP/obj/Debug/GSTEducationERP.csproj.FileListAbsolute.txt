@@ -692,6 +692,7 @@ C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\obj\
 C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEduca.6385CEE8.Up2Date
 C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.dll
 C:\Users\Mothabhau Borkar\Desktop\ERPMainProject\EmpowerERP\GSTEducationERP\obj\Debug\GSTEducationERP.pdb
+E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERP.dll.config
 E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERP.dll
 E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\GSTEducationERP.pdb
@@ -706,7 +707,6 @@ E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.C
 E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
 E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.dll
 E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
-E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.CSharp.Core.targets
 E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
 E:\ERPMainProject\EmpowerERP\GSTEducationERP\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
