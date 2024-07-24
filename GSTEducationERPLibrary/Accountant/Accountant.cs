@@ -62,7 +62,9 @@ namespace GSTEducationERPLibrary.Accountant
         public string ReferenceToName { get; set; }
         public string CandidateCode { get; set; }
         public string TranscationChequedate { get; set; }
-        public string TranscationCode { get; set; }
+        public string TransactionCode { get; set; }
+        public float TransactionAmount { get; set; }
+        public string Status { get; set; }
         
 
         public List<Accountant> lstRegularExpense {  get; set; }

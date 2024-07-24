@@ -60,25 +60,32 @@ namespace GSTEducationERPLibrary.Accountant
             return ds;
         }
 
+        public async Task<SqlDataReader> GetRefundCandidatesPaidFee(Accountant obj)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetRefundCandidatesPaidFee");
+            Param.Add("@CandidateCode", obj.CandidateCode);
+            SqlDataReader dr;
+            dr = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
+            return dr;
+        }
+
         public async Task SavetheExpenceMB(Accountant obj)
         {
-            int id=Convert.ToInt32(1);
-            int TYd=Convert.ToInt32(68);
+           
             Dictionary<string,string> Param = new Dictionary<string, string>();
             Param.Add("@Flag", "SavetheExpenceMB");
-            Param.Add("@TranscationCode", obj.TranscationCode);
+            Param.Add("@TranscationCode", obj.TransactionCode);
             Param.Add("@VendorName", obj.VendorName);
-            Param.Add("@TransactionDate", obj.Date.ToString());
+            Param.Add("@TransactionDate", obj.Date.ToString("yyyy-MM-dd"));
             Param.Add("@TransactionAmount", obj.Amount.ToString());
             Param.Add("@ExpenseCategoryId", obj.ExpID);
-            Param.Add("@StaffCode", obj.StaffCode);
-            Param.Add("@PaymentMode", obj.PaymentMode);
-            Param.Add("@TransactionId", obj.TranscationId);
-            Param.Add("@ChequeDate", obj.ChequeDate.ToShortDateString());
+            Param.Add("@StaffCode_CandidateCode", obj.CandidateCode);
+            Param.Add("@RefToCandidateCode", obj.ReferenceToName);
             Param.Add("@LoggedStaffCode", obj.StaffCode);
             Param.Add("@StatusId","6");
             Param.Add("@Description", obj.Comment);
-            Param.Add("@TransactionType","68");
+            Param.Add("@TransactionTypeId", "68");
             await DBHelper.ExecuteStoreProcedure("GSTAccountant", Param);
 
            
@@ -123,10 +130,42 @@ namespace GSTEducationERPLibrary.Accountant
         }
 
 
+        public async Task<DataSet> GetThePendingExpensesToMatchWithVoucherAsyncMB()
+        {
+            Dictionary<string,string> Param= new Dictionary<string, string>();
+            Param.Add("@Flag", "GetThePendingExpense");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
 
 
+        public async Task<DataSet> ListVouchersAsyncMB()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "ListVouchersAsyncMB");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
 
+        public async Task<SqlDataReader> GetVoucherAmountAsyncMB(Accountant obj)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetVouchersAmount");
+            Param.Add("@VoucherCode", obj.VoucherCode);
+            SqlDataReader dr = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
+            return dr;
+        }
 
+        public async Task VoucherLinkWithTransaction(Accountant obj)
+        {
+            Dictionary<string,string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "VoucherLinkWithTransaction");
+            Param.Add("@BalanceAmount", obj.Amount.ToString());
+            Param.Add("@VoucherCode", obj.VoucherCode);
+            Param.Add("@TranscationCode", obj.TransactionCode);
+            Param.Add("@TransactionDate", DateTime.Now.ToString("yyyy-MM-dd"));
+            await DBHelper.ExecuteStoreProcedure("GSTAccountant", Param);
+        }
 
         /// <summary>
         /// Shreyas Function code 

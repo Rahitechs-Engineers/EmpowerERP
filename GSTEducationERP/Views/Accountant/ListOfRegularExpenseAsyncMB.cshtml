@@ -1,119 +1,134 @@
-﻿@model GSTEducationERPLibrary.Accountant.Accountant
+﻿
+@model GSTEducationERPLibrary.Accountant.Accountant
 
-<script src="~/Content/plugins/jquery/jquery.min.js"></script>
-<script src="~/Content/Admin/js/Icon.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Management</title>
 
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
 
-<script type="text/javascript">
-    jQuery.noConflict();
-    jQuery(document).ready(function ($) {
-        $('#example1').on('click', '.icon, .icon1, .icon2', function () {
-            var MockId = $(this).data('id');
-            var url = $(this).data('action');
-            jQuery.ajax({
-                url: url,
-                type: 'GET',
-                success: function (data) {
-                    jQuery('#PerformanceModal .modal-content').html(data);
-                    jQuery('#PerformanceModal').modal('show');
-                }
-            });
-        });
-    });
-</script>
-
-<div class="card">
-    <div class="card-body">
-        <table id="example1" class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ExpID)
-                    </th>
-                    <th>
-                        Expense Type
-                    </th>
-                    <th>
-                        Vendor Name
-                    </th>
-                    <th>
-                        Date
-                    </th>
-                    <th>
-                        Payment Mode
-                    </th>
-                    <th>
-                        TranscationId
-                    </th>
-                    
-                    <th>
-                        Cheque Date
-                    </th>
-                    <th>
-                        Amount
-                    </th>
-
-                    <th>
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-
-                @foreach (var item in Model.lstRegularExpense)
-                {
+</head>
+<body>
+    <div class="card">
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
                     <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ExpID)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ExpenseType)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.VendorName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Date)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PaymentMode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TranscationId)
-                        </td>
-                        
-                        <td>
-                            @Html.DisplayFor(modelItem => item.TranscationChequedate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Amount)
-                        </td>
-                        <td >
-                            <a >
-                               
-                                <video width="25" height="25" playsinline loop>
-                                    <source src="~/Content/Admin/icon/viewEye.mp4" type="video/mp4">
-                                </video>
-                            </a>
-                        </td >
-
-
+                        <th>@Html.DisplayNameFor(model => model.ExpID)</th>
+                        <th>Expense Type</th>
+                        <th>Vendor Name</th>
+                        <th>Date</th>
+                        <th>Payment Mode</th>
+                        <th>TranscationId</th>
+                        <th>Cheque Date</th>
+                        <th>Amount</th>
+                        <th>Balance Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.lstRegularExpense)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.ExpID)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ExpenseType)</td>
+                            <td>@Html.DisplayFor(modelItem => item.VendorName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Date)</td>
+                            <td>@Html.DisplayFor(modelItem => item.PaymentMode)</td>
+                            <td>@Html.DisplayFor(modelItem => item.TransactionId)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ChequeDate)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Balance)</td>
+                            <td>
+                                @if (item.Status == "Completed")
+                                {
+                                    <a class="btn btn-success btn-sm rounded-pill"><b>@item.Status</b></a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-danger btn-sm rounded-pill"><b>@item.Status</b></a>
+                                }
+                            </td>
+                            <td>
+                                @if (item.Status == "Completed")
+                                {
+                                    <!-- Icon for viewing performance -->
+                                    <a href="#" id="icon" class="icon" data-id="@item.ExpID" data-action="@Url.Action("ViewTheExpenseDetailsAsyncMB", "Accountant", new { ExpCode = item.ExpID })"
+                                       data-toggle="modal" data-target="#MatchVoucherModal" title="View performance">
+                                        <video width="25" height="25" playsinline loop>
+                                            <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <!-- Icon for Match Vouchers -->
+                                    <a href="#" class="Matchicon" data-id="@item.ExpID" data-action="@Url.Action("MatchVoucherAsyncVM", "Accountant", new { TCode = item.ExpID ,Amount = item.Balance })"
+                                       data-toggle="modal" data-target="#MatchVoucherModal" title="View performance">
+                                        <video width="25" height="25" playsinline loop>
+                                            <source src="~/Content/Admin/icon/Edit.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
 
-            </tbody>
-        </table>
+                                    <!-- Icon for viewing performance -->
+                                    <a href="#" id="icon" class="icon" data-id="@item.ExpID" data-action="@Url.Action("ViewTheExpenseDetailsAsyncMB", "Accountant", new { ExpCode = item.ExpID })"
+                                       data-toggle="modal" data-target="#MatchVoucherModal" title="View performance">
+                                        <video width="25" height="25" playsinline loop>
+                                            <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
+                                        </video>
+                                    </a>
+                                }
+
+
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
-<div class="modal fade custom-modal-width" id="PerformanceModal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <!-- Content for Schedule Modal -->
+
+    <div class="modal fade custom-modal-width" id="MatchVoucherModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width:30vw;">
+                <div class="modal-body">
+                    <!-- Content for Schedule Modal -->
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+
+    <script type="text/javascript">
+        jQuery.noConflict();
+        jQuery(document).ready(function ($) {
+
+            $('#example1').on('click', '.Matchicon', function () {
+                var ExpCode = $(this).data('id');
+                var url = $(this).data('action');
+                jQuery.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        jQuery('#MatchVoucherModal .modal-content').html(data);
+                        jQuery('#MatchVoucherModal').modal('show');
+                    }
+                });
+            });
+        });
+    </script>
+
+
+</body>
+</html>
+
+
 
 
 

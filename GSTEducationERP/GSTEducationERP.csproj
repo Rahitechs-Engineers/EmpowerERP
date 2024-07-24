@@ -135,6 +135,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Accountant\Plugins\Select-2\Bootstrap\select2-bootstrap4.min.css" />
+    <Content Include="Content\Accountant\Plugins\Select-2\css\select2.min.css" />
+    <Content Include="Content\Accountant\Plugins\Select-2\Js\select2.full.min.js" />
     <Content Include="Content\Account\css\style.css" />
     <Content Include="Content\Account\img\international-day-education-cartoon-style.jpg" />
     <Content Include="Content\Admin\css\adminlte.css" />
@@ -851,6 +854,10 @@
     <Content Include="Content\plugins\moment\moment-with-locales.js" />
     <Content Include="Content\plugins\moment\moment-with-locales.min.js" />
     <Content Include="Content\plugins\moment\moment.min.js" />
+    <Content Include="Content\plugins\MultiSelect\css\bootstrap-multiselect-showselected.css" />
+    <Content Include="Content\plugins\MultiSelect\css\bootstrap-multiselect-showselected.min.css" />
+    <Content Include="Content\plugins\MultiSelect\js\bootstrap-multiselect-showselected.js" />
+    <Content Include="Content\plugins\MultiSelect\js\bootstrap-multiselect-showselected.min.js" />
     <Content Include="Content\plugins\overlayScrollbars\css\OverlayScrollbars.css" />
     <Content Include="Content\plugins\overlayScrollbars\css\OverlayScrollbars.min.css" />
     <Content Include="Content\plugins\overlayScrollbars\js\jquery.overlayScrollbars.js" />
@@ -1152,7 +1159,9 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Accountant\ViewTheExpenseDetailsAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\_MatchVoucherAsyncVM.cshtml" />
+    <Content Include="Views\Accountant\AddExpensesAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\DetailTranscationOfExpenseAsynMB.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

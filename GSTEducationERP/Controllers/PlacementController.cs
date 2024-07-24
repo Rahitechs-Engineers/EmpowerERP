@@ -2314,23 +2314,23 @@ namespace GSTEducationERP.Controllers
         /// <param name="endDate"></param>
         /// THIS OBJECT IS USE TO GET START DATE AND END DATE GET.
         /// <returns> THIS METHOS RETUN FILTER LIST.</returns>
-        [HttpPost]
-        public async Task<JsonResult> FilterDateCompanyPB(DateTime startDate, DateTime endDate)
-        {
-            try
-            {
-                objPlacement.BranchCode = Session["BranchCode"].ToString();
-                DataSet ds = await objbal.DateFilterPB(startDate, endDate, objPlacement.BranchCode);
-                DataTable dt = new DataTable();
-                dt = ds.Tables[0];
-                var jsondata = JsonConvert.SerializeObject(dt);
-                return await Task.Run(() => Json(jsondata));
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
+        //[HttpPost]
+        //public async Task<JsonResult> FilterDateCompanyPB(DateTime startDate, DateTime endDate)
+        //{
+        //    try
+        //    {
+        //        objPlacement.BranchCode = Session["BranchCode"].ToString();
+        //        DataSet ds = await objbal.DateFilterPB(startDate, endDate, objPlacement.BranchCode);
+        //        DataTable dt = new DataTable();
+        //        dt = ds.Tables[0];
+        //        var jsondata = JsonConvert.SerializeObject(dt);
+        //        return await Task.Run(() => Json(jsondata));
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw (ex);
+        //    }
+        //}
         /// <summary>
         /// THIS METHOD IS USE TO GET UPDATE VIEW.
         /// </summary>
