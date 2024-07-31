@@ -700,9 +700,8 @@ namespace GSTEducationERP.Controllers
                 if (dr.Read())
                 {
                     DateTime transactionDate = Convert.ToDateTime(dr["TransactionDate"]);
-                    string formattedDate = transactionDate.ToString("dd-MM-yyyy");
+                    ViewBag.TransactionDate = transactionDate.ToString("dd-MM-yyyy");
                     ViewBag.TransactionCode = PurchaseCode;
-                    ViewBag.TransactionDate = formattedDate;
                     ViewBag.VendorName = dr["VendorName"].ToString();
                     ViewBag.TransactionAmount = dr["TransactionAmount"].ToString() == "0" ? 0 : long.Parse(dr["TransactionAmount"].ToString());
                     ViewBag.TransactionAmount = dr["BalanceAmount"].ToString() == "0" ? 0 : long.Parse(dr["BalanceAmount"].ToString());

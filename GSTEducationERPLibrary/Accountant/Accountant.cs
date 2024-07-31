@@ -79,7 +79,7 @@ namespace GSTEducationERPLibrary.Accountant
 
         [DataType(DataType.Date)]
         [DisplayName("Transaction Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime TransactionDate { get; set; }
         [DisplayName("Paid amount")]
         public double TransactionAmount { get; set; }
