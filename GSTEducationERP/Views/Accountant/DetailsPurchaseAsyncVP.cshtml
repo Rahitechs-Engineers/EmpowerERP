@@ -4,6 +4,7 @@
     ViewBag.Title = "DetailsPurchaseAsyncVP";
     Layout = "~/Views/Shared/_LayoutERP.cshtml";
     var currency = Html.Raw(ViewBag.Currency);
+    var ListforFilter = ViewBag.ListForFilter;
 }
 
 
@@ -29,6 +30,10 @@
         #addpurchaseButton, #addvoucherButton {
             margin-top: 15px !important;
             font-size: 16px !important;
+        }
+
+        label {
+            padding-right: 5px;
         }
 
         .card-header {
@@ -88,7 +93,113 @@
             width: 100% !important;
         }
     </style>
+    <!--datatable css for the table-->
+    <style>
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+            margin: 0px !important;
+        }
 
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active {
+            border-top: 3px solid #33CCCC;
+        }
+
+        a {
+            color: #33CCCC;
+        }
+
+        .card.card-outline-tabs .card-header a:hover {
+            color: #33CCCC;
+        }
+
+        .card-primary.card-outline-tabs > .card-header a.active, .card-primary.card-outline-tabs > .card-header a.active:hover {
+            border-top: 3px solid #33CCCC;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter {
+            margin-top: -40px !important;
+        }
+
+        div.dt-buttons {
+            margin-top: -20px !important;
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate ul.pagination {
+            margin-top: -20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+
+        .container, .container-lg, .container-md, .container-sm, .container-xl {
+            max-width: none !important;
+        }
+    </style>
 </head>
 <body style="margin: 0; padding: 0;">
     @using (Html.BeginForm("DetailsPurchaseAsyncVP", "Accountant"))
@@ -104,12 +215,12 @@
                         <div class="row g-6 justify-content-end">
                             <div class="col-3">
                                 <button id="addvoucherButton" type="button" class="btn btn-block bg-gradient-info btn-block" onclick="location.href = '/Placement/ListInternalRelesedStudentsPRAsync', '/Placement/ListInternalOnHoldStudentsPRAsync'">
-                                    @*<img src="~/Content/Admin/icon/Add.jpeg"  class="btnicon"/>*@Add Voucher
+                                    <i class="far fa-google-plus"></i>Add Voucher
                                 </button>
                             </div>
                             <div class="col-3">
                                 <button id="addpurchaseButton" type="button" class="btn btn-block bg-gradient-info btn-block" onclick="location.href = '/Accountant/AddPurchaseAsyncVP'">
-                                    @*<img src="~/Content/Admin/icon/Add.jpeg" class="btnicon" />*@ Add Purchase
+                                    <i class="fc-icon-plus-square"></i> Add Purchase
                                 </button>
                             </div>
                         </div>
@@ -120,24 +231,37 @@
             <hr />
             <div class="row">
 
-                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
+                <div class="col-md-2 form-group" style="width:fit-content;display:flex">
                     <label style="padding-right: 10px; padding-left: 10px ">Status</label>
-                    <select id="ddlStatus" class="form-control">
+                    <select id="statusFilter" class="form-control">
+                        <option value="null">Select All</option>
                         <option value="Pending">Pending</option>
-                        <option value="Settled">Settled</option>
+                        <option value="Completed">Completed</option>
                     </select>
                 </div>
-                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
-                    <label>Start Date</label>
-                    <input type="date" class="form-control" id="startDate" name="startDate">
 
+                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
+                    <div class="input-group">
+                        <label for="startDate" class="label-control">Start Date</label>
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input type="date" class="form-control col-md-6" id="startDateFilter" name="startDate">
+                    </div>
                 </div>
                 <div class="col-md-3 form-group" style="width:fit-content;display:flex">
-                    <label>End Date</label>
-                    <input type="date" class="form-control" id="endDate" name="endDate">
+                    <div class="input-group">
+                        <label for="endDate">End Date   </label>
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input type="date" class="form-control col-md-6" id="endDateFilter" name="endDate">
+                    </div>
                 </div>
-
-
             </div>
             <div class="modal" id="StudentModal">
                 <div class="modal-dialog" style="background-color: white;">
@@ -183,7 +307,10 @@
                                     @Html.DisplayNameFor(model => model.BalanceAmount) (@currency)
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.TransactionDate)
+                                    Total Amount (@currency)
+                                </th>
+                                <th>
+                                    Purchase Date
                                 </th>
                                 <th hidden>
                                     @Html.DisplayNameFor(model => model.PaymentMode)
@@ -194,7 +321,7 @@
                                 <th>
                                     @Html.DisplayNameFor(model => model.Status)
                                 </th>
-                                <th></th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -226,7 +353,7 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.TransactionAmount)
                                         </td>
-                                        <td >
+                                        <td>
                                             @if (item.Status == "Pending")
                                             {
                                                 <span style="color:red;"> @Html.DisplayFor(modelItem => item.BalanceAmount)</span>
@@ -236,6 +363,11 @@
                                                 @Html.DisplayFor(modelItem => item.BalanceAmount)
                                             }
 
+                                        </td>
+                                        <td>
+                                            @(
+                                                item.TransactionAmount + item.BalanceAmount
+                                            )
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.TransactionDate)
@@ -351,6 +483,7 @@
             });
         });
     </script>
+
 
     <script>
         jQuery(function ($) {
@@ -471,7 +604,7 @@
                      jQuery('#MatchVoucherModal').modal('show');
                 }
             });
-       });
+        });
 
     </script>
 
@@ -490,6 +623,111 @@
             timeOut: 4000 // How long the toast will be displayed (in milliseconds)
         };
     </script>
+    <!--filter here for status and dates-->
+    <script>
+    $(document).ready(function () {
+        function filterPurchases(status, startDate, endDate) {
+            var url = '@Url.Action("FilterPurchases", "Accountant")' + '?status=' + encodeURIComponent(status) + '&startDate=' + encodeURIComponent(startDate) + '&endDate=' + encodeURIComponent(endDate);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function (response) {
+                    var tableBody = $('#PurchaseList tbody');
+                    tableBody.empty(); // Clear the table body
+
+                    response.forEach(function (item) {
+                        var formattedDate = formatDate(item.TransactionDate);
+
+                        var row = '<tr>' +
+                            '<td>' + item.TransactionCode + '</td>' +
+                            '<td>' + item.VendorName + '</td>' +
+                            '<td>' + item.ItemName + '</td>' +
+                            '<td hidden>' +
+                            '<a href="#" class="icon" id="PopUpitem" data-id="' + item.TransactionCode + '" data-url="/Accountant/ListPurchasedItemsAsyncVP?PurchaseCode=' + item.TransactionCode + '" data-toggle="modal" data-target="#StudentModal" title="Items List">' +
+                            '<video width="25" height="25" playsinline loop>' +
+                            '<source src="~/Content/Admin/icon/notebook_3.mp4" type="video/mp4" />' +
+                            '</video>' +
+                            '</a>' +
+                            '</td>' +
+                            '<td>' + item.TransactionAmount + '</td>' +
+                            '<td>' + (item.Status == "Pending" ? '<span style="color:red;">' + item.BalanceAmount + '</span>' : item.BalanceAmount) + '</td>' +
+                            '<td>' + (item.TransactionAmount + item.BalanceAmount) + '</td>' +
+                            '<td>' + formattedDate + '</td>' +
+                            '<td hidden>' + item.PaymentMode + '</td>' +
+                            '<td hidden>' + item.TranId_CheqNo + '</td>' +
+                            '<td>' + (item.Status == "Completed" ? '<span class="badge bg-success">' + item.Status + '</span>' : '<span class="badge bg-danger">' + item.Status + '</span>') + '</td>' +
+                            '<td style="text-align: center;">' +
+                            (item.Status == "Completed" ? '<a href="javascript:void(0);" class="icon" id="ViewPurchase" data-toggle="tooltip" title="View Purchase Invoice" data-PurchaseCode="' + item.TransactionCode + '">' +
+                                '<video width="25" height="25" playsinline loop>' +
+                                '<source src="~/Content/Admin/icon/view.mp4" type="video/mp4">' +
+                                '</video>' +
+                                '</a>' : '') +
+                            (item.Status == "Pending" ? '<span>' +
+                                '<a href="#" class="icon" id="Matchicon" data-id="' + item.TransactionCode + '" data-action="/Accountant/MatchVoucherAsyncVM?TCode=' + item.TransactionCode + '-' + item.VendorName + '&Amount=' + item.BalanceAmount + '" data-toggle="modal" data-target="#MatchVoucherModal" title="Pay">' +
+                                '<video width="25" height="25" playsinline loop>' +
+                                    '<source src="~/Content/Admin/icon/payment.mp4" type="video/mp4">' +
+                                '</video>' +
+                                '</a>' +
+                                '</span>' + (item.TransactionAmount == 0 ? '<span>' +
+                                    '<a href="/Accountant/UpdatePurchaseAsyncVP?PurchaseCode=' + item.TransactionCode + '" class="icon" data-toggle="tooltip" title="Edit Purchase">' +
+                                    '<video width="25" height="25" playsinline loop>' +
+                                        '<source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" />' +
+                                    '</video>' +
+                                    '</a>' +
+                                    '</span>' : '') : '') +
+                            '</td>' +
+                            '</tr>';
+                        tableBody.append(row);
+                    });
+
+                    // Reinitialize event handlers after pagination
+                    initializeFilterEventHandlers();
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                }
+            });
+        }
+
+        function formatDate(jsonDate) {
+            var date = new Date(parseInt(jsonDate.substr(6)));
+            var day = ("0" + date.getDate()).slice(-2);
+            var month = ("0" + (date.getMonth() + 1)).slice(-2);
+            var year = date.getFullYear();
+            return day + "/" + month + "/" + year;
+        }
+
+        function initializeFilterEventHandlers() {
+            var status = $('#statusFilter').val();
+            var startDate = $('#startDateFilter').val();
+            var endDate = $('#endDateFilter').val();
+
+            $('#statusFilter').off('change').on('change', function () {
+                status = $(this).val();
+                filterPurchases(status, startDate, endDate);
+            });
+
+            $('#startDateFilter').off('change').on('change', function () {
+                startDate = $(this).val();
+                filterPurchases(status, startDate, endDate);
+            });
+
+            $('#endDateFilter').off('change').on('change', function () {
+                endDate = $(this).val();
+                filterPurchases(status, startDate, endDate);
+            });
+
+            // Initial filter call if needed
+            //filterPurchases(status, startDate, endDate);
+        }
+
+        // Initialize the event handlers
+        initializeFilterEventHandlers();
+    });
+    </script>
+
+
 
 </body>
 </html>

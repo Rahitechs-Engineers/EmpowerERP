@@ -11,15 +11,20 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Purchase | Invoice</title>
-
-    <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="~/Content/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     @*<link rel="stylesheet" href="~/Content/dist/css/adminlte.min.css">*@
     <style>
         a {
+            color: #33CCCC;
+        }
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
             color: #33CCCC;
         }
     </style>
@@ -81,8 +86,8 @@
                                 <th>Quantity (units)</th>
                                 <th>Unit Price (@currency)</th>
                                 <th>Discount(%)</th>
-                                <th>Tax(%)</th>
                                 <th>Discount Amount (@currency)</th>
+                                <th>Tax(%)</th>
                                 <th>Tax Amount (@currency)</th>
                                 <th>Total Price (@currency)</th>
                             </tr>
@@ -108,10 +113,10 @@
                                             @Html.DisplayFor(modelItem => item.Discount)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Tax)
+                                            @Html.DisplayFor(modelItem => item.Balance)<!--this is discounted price-->
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Balance)<!--this is discounted price-->
+                                            @Html.DisplayFor(modelItem => item.Tax)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.AppliedTax)<!--this is applied tax amount calculation -->
@@ -171,96 +176,99 @@
                 </div>
                 <!-- /.col -->
             </div>
-            <!--div for transactions here -->
-            <div class="card" id="divtransaction">
-                <!--show the transactions in table -->
-                <div class="card-title">
-                    <p>Transactions </p>
-                </div>
-                <div class="card-body">
-                    <table class="table" id="tbltransactions">
-                        <thead>
-                            <tr>
-                                <th>Date </th>
-                                <th>Voucher Code</th>
-                                <th>Payment Mode</th>
-                                @if (mode == "BANK")
-                                {
-                                    <th>TransactionId/Cheque No.</th>
 
-                                }
-                                else if (mode == "CHEQUE")
-                                {
-                                    <th>TransactionId/Cheque No.</th>
-                                    <th>Cheque Date</th>
-                                    <th>Cheque Clearence Date</th>
-                                }
-
-                                <th>Amount Paid (@currency)</th>
-                                <th>Balance Amount (@currency)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model != null && Model.lstTransactionVP != null)
-                            {
-                                for (int i = 0; i < Model.lstTransactionVP.Count; i++)
-                                {
-                                    var item = Model.lstTransactionVP[i];
-                                    <tr>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.TransactionDate)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.VoucherCode)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.PaymentMode)
-                                        </td>
-                                        @if (mode == "BANK")
-                                        {
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.TranId_CheqNo)
-                                            </td>
-                                        }
-                                        else if (mode == "CHEQUE")
-                                        {
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.TranId_CheqNo)
-                                            </td>
-
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ChequeDate)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ChequeClearenceDate)
-                                            </td>
-                                        }
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.TransactionAmount)
-                                        </td>
-                                        <td>
-                                            @Html.DisplayFor(modelItem => item.BalanceAmount)
-                                        </td>
-                                    </tr>
-                                }
-                             }
-                             else
-                             {
-                                <tr>
-                                    No data found...
-                                </tr>
-                             }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
             <!-- this row will not appear when printing -->
             <div class="row no-print">
                 <div class="col-12">
                     <input type="button" href="ViewPurchaseFormAsyncVP.cshtml" value="Print this page" onClick="printForm('ViewPurchaseFormAsyncVP')">
 
-                    
+
                 </div>
+            </div>
+        </div>
+        <!--div for transactions here -->
+        <div class="card" id="divtransaction">
+            <!--show the transactions in table -->
+            <div class="card-title">
+                <h2>
+                    Transactions
+                </h2>
+            </div>
+            <div class="card-body">
+                <table class="table" id="tbltransactions">
+                    <thead>
+                        <tr>
+                            <th>Date </th>
+                            <th>Voucher Code</th>
+                            <th>Payment Mode</th>
+                            @if (mode == "BANK")
+                            {
+                                <th>TransactionId/Cheque No.</th>
+
+                            }
+                            else if (mode == "CHEQUE")
+                            {
+                                <th>TransactionId/Cheque No.</th>
+                                <th>Cheque Date</th>
+                                <th>Cheque Clearence Date</th>
+                            }
+
+                            <th>Amount Paid (@currency)</th>
+                            <th>Balance Amount (@currency)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.lstTransactionVP != null)
+                        {
+                            for (int i = 0; i < Model.lstTransactionVP.Count; i++)
+                            {
+                                var item = Model.lstTransactionVP[i];
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TransactionDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.VoucherCode)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.PaymentMode)
+                                    </td>
+                                    @if (mode == "BANK")
+                                    {
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TranId_CheqNo)
+                                        </td>
+                                    }
+                                    else if (mode == "CHEQUE")
+                                    {
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TranId_CheqNo)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ChequeDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ChequeClearenceDate)
+                                        </td>
+                                    }
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.TransactionAmount)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.BalanceAmount)
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                No data found...
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </div>
     </form>
@@ -269,7 +277,7 @@
     <!--scripts for pdf-->
     <script src="~/Content/plugins/pdfmake/pdfmake.js"></script>
     <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
-    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -303,16 +311,15 @@
     </script>
     <!--script for the print button-->
     <script>
-        window.onload = function () {
-            // Print button
-            document.getElementById('printButton').addEventListener('click', function (event) {
+        $(document).ready(function () {
+            $('#printButton').on('click', function (event) {
                 event.preventDefault();
                 var printWindow = window.open(window.location.href, '_blank', 'noopener,noreferrer');
                 printWindow.addEventListener('load', function () {
                     printWindow.print();
                 });
             });
-        };
+        });
         function printForm(divName) {
             debugger;
             var printContents = document.getElementById(divName).innerHTML;
@@ -322,6 +329,6 @@
             w.close();
         }
     </script>
-  
+
 </body>
 </html>

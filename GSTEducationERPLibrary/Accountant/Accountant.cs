@@ -15,6 +15,8 @@ namespace GSTEducationERPLibrary.Accountant
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
         public int VoucherId { get; set; }
         public string VoucherCode { get; set; }
+        [Required]
+        [DisplayName("Vendor Name")]
         public string VendorName { get; set; }
         public float Amount { get; set; }
         public string AmountPaidTo { get; set; }
@@ -47,7 +49,7 @@ namespace GSTEducationERPLibrary.Accountant
 	public List<Accountant> lstPendingVoucher { get; set; }
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
         //----------------------------------------vishla's properties here-----------------------------------------------------------------------------------
-        #region
+        #region//vishals region starts here for purchase
         /// <summary>
         /// vishals properties starts from here 
         /// </summary>
@@ -76,6 +78,7 @@ namespace GSTEducationERPLibrary.Accountant
         /// properties for the purchase  table here
         /// </summary>
         public string TransactionCode { get; set; }
+        [Required]
 
         [DataType(DataType.Date)]
         [DisplayName("Transaction Date")]

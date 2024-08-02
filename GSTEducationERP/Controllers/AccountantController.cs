@@ -22,7 +22,7 @@ namespace GSTEducationERP.Controllers
             public string Name { get; set; }
             public string Url { get; set; }
         }
-
+       
         // GET: Accountant
         public ActionResult AccountantDashboardAsyncSGS()
         {
@@ -319,7 +319,7 @@ namespace GSTEducationERP.Controllers
             
         }
         #region //Vishals purchase modules starts here
-        //------------------------------------Vishal's Purchase Modules strts here------------------------------------------------------------
+        //------------------------------------Vishal's Purchase Modules starts here------------------------------------------------------------
         /// <summary>
         /// this action result methode for the purchase dashboard ...getting the all the purchases 
         /// </summary>
@@ -351,9 +351,38 @@ namespace GSTEducationERP.Controllers
                 //{
                 //    throw (ex);
                 //}
+                Session["ListforFilter"] = model;
                 return await Task.Run(() => View("DetailsPurchaseAsyncVP", objac));
 
             }
+        }
+        /// <summary>
+        /// this action result methode is written for thr purchase purpose
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns>filter llst</returns>
+        [HttpGet]
+        public async Task<JsonResult> FilterPurchases(string status, DateTime? startDate, DateTime? endDate)
+        {
+            List<Accountant> purchases = Session["ListforFilter"] as List<Accountant>;
+            if (!string.IsNullOrEmpty(status)&& status!= "null")
+            {
+                purchases = purchases.Where(p => p.Status == status).ToList();
+            }
+
+            if (startDate.HasValue)
+            {
+                purchases = purchases.Where(p => p.TransactionDate >= startDate.Value).ToList();
+            }
+
+            if (endDate.HasValue)
+            {
+                purchases = purchases.Where(p => p.TransactionDate <= endDate.Value).ToList();
+            }
+
+            return await Task.Run(()=> Json(purchases, JsonRequestBehavior.AllowGet));
         }
 
         /// <summary>
@@ -455,7 +484,7 @@ namespace GSTEducationERP.Controllers
         /// <param name="PurchaseCode"></param>
         /// <returns>true/false</returns>
         [HttpPost]
-        public async Task<JsonResult> ValidatePurchaseAsyncVP(string PurchaseCode)
+        public async Task<ActionResult> ValidatePurchaseAsyncVP(string PurchaseCode)
         {
             objac.PurchaseCode = PurchaseCode;
             SqlDataReader dr;
@@ -464,12 +493,12 @@ namespace GSTEducationERP.Controllers
             {
                 objac.VendorName = dr["VendorName"].ToString();
                 //purchase code exists in the database
-                return Json(objac, JsonRequestBehavior.AllowGet);
+                return Json(new {success=false}, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 //purchase code doesn't exists
-                return Json(JsonRequestBehavior.AllowGet);
+                return Json(new {success=true},JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -505,8 +534,8 @@ namespace GSTEducationERP.Controllers
                     //fetching the banks here for the add purchase 
                     await ListStatusAsyncVP();//fetching the status here i don't know why
                     //setting the date by default todays
-                    objac.TransactionDate = DateTime.Now;
-                    objac.ChequeDate = DateTime.Now;
+                    //objac.TransactionDate = DateTime.Now;
+                    //objac.ChequeDate = DateTime.Now;
                     await ListHsnCodeAsyncVP();//getting thehsncode link for dropdown
                     await ListTaxAsyncVP();//getting the applied tax viewbag from methode
                     await PaymentmodesAsyncVP();//getting the payment modes to dropdown
@@ -746,7 +775,6 @@ namespace GSTEducationERP.Controllers
                 //getting the details from the database for this purchase code
                 objac.TransactionCode = PurchaseCode;
                 objac.PurchaseCode = PurchaseCode;
-                accountant.TransactionDate = DateTime.Now;
                 ViewBag.Currency = "&#x20b9;";
                 ViewBag.IsitEdit = true;
                 SqlDataReader dr = await objbal.ListPurchasesDetailsAsyncVP(objac);
