@@ -17,6 +17,11 @@ namespace GSTEducationERP.Controllers
     {
         private readonly BALAccountant objbal = new BALAccountant();
         private readonly Accountant objac = new Accountant();
+        private const string StaffListSessionKey = "FullStaffList";
+        private const string StaffAttendanceListSessionKey = "FullStaffAttendanceList";
+        private const string AdvancePayStaffListSessionKey = "AdvancePayStaffList";
+        private const string AllStaffAttendanceListSessionKey = "AllFullStaffAttendanceList";
+
         public class BreadcrumbItem
         {
             public string Name { get; set; }
@@ -1099,6 +1104,499 @@ namespace GSTEducationERP.Controllers
             }
         }
         //------------------------------------Vishal's Purchase Modules ends here------------------------------------------------------------
-        #endregion 
+        #endregion
+
+        #region // Shrikant Staff PayRoll modules starts here
+
+
+        //-----------------Shrikant StaffPayRoll Start -----------------------------------------------------------------------//
+
+        /// <summary>
+        /// This method is Used for just checking user is loged or not 
+        /// if loged than show main view of staff payRoll
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> GetStaffForPaySSAsync()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                await DeparmentBindSSAsync();
+                await PositionBindSSAsync();
+                await LoadAndStoreFullStaffList();
+
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
+            new BreadcrumbItem { Name = "StaffPayRoll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") }
+        };
+
+                ViewBag.Breadcrumbs = breadcrumbs;
+
+                return View();
+            }
+        }
+
+        /// <summary>
+        /// this method create to Load and Store Full Staff List in Session
+        /// </summary>
+        /// <returns>it not returns any thing</returns>
+        [HttpGet]
+        private async Task LoadAndStoreFullStaffList()
+        {
+
+            if (Session[StaffListSessionKey] == null)
+            {
+                string BranchCode = Session["BranchCode"].ToString();
+                DataSet ds = await objbal.StaffListSSAsync(BranchCode);
+                List<Accountant> fullStaffList = ConvertDataSetToAccountantList(ds);
+                Session[StaffListSessionKey] = fullStaffList;
+            }
+        }
+
+        /// <summary>
+        /// this Method is used Store data into model property 
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <returns>List of Accountant</returns>
+        private List<Accountant> ConvertDataSetToAccountantList(DataSet ds)
+        {
+            List<Accountant> staffList = new List<Accountant>();
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    Accountant objP = new Accountant
+                    {
+                        StaffCode = dr["StaffCode"].ToString(),
+                        DepartmentID = Convert.ToInt32(dr["DepartmentId"]),
+                        StaffName = dr["Staff Name"].ToString(),
+                        DepartmentName = dr["Department"].ToString(),
+                        Designation = dr["Designation"].ToString(),
+                        BankName = dr["Bank"].ToString(),
+                        AccountNo = Convert.ToInt64(dr["Account Number"].ToString()),
+                        IFSCCode = dr["IFSCCode"].ToString(),
+                        GrossSalary = Convert.ToInt64(dr["GrossSalary"])
+                    };
+                    staffList.Add(objP);
+                }
+            }
+            return staffList;
+        }
+
+        /// <summary>
+        /// This method is Partial View of StaffDetailes Page
+        /// we call this method when page is load
+        /// </summary>
+        /// <returns> partial View</returns>
+        public async Task<ActionResult> ListOfStaffSSAsync()
+        {
+            List<Accountant> fullStaffList = Session[StaffListSessionKey] as List<Accountant>;
+            Accountant obj = new Accountant { lstEmp = fullStaffList };
+            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
+            new BreadcrumbItem { Name = "StaffPayRoll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
+            new BreadcrumbItem { Name = "ListOFStaff", Url = Url.Action("_ListOfStaffSSAsync", "Accountant") }
+        };
+
+            ViewBag.Breadcrumbs = breadcrumbs;
+            return PartialView("_ListOfStaffSSAsync", obj);
+
+        }
+
+        /// <summary>
+        /// This is nonAction method used for just get List of Departments
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        [HttpGet]
+        private async Task DeparmentBindSSAsync()
+        {
+            DataSet ds = await objbal.DeparmentBindSSAsync();
+            List<SelectListItem> DepList = new List<SelectListItem>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                DepList.Add(new SelectListItem
+                {
+                    Text = dr["DepartmentName"].ToString(),
+                    Value = dr["DepartmentId"].ToString()
+                });
+            }
+            ViewBag.Department = new SelectList(DepList, "Value", "Text");
+        }
+
+        /// <summary>
+        /// This non Action Method used to Fech List of Positions
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task PositionBindSSAsync()
+        {
+            DataSet ds = await objbal.PositionBindSSAsync();
+            List<SelectListItem> DepList = new List<SelectListItem>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                DepList.Add(new SelectListItem
+                {
+                    Text = dr["StaffPosition"].ToString(),
+                    Value = dr["StaffPositionId"].ToString()
+                });
+            }
+            ViewBag.Positon = new SelectList(DepList, "Value", "Text");
+
+
+        }
+
+
+        /// <summary>
+        /// Display employees filtered by DepartmentID
+        /// </summary>
+        /// <param name="DepartmentID"></param>
+        /// <returns>PartialView</returns>
+        public ActionResult WithIdListOfStaffSSAsync(string DepartmentText, string PositionName)
+        {
+
+            DepartmentText = DepartmentText == "Select Department" ? null : DepartmentText;
+            PositionName = PositionName == "Select Position" ? null : PositionName;
+
+
+            List<Accountant> fullStaffList = Session[StaffListSessionKey] as List<Accountant>;
+            if (fullStaffList == null)
+            {
+
+                return PartialView("_ListOfStaffSSAsync", new Accountant { lstEmp = new List<Accountant>() });
+            }
+
+
+            List<Accountant> filteredStaff = fullStaffList;
+
+            if (!string.IsNullOrEmpty(DepartmentText))
+            {
+                filteredStaff = filteredStaff.Where(s => s.DepartmentName == DepartmentText).ToList();
+            }
+            if (!string.IsNullOrEmpty(PositionName))
+            {
+                filteredStaff = filteredStaff.Where(s => s.Designation == PositionName).ToList();
+            }
+
+
+            Accountant obj = new Accountant { lstEmp = filteredStaff };
+            return PartialView("_ListOfStaffSSAsync", obj);
+        }
+
+        /// <summary>
+        /// this is Non Action Method Used to Load And Store Attendance of Staff
+        /// </summary>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        private async Task LoadAndStoreFullAttendanceSSasync(string month, string year)
+        {
+            string branchCode = Session["BranchCode"].ToString();
+            DataSet ds = await objbal.LoadAndStoreFullAttendanceSSasync(branchCode, month, year);
+            List<Accountant> fullStaffAttendanceList = ConvertDataSetToAccountantListForAttendance(ds);
+            Session[StaffAttendanceListSessionKey] = fullStaffAttendanceList;
+        }
+
+        /// <summary>
+        /// this Non Action Method used to Convert DataSet to Accountant List For Attendance
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <returns></returns>
+        private List<Accountant> ConvertDataSetToAccountantListForAttendance(DataSet ds)
+        {
+            List<Accountant> staffList = new List<Accountant>();
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    Accountant objP = new Accountant
+                    {
+                        StaffName = dr["StaffName"].ToString(),
+                        DepartmentName = dr["DepartmentName"].ToString(),
+                        Designation = dr["Designation"].ToString(),
+                        PaidLeaveCount = Convert.ToInt32(dr["PaidLeaveCount"].ToString()),
+                        //ApprovedLeaveCount = Convert.ToInt32(dr["ApprovedLeaveCount"].ToString()),
+                        //PendingLeaveCount = Convert.ToInt32(dr["PendingLeaveCount"].ToString()),
+                        AbsentDays = Convert.ToInt32(dr["AbsentDays"]),
+                        PayableDays = Convert.ToInt32(dr["PayableDays"]),
+                        MonthlyBasicSalary = Convert.ToDecimal(dr["MonthlyBasicSalary"]),
+                        AdjustedNetSalary = Convert.ToDecimal(dr["AdjustedNetSalary"])
+                    };
+                    staffList.Add(objP);
+                }
+            }
+            return staffList;
+        }
+        /// <summary>
+        /// this method 
+        /// </summary>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> AttendenceOfStaffssAsync(string month, string year)
+        {
+            await LoadAndStoreFullAttendanceSSasync(month, year);
+
+            List<Accountant> fullStaffAttendanceList = Session[StaffAttendanceListSessionKey] as List<Accountant>;
+            Accountant obj = new Accountant { lstEmpAttendance = fullStaffAttendanceList };
+            return PartialView("_AttendenceOfStaffssAsync", obj);
+        }
+
+        /// <summary>
+        /// This method is used to Filter data From Session StaffAttendanceListSessionKey
+        /// </summary>
+        /// <param name="departmentText"></param>
+        /// <param name="positionName"></param>
+        /// <returns></returns>
+        public ActionResult WithIdListOfStaffAttendanceSSAsync(string departmentText, string positionName)
+        {
+            departmentText = departmentText == "Select Department" ? null : departmentText;
+            positionName = positionName == "Select Position" ? null : positionName;
+
+            List<Accountant> fullStaffList = Session[StaffAttendanceListSessionKey] as List<Accountant>;
+            if (fullStaffList == null)
+            {
+                return PartialView("_AttendenceOfStaffssAsync", new Accountant { lstEmpAttendance = new List<Accountant>() });
+            }
+
+            List<Accountant> filteredStaff = fullStaffList;
+
+            if (!string.IsNullOrEmpty(departmentText))
+            {
+                filteredStaff = filteredStaff.Where(s => s.DepartmentName == departmentText).ToList();
+            }
+            if (!string.IsNullOrEmpty(positionName))
+            {
+                filteredStaff = filteredStaff.Where(s => s.Designation == positionName).ToList();
+            }
+
+            Accountant obj = new Accountant { lstEmpAttendance = filteredStaff };
+            return PartialView("_AttendenceOfStaffssAsync", obj);
+        }
+
+        /// <summary>
+        /// This Method used to Show Staff Details Of Staff
+        /// </summary>
+        /// <param name="StaffCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult DetailsOfStaffAsyncSS(string StaffCode)
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
+            new BreadcrumbItem { Name = "StaffPayRoll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
+            new BreadcrumbItem { Name = "ListOFStaff", Url = Url.Action("_ListOfStaffSSAsync", "Accountant") },
+            new BreadcrumbItem { Name = "ListOFStaff", Url = Url.Action("DetailsOfStaffAsyncSS", "Accountant") }
+        };
+                ViewBag.Breadcrumbs = breadcrumbs;
+                return View("mm");
+            }
+
+        }
+
+        /// <summary>
+        /// This Method used to Show Salary History of specific Staff
+        /// </summary>
+        /// <param name="StaffCode"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> ShowAllSalaryAsyncSS(string StaffCode = null)
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                DataSet ds = await objbal.ShowAllSalaryAsyncSS(StaffCode);
+                List<Accountant> salarySlips = new List<Accountant>();
+
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        Accountant obja = new Accountant
+                        {
+                            StaffCode = dr["StaffCode"].ToString(),
+                            StaffName = dr["StaffName"].ToString(),
+                            StaffPosition = dr["StaffPosition"].ToString(),
+                            GrossSalary = Convert.ToDecimal(dr["MonthlyGrossSalary"]),
+                            AdvanceAmount = Convert.ToDecimal(dr["AdvanceAmount"]),
+                            NetSalary = Convert.ToDecimal(dr["MonthlyNetSalary"]),
+                            SalaryCreditedDate = Convert.ToDateTime(dr["CreditedDate"]),
+
+                        };
+                        salarySlips.Add(obja);
+                    }
+                }
+                else
+                {
+                    ViewBag.Message = "No salary slips found for the given criteria.";
+                }
+
+                ViewBag.SalarySlips = salarySlips;
+            }
+
+            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Name = "Accountant Dashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
+            new BreadcrumbItem { Name = "Staff Pay Roll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
+            new BreadcrumbItem { Name = "List OF Staff", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
+            new BreadcrumbItem { Name = "Salary Details", Url = Url.Action("ShowAllSalaryAsyncSS", "Accountant") }
+        };
+            ViewBag.Breadcrumbs = breadcrumbs;
+
+
+
+            return View();
+
+
+        }
+
+
+        /// <summary>
+        /// Load And Store All Staff Attendance
+        /// </summary>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        [HttpGet]
+
+        public async Task LoadAndStoreAllFullAttendanceSSasync(string month, string year)
+        {
+            string branchCode = Session["BranchCode"].ToString();
+            DataSet ds = await objbal.ShowAttendanceOfAllStaffAsyncSS(branchCode);
+            List<Accountant> AllFullStaffAttendanceList = ConvertDataSetToAccountantAttendance(ds);
+            Session[AllStaffAttendanceListSessionKey] = AllFullStaffAttendanceList;
+        }
+
+        /// <summary>
+        /// This Method Used to Ds data into List
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <returns></returns>
+        public List<Accountant> ConvertDataSetToAccountantAttendance(DataSet ds)
+        {
+            List<Accountant> staffList = new List<Accountant>();
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    DateTime date;
+                    bool isValidDate = DateTime.TryParse(dr["Date"].ToString(), out date);
+
+                    Accountant objP = new Accountant
+                    {
+                        StaffCode = dr["StaffCode"].ToString(),
+                        StaffName = dr["StaffName"].ToString(),
+                        Status = dr["Status"].ToString(),
+                        Date = isValidDate ? date.ToString("dd/MM/yyyy") : string.Empty,
+                    };
+                    staffList.Add(objP);
+                }
+            }
+            return staffList;
+        }
+
+        /// <summary>
+        /// This Method used to call _AttendenceOfAllStaffssAsync this view
+        /// </summary>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> AttendenceOfAllStaffssAsync(string month, string year)
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                await LoadAndStoreAllFullAttendanceSSasync(month, year);
+
+                List<Accountant> AllFullStaffAttendanceList = Session[AllStaffAttendanceListSessionKey] as List<Accountant>;
+                Accountant obj = new Accountant { lstAllEmpAttendance = AllFullStaffAttendanceList };
+                return PartialView("_AttendenceOfAllStaffssAsync", obj);
+            }
+        }
+
+        /// <summary>
+        /// Advance Payment View 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ActionResult> AdvanceStaffPaySSAsync()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                await LoadAndStoreAdvanceSSasync();
+
+                List<Accountant> AdvancePayStaffList = Session[AdvancePayStaffListSessionKey] as List<Accountant>;
+                Accountant obj = new Accountant { lstAllEmpAdvancePay = AdvancePayStaffList };
+                return PartialView("_AdvanceStaffPaySSAsync", obj);
+            }
+        }
+
+        /// <summary>
+        /// This Method Used to call method From bal class
+        /// </summary>
+        /// <returns></returns>
+        public async Task LoadAndStoreAdvanceSSasync()
+        {
+            string branchCode = Session["BranchCode"].ToString();
+            DataSet ds = await objbal.LoadAndStoreAdvanceSSasync(branchCode);
+            List<Accountant> AdvancePayStaffList = ConvertDataSetToAccountantAdvance(ds);
+            Session[AdvancePayStaffListSessionKey] = AdvancePayStaffList;
+        }
+
+        /// <summary>
+        /// Bind data with Model
+        /// </summary>
+        /// <param name="ds"></param>
+        /// <returns></returns>
+        public List<Accountant> ConvertDataSetToAccountantAdvance(DataSet ds)
+        {
+            List<Accountant> staffList = new List<Accountant>();
+            if (ds != null && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+
+
+                    Accountant objP = new Accountant
+                    {
+                        StaffCode = dr["StaffCode"].ToString(),
+                        StaffName = dr["StaffName"].ToString(),
+                        //Status = dr["Status"].ToString(),
+                        DepartmentName = dr["DepartmentName"].ToString(),
+                        StaffPosition = dr["StaffPosition"].ToString(),
+                        AdvanceAmount = Convert.ToDecimal(dr["AdvanceAmount"]),
+                        MonthlyBasicSalary = Convert.ToDecimal(dr["MonthlyBasicSalary"]),
+                        // Date = isValidDate ? date.ToString("dd/MM/yyyy") : string.Empty,
+                    };
+                    staffList.Add(objP);
+                }
+            }
+            return staffList;
+        }
+
+
+        #endregion// Shrikant Staff PayRoll modules End here
     }
 }

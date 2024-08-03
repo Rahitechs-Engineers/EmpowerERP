@@ -449,5 +449,186 @@ namespace GSTEducationERPLibrary.Accountant
         //}
         #endregion
         #endregion //vishals region ends here
+
+
+        //------------------Shrikant StaffPayRoll Start ----------------------------------------------------------//
+
+        /// <summary>
+        /// This Method Used to return Dataset of Staff List
+        /// </summary>
+        /// <param name="BranchCode"></param>
+        /// <returns></returns>
+        public async Task<DataSet> StaffListSSAsync(string BranchCode)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "StaffListSSAsync");
+            Param.Add("@BranchCode", BranchCode);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+        /// <summary>
+        /// This Method used to To Bind Deparment to the DropDown
+        /// </summary>
+        /// <returns></returns>
+        public async Task<DataSet> DeparmentBindSSAsync()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "DeparmentBindSSAsync");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+        /// <summary>
+        /// This Method Used To Bind Position to the DropDown
+        /// </summary>
+        /// <returns></returns>
+        public async Task<DataSet> PositionBindSSAsync()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "PositionBindSSAsync");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+
+        }
+
+        /// <summary>
+        /// This Method Used to bind Attendance of Staff
+        /// </summary>
+        /// <param name="BranchCode"></param>
+        /// <param name="month"></param>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public async Task<DataSet> LoadAndStoreFullAttendanceSSasync(string BranchCode, string month, string year)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "StaffAttendanceSSAsync");
+            Param.Add("@BranchCode", BranchCode);
+            Param.Add("@MonthStr", month);
+            Param.Add("@YearStr", year);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+        /// <summary>
+        /// This Method used to show Details of Staff
+        /// </summary>
+        /// <param name="StaffCode"></param>
+        /// <returns></returns>
+        public async Task<DataSet> DetailsOfStaffAsyncSS(string StaffCode)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "DetailsOfStaffAsyncSS");
+            Param.Add("@StaffCode", StaffCode);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+        /// <summary>
+        /// this method used to show all staff Salary
+        /// </summary>
+        /// <param name="staffCode"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<DataSet> ShowAllSalaryAsyncSS(string staffCode)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                {
+                    Param.Add("@Flag", "ShowAllSalaryAsyncSS");
+                    Param.Add("@StaffCode", staffCode ?? string.Empty);
+                    //Param.Add("@FromDate", fromDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
+                    //Param.Add("@ToDate", toDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
+                };
+
+                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// this method used to get salary details 
+        /// </summary>
+        /// <param name="staffCode"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<DataSet> GetSelfSalarySlipsAsyncAG(string staffCode, DateTime? fromDate, DateTime? toDate)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                {
+                    Param.Add("@Flag", "ListESSAccountantSalarySlipAG");
+                    Param.Add("@StaffCode", staffCode ?? string.Empty);
+                    //Param.Add("@FromDate", fromDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
+                    //Param.Add("@ToDate", toDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
+                };
+
+                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Show Attendance od all Staff
+        /// </summary>
+        /// <param name="BranchCode"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<DataSet> ShowAttendanceOfAllStaffAsyncSS(string BranchCode)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                {
+                    Param.Add("@Flag", "ShowAttendanceOfAllStaffAsyncSS");
+                    Param.Add("@BranchCode", BranchCode);
+
+                };
+
+                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
+            }
+        }
+        /// <summary>
+        /// Load and Store Advance Salary 
+        /// </summary>
+        /// <param name="BranchCode"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<DataSet> LoadAndStoreAdvanceSSasync(string BranchCode)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                {
+                    Param.Add("@Flag", "LoadAndStoreAdvanceSSasync");
+                    Param.Add("@BranchCode", BranchCode);
+
+                };
+
+                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
+            }
+        }
+        //------------------Shrikant StaffPayRoll End ----------------------------------------------------------//
+
     }
 }
