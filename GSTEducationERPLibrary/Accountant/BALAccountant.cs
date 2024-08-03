@@ -449,5 +449,63 @@ namespace GSTEducationERPLibrary.Accountant
         //}
         #endregion
         #endregion //vishals region ends here
+
+        #region//---------------------------------------Amruta region for salary slip-------------------------------------------------------//
+        /// <summary>
+        /// method to show specific accountant self salary slip
+        /// </summary>
+        /// <param name="staffCode"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<DataSet> GetSelfSalarySlipsAsyncAG(string staffCode, DateTime? fromDate, DateTime? toDate)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                {
+                    Param.Add("@Flag", "ListESSAccountantSalarySlipAG");
+                    Param.Add("@StaffCode", staffCode ?? string.Empty);
+                    Param.Add("@FromDate", fromDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
+                    Param.Add("@ToDate", toDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
+                };
+
+                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
+            }
+        }
+        /// <summary>
+        /// login through session and view salary slip
+        /// </summary>
+        /// <param name="staffCode"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+
+        public async Task<DataSet> GenerateSelfSalarySlipsAsyncAG(string staffCode)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                {
+                    Param.Add("@Flag", "SelfSalaryslipAG");
+                    Param.Add("@StaffCode", staffCode);
+
+                };
+
+                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
+            }
+        }
+        #endregion
+
     }
 }

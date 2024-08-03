@@ -1099,6 +1099,190 @@ namespace GSTEducationERP.Controllers
             }
         }
         //------------------------------------Vishal's Purchase Modules ends here------------------------------------------------------------
-        #endregion 
+        #endregion
+
+        #region//Amruta Salary slip Module starts here
+
+        /// <summary>
+        /// method to Get the list of SalarySlip based on Accountant 
+        /// </summary>
+        //<param name = "staffCode" > staffCode for Accountant.</param>
+        /// <returns>List of SelfStaffSalary.</returns>
+        [HttpGet]
+        public async Task<ActionResult> GetSelfSalarySlipsAsyncAG(DateTime? fromDate, DateTime? toDate, string StaffCode)
+        {
+            string staffCode = Session["StaffCode"] as string;
+
+            if (string.IsNullOrEmpty(staffCode))
+            {
+                // Handle case where staff code is not found in session
+                return RedirectToAction("Login", "Account");
+            }
+            DataSet ds = await objbal.GetSelfSalarySlipsAsyncAG(staffCode, fromDate, toDate);
+            List<Accountant> salarySlips = new List<Accountant>();
+
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    Accountant obja = new Accountant
+
+                    {
+                        StaffCode = dr["StaffCode"].ToString(),
+                        StaffName = dr["StaffName"].ToString(),
+                        StaffPosition = dr["StaffPosition"].ToString(),
+                        BranchName = dr["BranchName"].ToString(),
+                        CenterName = dr["CenterName"].ToString(),
+                        ClientName = dr["ClientName"].ToString(),
+                        GrossSalary = Convert.ToDecimal(dr["MonthlyGrossSalary"]),
+
+                        TotalAllowances = Convert.ToDecimal(dr["MonthlyTotalAllowances"]),
+
+                        TotalDeductions = Convert.ToDecimal(dr["MonthlyTotalDeductions"]),
+
+
+                        NetSalary = Convert.ToDecimal(dr["MonthlyNetSalary"]),
+
+                        SalaryCreditedDate = Convert.ToDateTime(dr["CreditedDate"]),
+                    };
+                    salarySlips.Add(obja);
+                }
+            }
+            else
+            {
+                ViewBag.Message = "No salary slips found for the given criteria.";
+            }
+
+            ViewBag.SalarySlips = salarySlips;
+
+            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+            {
+                new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
+                new BreadcrumbItem { Name = "Salary Slip", Url = Url.Action("GetSelfSalarySlipsAsyncAG", "Accountant") }
+            };
+
+
+
+            ViewBag.Breadcrumbs = breadcrumbs;
+
+            return View();
+        }
+
+        /// <summary>
+        /// this method is using generated salary slip is view
+        /// </summary>
+        /// <returns></returns>
+
+
+        [HttpGet]
+        public async Task<ActionResult> ViewSalarySlipAsyncAG()
+        {
+            // Retrieve the staff code from the session
+            string staffCode = Session["StaffCode"] as string;
+
+            if (string.IsNullOrEmpty(staffCode))
+            {
+                // Handle case where staff code is not found in session
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Fetch data from the database
+            DataSet ds = await objbal.GenerateSelfSalarySlipsAsyncAG(staffCode);
+
+            // Assuming data is retrieved and it's safe to access the first row
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                var staffData = ds.Tables[0].Rows[0];
+
+                // Split allowance and deduction components and amounts
+                var allowances = staffData["AllowanceComponents"].ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                var allowanceAmounts = staffData["AllowanceAmounts"].ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(decimal.Parse).ToArray();
+                var deductions = staffData["DeductionComponents"].ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                var deductionAmounts = staffData["DeductionAmounts"].ToString().Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(decimal.Parse).ToArray();
+
+                // Create the model
+                Accountant objac = new Accountant
+                {
+                    StaffCode = staffData["StaffCode"].ToString(),
+                    StaffName = staffData["StaffName"].ToString(),
+                    StaffPosition = staffData["StaffPosition"].ToString(),
+                    BranchName = staffData["BranchName"].ToString(),
+                    BankName = staffData["BankName"].ToString(),
+                    AccountNumber = staffData["AccountNumber"].ToString(),
+                    Department = staffData["DepartmentName"].ToString(),
+                    JoiningDate = Convert.ToDateTime(staffData["JoiningDate"]),
+                    PANNumber = staffData["PanCardNo"].ToString(),
+                    CenterName = staffData["CenterName"].ToString(),
+                    ClientName = staffData["ClientName"].ToString(),
+                    Logo = staffData["Logo"].ToString(),
+                    TotalAllowances = Convert.ToDecimal(staffData["MonthlyTotalAllowances"]),
+                    TotalDeductions = Convert.ToDecimal(staffData["MonthlyTotalDeductions"]),
+                    NetSalary = Convert.ToDecimal(staffData["MonthlyNetSalary"]),
+                    BasicSalary = Convert.ToDecimal(staffData["BasicSalary"]),
+                    AllowanceComponents = staffData["AllowanceComponents"].ToString(),
+                    AllowanceAmounts = staffData["AllowanceAmounts"].ToString(),
+                    DeductionComponents = staffData["DeductionComponents"].ToString(),
+                    DeductionAmounts = staffData["DeductionAmounts"].ToString(),
+                    Address = staffData["ClientAddress"].ToString(),
+
+                };
+                string[] addressParts = SplitAddressJY(objac.Address);
+                objac.addressPart1 = addressParts.Length > 0 ? addressParts[0] : string.Empty;
+                objac.addressPart2 = addressParts.Length > 1 ? addressParts[1] : string.Empty;
+                objac.addressPart3 = addressParts.Length > 2 ? addressParts[2] : string.Empty;
+                // Pass the object to the view
+                return View("ViewSalarySlipAsyncAG", objac);
+            }
+            else
+            {
+                // Handle case where no data is found
+                return RedirectToAction("Index", "Home");
+            }
+        }
+        /// <summary>
+        /// this method is using dynamic address show in salary slip
+        /// </summary>
+        /// <param name="address"></param>
+        /// <returns></returns>
+        private string[] SplitAddressJY(string address)
+        {
+            string[] addressParts = new string[3];
+
+            if (!string.IsNullOrEmpty(address))
+            {
+                string[] words = address.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                int totalWords = words.Length;
+
+                int firstPartLength = (int)Math.Ceiling((double)totalWords * 0.5); // 50% of total words
+                int secondPartLength = (int)Math.Ceiling((double)totalWords * 0.3); // 30% of total words
+                int thirdPartLength = totalWords - firstPartLength - secondPartLength; // Remaining words for the third part
+
+
+                addressParts[0] = string.Join(" ", words.Take(firstPartLength));
+                addressParts[1] = string.Join(" ", words.Skip(firstPartLength).Take(secondPartLength));
+                addressParts[2] = string.Join(" ", words.Skip(firstPartLength + secondPartLength));
+
+
+                if (firstPartLength <= 0)
+                {
+                    addressParts[0] = string.Empty;
+                    addressParts[1] = string.Empty;
+                    addressParts[2] = string.Empty;
+                }
+                else if (secondPartLength <= 0)
+                {
+                    addressParts[1] = string.Empty;
+                    addressParts[2] = string.Empty;
+                }
+                else if (thirdPartLength <= 0)
+                {
+                    addressParts[2] = string.Empty;
+                }
+            }
+
+            return addressParts;
+        }
+        #endregion
     }
 }

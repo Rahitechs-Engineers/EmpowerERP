@@ -98,6 +98,43 @@ namespace GSTEducationERPLibrary.Accountant
         public List<Accountant> lstTransactionVP = new List<Accountant>();
         #endregion
         //---------------------------vishals properties ends here-----------------------------------------------------------------------------------------------
+        #region//----------------Amruta Salary Slip start here--------------------------------------------------//
+        public string StaffName { get; set; }
+        public string Department { get; set; }
+        public string Designation { get; set; }
+      
+        public long AccountNo { get; set; }
+        public string IFSCCode { get; set; }
+        public decimal GrossSalary { get; set; }
+        public List<Accountant> lstEmp { get; set; }
+        public decimal NetSalary { get; set; }
+        public DateTime SalaryCreditedDate { get; set; }
+        public string ClientName { get; set; }
+        public string Logo { get; set; }
+        public string StaffPosition { get; set; }
+        public string BranchName { get; set; }
+        public string CenterName { get; set; }
+        public DateTime JoiningDate { get; set; }
+
+        public decimal TotalAllowances { get; set; }
+        public decimal TotalDeductions { get; set; }
+        public String AccountNumber { get; set; }
+        public string PANNumber { get; set; }
+        public decimal BasicSalary { get; set; }
+
+        public int Year { get; set; }
+        public int Month { get; set; }
+
+        public string AllowanceComponents { get; set; } = "";
+        public string AllowanceAmounts { get; set; } = "";
+        public string DeductionComponents { get; set; } = "";
+        public string DeductionAmounts { get; set; } = "";
+        public string Address { get; set; }
+        public string[] addressParts { get; set; }
+        public string addressPart1 { get; set; }
+        public string addressPart2 { get; set; }
+        public string addressPart3 { get; set; }
+        #endregion
 
     }
 }

@@ -1,0 +1,327 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+@{
+    ViewBag.Title = "View Salary Slip";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+    var culture = System.Globalization.CultureInfo.CurrentCulture;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Payslip</title>
+    <style>
+        body {
+            font-size: 10px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 800px;
+            padding: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+            .header img {
+                max-width: 100px;
+                height: auto;
+            }
+
+            .header .company-info {
+                text-align: center;
+                flex-grow: 1;
+            }
+
+                .header .company-info h2 {
+                    margin: 0;
+                    font-size: 14px;
+                }
+
+            .header .address {
+                text-align: right;
+            }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            margin-bottom: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 3px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .section {
+            margin-top: 4px;
+        }
+
+        .earnings-deductions-table th,
+        .earnings-deductions-table td {
+            border: 1px solid black;
+            padding: 3px;
+            text-align: left;
+        }
+
+        .earnings-deductions-table th {
+            background-color: #f2f2f2;
+        }
+
+        .earnings-deductions-table .earnings {
+            background-color: #eaf5ea;
+        }
+
+        .earnings-deductions-table .deductions {
+            background-color: #f5eaea;
+        }
+
+        .address {
+            text-align: right;
+        }
+
+        .address-part {
+            margin-bottom: 5px;
+        }
+        .h1{
+            font-family:fantasy;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="header">
+            <img src="~/Content/Admin/img/@Model.Logo" />
+            <div class="company-info">
+                <h1 style=" font-family: fantasy; justify-content:center ">@Model.ClientName</h1>
+            </div>
+            <div class="address">
+                <p><strong>@Model.addressPart1</strong></p>
+                <p><strong>@Model.addressPart2</strong></p>
+                <p><strong>@Model.addressPart3</strong></p>
+            </div>
+        </div>
+
+        <h4 style="text-align: center;">Payslip</h4>
+        <table>
+            <tr>
+                <td><strong>Staff Code</strong></td>
+                <td>@Model.StaffCode</td>
+                <td><strong>Staff Name</strong></td>
+                <td>@Model.StaffName</td>
+            </tr>
+            <tr>
+                <td><strong>Center Name</strong></td>
+                <td>@Model.CenterName</td>
+                <td><strong>Bank Name</strong></td>
+                <td>@Model.BankName</td>
+            </tr>
+            <tr>
+                <td><strong>Department</strong></td>
+                <td>@Model.Department</td>
+                <td><strong>Account Number</strong></td>
+                <td>@Model.AccountNumber</td>
+            </tr>
+            <tr>
+                <td><strong>Date of Joining</strong></td>
+                <td>@Model.JoiningDate.ToShortDateString()</td>
+                <td><strong>PAN Number</strong></td>
+                <td>@Model.PANNumber</td>
+            </tr>
+        </table>
+
+        <div class="section">
+            <h3>Earnings and Deductions</h3>
+            <table class="earnings-deductions-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="earnings" style="background-color: aliceblue;">
+                        <td>Basic Salary</td>
+                        <td>@Model.BasicSalary.ToString("C", culture)</td>
+                        <td>-</td>
+                    </tr>
+                    @if (!string.IsNullOrEmpty(Model.AllowanceComponents) && !string.IsNullOrEmpty(Model.AllowanceAmounts))
+                    {
+                        var allowanceComponents = Model.AllowanceComponents.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        var allowanceAmounts = Model.AllowanceAmounts.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (allowanceComponents.Length == allowanceAmounts.Length)
+                        {
+                            for (int i = 0; i < allowanceComponents.Length; i++)
+                            {
+                                if (decimal.TryParse(allowanceAmounts[i].Trim(), out var amount))
+                                {
+                                    <tr class="earnings">
+                                        <td>@allowanceComponents[i].Trim()</td>
+                                        <td>@amount.ToString("C", culture)</td>
+                                        <td>Allowance</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr class="earnings">
+                                        <td>@allowanceComponents[i].Trim()</td>
+                                        <td>Invalid Amount</td>
+                                        <td>Allowance</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">Allowance data mismatch</td>
+                            </tr>
+                        }
+                    }
+                    @if (!string.IsNullOrEmpty(Model.DeductionComponents) && !string.IsNullOrEmpty(Model.DeductionAmounts))
+                    {
+                        var deductionComponents = Model.DeductionComponents.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                        var deductionAmounts = Model.DeductionAmounts.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                        if (deductionComponents.Length == deductionAmounts.Length)
+                        {
+                            for (int i = 0; i < deductionComponents.Length; i++)
+                            {
+                                if (decimal.TryParse(deductionAmounts[i].Trim(), out var amount))
+                                {
+                                    <tr class="deductions">
+                                        <td>@deductionComponents[i].Trim()</td>
+                                        <td>@amount.ToString("C", culture)</td>
+                                        <td>Deduction</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr class="deductions">
+                                        <td>@deductionComponents[i].Trim()</td>
+                                        <td>Invalid Amount</td>
+                                        <td>Deduction</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3">Deduction data mismatch</td>
+                            </tr>
+                        }
+                    }
+                    <tr>
+                        <td><strong>Total Earnings</strong></td>
+                        <td><strong>@Model.TotalAllowances.ToString("C", culture)</strong></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Total Deductions</strong></td>
+                        <td><strong>@Model.TotalDeductions.ToString("C", culture)</strong></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Net Salary</strong></td>
+                        <td><strong>@Model.NetSalary.ToString("C", culture)</strong></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Amount in Words:</strong></td>
+                        <td id="inWordsAmount" colspan="2" style="text-align: right;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+    $(document).ready(function () {
+        var netSalary = @Model.NetSalary;
+
+        if (!isNaN(netSalary)) {
+            var inWords = convertNumberToWords(netSalary);
+            $('#inWordsAmount').text(inWords);
+        } else {
+            $('#inWordsAmount').text('Invalid Amount');
+        }
+    });
+
+    function convertNumberToWords(number) {
+        var units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+        var teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+        var tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+        var thousands = ['', 'Thousand', 'Million', 'Billion'];
+
+        if (number === 0) {
+            return 'Zero';
+        }
+
+        var words = '';
+
+        function getBelowHundred(n) {
+            if (n < 10) return units[n];
+            else if (n < 20) return teens[n - 10];
+            else {
+                var unit = n % 10;
+                var ten = Math.floor(n / 10) % 10;
+                return tens[ten] + (unit > 0 ? ' ' + units[unit] : '');
+            }
+        }
+
+        function getBelowThousand(n) {
+            var hundred = Math.floor(n / 100);
+            var rest = n % 100;
+            var str = '';
+            if (hundred) {
+                str += units[hundred] + ' Hundred';
+            }
+            if (rest) {
+                if (str) str += ' and ';
+                str += getBelowHundred(rest);
+            }
+            return str;
+        }
+
+        var i = 0;
+        while (number > 0) {
+            var remainder = number % 1000;
+            if (remainder > 0) {
+                var str = getBelowThousand(remainder);
+                if (i > 0) {
+                    str += ' ' + thousands[i];
+                }
+                words = str + ' ' + words;
+            }
+            number = Math.floor(number / 1000);
+            i++;
+        }
+
+        return words.trim();
+    }
+    </script>
+
+</body>
+</html>

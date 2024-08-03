@@ -1,0 +1,322 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+
+@{
+    ViewBag.Title = "GetSelfSalarySlipsAsyncAG";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Self Salary Slip</title>
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <style>
+        th {
+            background-color: #33CCCC;
+            color: #000;
+            text-align: center !important;
+        }
+
+        h2 {
+            padding-top: 10px;
+            margin-bottom: 10px;
+            font-family: Verdana;
+            font-weight: bold;
+            font-size: medium;
+            color: #33CCCC;
+        }
+
+        .dataTables_wrapper .btn-secondary {
+            color: #235;
+            background-color: transparent !important;
+            border-color: transparent;
+            font-size: x-large;
+        }
+
+        a {
+            color: #01a6a6;
+        }
+
+        .card-body {
+            font-family: Calibri !important;
+            padding-bottom: 0px !important;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        td {
+            text-align: center;
+            color: black !important;
+        }
+
+        .table td {
+            padding: 0px 0px 0px 0px !important;
+            font-size: 14px !important;
+        }
+
+        .table th {
+            padding: 5px 5px 4px 10px !important;
+            font-size: 14px !important;
+        }
+
+        table.dataTable > thead .sorting:after, table.dataTable > thead .sorting:before {
+            font-size: xx-small !important;
+        }
+
+        div.dt-buttons {
+            margin-top: -20px !important;
+        }
+
+        .btn-group > .btn:not(:last-child):not(.dropdown-toggle), .btn-group > .btn-group:not(:last-child) > .btn {
+            padding-left: 5px !important;
+            padding-right: 5px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter label {
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_filter input {
+            height: 20px !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_info {
+            padding: 0px !important;
+            font-size: small !important;
+        }
+
+        div.dataTables_wrapper div.dataTables_paginate {
+            font-size: small !important;
+        }
+
+        button.video-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #17A2B8;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .date-input {
+            margin-right: 10px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .filter-btn {
+            background-color: #64bbc9;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            margin-left: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .image-style {
+            width: 35px;
+            height: auto;
+        }
+
+        .filter-btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+            background: none;
+        }
+
+        .modal-title {
+            font-weight: bold;
+        }
+        </style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <br />
+    <div class="card " style="padding:5px;margin-right:20px;margin-left:10px; margin-top:-15px">
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <h2 class="col">Self Salary Slip </h2>
+                    <div class="col text-left">
+                        <label for="fromDate">From:</label>
+                        <input type="date" id="fromDate" name="fromDate" class="date-input" style="width: 120px; height:30px">
+                        <label for="toDate">To:</label>
+                        <input type="date" id="toDate" name="toDate" class="date-input" style="width: 120px; height: 30px">
+                        <img class="filter-btn" id="clearBtn" src="~/Content/Admin/icon/refreshicon.jpg" alt="Clear" title="Refresh">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="col-10">
+
+
+                <div class="container-fluid" style="overflow-x: auto;">
+                    <div class="row">
+                        <div class="table-responsive">
+                            <br />
+
+                            <table id="example1" class="table table-bordered table-striped" style="width: 100%;">
+                                <thead>
+                                    <tr>
+                                        <th hidden>Staff Code</th>
+                                        <th>Staff Name</th>
+                                        <th>Staff Position</th>
+                                        <th>Branch Name</th>
+                                        <th>Center Name</th>
+                                        <th>Company Name</th>
+                                        <th>Gross Salary</th>
+                                        <th>Total Allowances</th>
+                                        <th>Total Deductions</th>
+                                        <th>Net Salary</th>
+                                        <th>Salary Credited Date</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var slip in ViewBag.SalarySlips)
+                                    {
+                                        <tr>
+                                            <td hidden>@slip.StaffCode</td>
+                                            <td>@slip.StaffName</td>
+                                            <td>@slip.StaffPosition</td>
+                                            <td>@slip.BranchName</td>
+                                            <td>@slip.CenterName</td>
+                                            <td>@slip.ClientName</td>
+                                            <td>@slip.GrossSalary.ToString("C")</td>
+                                            <td>@slip.TotalAllowances.ToString("C")</td>
+                                            <td>@slip.TotalDeductions.ToString("C")</td>
+                                            <td>@slip.NetSalary.ToString("C")</td>
+                                            <td>@slip.SalaryCreditedDate.ToString("dd MMM yyyy")</td>
+
+                                            <td>
+                                                <a href="@Url.Action("ViewSalarySlipAsyncAG", "Accountant", new { year = slip.Year, month = slip.Month })" class="icon" title="Download">
+                                                    <video width="35" height="35">
+                                                        <source src="~/Content/Admin/icon/DownloadFile.mp4" type="video/mp4" />
+                                                    </video>
+                                                </a>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                           
+                        </div>
+                        <!-- jQuery -->
+                        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+                        <!-- Bootstrap 4 -->
+                        <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+                        <!-- DataTables  & Plugins -->
+                        <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+                        <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+                        <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+                        <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+                        <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+                        <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+                        <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+                        <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+                        <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+                        <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+                        <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+                        <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+                        <script src="~/Content/Admin/js/Icon.js"></script>
+                        <script src="~/Content/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+                       
+                        
+                        <script type="text/javascript">
+
+                         $(document).ready(function () {
+                           $.noConflict();
+                           var table = $('#example1').DataTable({
+                          "responsive": true,
+                          "lengthChange": false,
+                          "autoWidth": false,
+                          "buttons": [
+                         {
+                    extend: 'copy',
+                    text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />',
+                    titleAttr: 'Copy'
+                },
+                {
+                    extend: 'csv',
+                    text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="25" width="25" />',
+                    titleAttr: 'CSV'
+                },
+                {
+                    extend: 'excel',
+                    text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />',
+                    titleAttr: 'Excel'
+                },
+                {
+                    extend: 'pdf',
+                    text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                    titleAttr: 'PDF'
+                },
+                {
+                    extend: 'print',
+                    text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />',
+                    titleAttr: 'Print'
+                },
+                {
+                    extend: 'colvis',
+                    text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />',
+                    titleAttr: 'Columns'
+                }
+            ]
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+       $(document).ready(function () {
+    // Function to trigger filtering when date inputs change
+    $('#fromDate, #toDate').change(function () {
+        filterTable();
+    });
+
+    // Function to filter the table based on date range
+    function filterTable() {
+        var fromDate = $('#fromDate').val();
+        var toDate = $('#toDate').val();
+        $.ajax({
+            url: '@Url.Action("GetSelfSalarySlipsAsyncAG", "Accountant")',
+            type: 'GET',
+            data: {
+                fromDate: fromDate,
+                toDate: toDate
+            },
+            success: function (result) {
+                $('#example1').html($(result).find('#example1').html());
+            },
+            error: function () {
+                alert('An error occurred while processing your request.');
+            }
+        });
+    }
+
+    // Clear button functionality (to clear date inputs)
+    $('#clearBtn').click(function () {
+        $('#fromDate').val('');
+        $('#toDate').val('');
+        filterTable(); // Trigger filtering after clearing the dates
+    });
+});
+    });
+   </script>
+</body>
+</html>
+
+
+

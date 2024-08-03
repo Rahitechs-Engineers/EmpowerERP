@@ -69,3 +69,12 @@ D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEd
 D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEduca.4B0C6BB9.Up2Date
 D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
 D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+D:\ERPProjectmerge\ERP3amruta\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+D:\ERPProjectmerge\ERP3amruta\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+D:\ERPProjectmerge\ERP3amruta\GSTEducationERPLibrary\bin\Debug\Helper.dll
+D:\ERPProjectmerge\ERP3amruta\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+D:\ERPProjectmerge\ERP3amruta\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+D:\ERPProjectmerge\ERP3amruta\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+D:\ERPProjectmerge\ERP3amruta\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CopyComplete
+D:\ERPProjectmerge\ERP3amruta\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+D:\ERPProjectmerge\ERP3amruta\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
