@@ -449,5 +449,42 @@ namespace GSTEducationERPLibrary.Accountant
         //}
         #endregion
         #endregion //vishals region ends here
+        #region//Jay
+        //---------------------Jayash---------Start
+
+        public async Task<DataSet> FetchPersonalAttendanceAsyncJY(string staffcode, string year, string month)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "PersonalAttendenceJY");
+            Param.Add("@StaffCode", staffcode);
+            Param.Add("@Month", month);
+            Param.Add("@Year", year);
+
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+        public async Task<DataSet> FetchPersonalAttendanceAsyncCountJY(string staffcode, string year, string month)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "PersonalCountJY");
+            Param.Add("@StaffCode", staffcode);
+            Param.Add("@Month", month);
+            Param.Add("@Year", year);
+
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+        public async Task<DataSet> FetchReciptAsyncJY(string Transactioncode)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+
+            Param.Add("@Flag", "ProReciptAsyncJY");
+            Param.Add("@TransactionCode", Transactioncode);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+        //---------------------Jayash---------end
+        #endregion
     }
 }

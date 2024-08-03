@@ -98,6 +98,54 @@ namespace GSTEducationERPLibrary.Accountant
         public List<Accountant> lstTransactionVP = new List<Accountant>();
         #endregion
         //---------------------------vishals properties ends here-----------------------------------------------------------------------------------------------
+        #region//Jay
+        //----------------Jayash-  Accountant -----------------------------------start //
+        public List<Accountant> LstAttendence { get; set; }
 
+        public string ProvisionalReceiptNo { get; set; }
+        public string addressPart1 { get; set; }
+        public string addressPart2 { get; set; }
+        public string addressPart3 { get; set; }
+        public string ClientLogo { get; set; }
+        public string Name { get; set; }
+        public string Course { get; set; }
+        //public long Amount { get; set; }
+        //public DateTime ChequeDate { get; set; }
+        public DateTime ProvisionalReceiptDate { get; set; }
+        public string EnrollmentNumber { get; set; }
+        public string Batch { get; set; }
+        //public string PaymentMode { get; set; }
+        //public string TransactionId { get; set; }
+        //public decimal Discount { get; set; }
+        public decimal RemainingFee { get; set; }
+        public DateTime NextInstallmentDate { get; set; }
+        public decimal NextInstallmentAmount { get; set; }
+        public string InstallmentNo { get; set; }
+        public string DrawnOn { get; set; }
+        public string AdmissionType { get; set; }
+        public string Comment { get; set; }
+        public int Id { get; set; }
+        public string Logo { get; set; }
+        public string InwordsAmmount { get; set; }
+        public long Chequenumber { get; set; }
+        public DateTime ChequeClearanceDate { get; set; }
+        public decimal TotalFee { get; set; }
+        public string Address { get; set; }
+        public string Signature { get; set; }
+        public DateTime InTime { get; set; }
+        public DateTime OutTime { get; set; }
+        public String Remark { get; set; }
+        public string Hrs { get; set; }
+    
+        public DateTime Date { get; set; }
+
+        public String Workeddays { get; set; }
+        public String HalfDays { get; set; }
+        public String PresentDays { get; set; }
+        public String PayableDays { get; set; }
+        public string StaffName { get; set; }
+
+        //----------------Jayash-  Accountant -----------------------------------End //
+        #endregion
     }
 }

@@ -1099,6 +1099,173 @@ namespace GSTEducationERP.Controllers
             }
         }
         //------------------------------------Vishal's Purchase Modules ends here------------------------------------------------------------
-        #endregion 
+        #endregion
+        #region//Jay
+        //----------------Jayash-  Accountant -----------------------------------start //
+        /// <summary>
+        ///This is for fetching Personal Attendance 
+        /// </summary>
+        /// 
+        [HttpGet]
+        public async Task<ActionResult> GetPersonalAttendanceAsyncJY(string year, string month)
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            // Get the current date
+            DateTime currentDate = DateTime.Now;
+            year = string.IsNullOrEmpty(year) ? currentDate.Year.ToString() : year;
+            month = string.IsNullOrEmpty(month) ? currentDate.Month.ToString() : month;
+
+            string staffCode = Session["StaffCode"].ToString();
+
+            // Fetch summary attendance
+            DataSet dsSummary = await objbal.FetchPersonalAttendanceAsyncCountJY(staffCode, year, month);
+            if (dsSummary.Tables.Count > 0 && dsSummary.Tables[0].Rows.Count > 0)
+            {
+                var row = dsSummary.Tables[0].Rows[0];
+                objac.Workeddays = row["Workeddays"].ToString();
+                objac.HalfDays = row["HalfDays"].ToString();
+                objac.PresentDays = row["PresentDays"].ToString();
+                objac.PayableDays = row["PayableDays"].ToString();
+            }
+
+            // Fetch detailed attendance
+            List<Accountant> lstAttendance = new List<Accountant>();
+            DataSet dsDetail = await objbal.FetchPersonalAttendanceAsyncJY(staffCode, year, month);
+            if (dsDetail.Tables.Count > 0 && dsDetail.Tables[0].Rows.Count > 0)
+            {
+                objac.LstAttendence = new List<Accountant>();
+                foreach (DataRow row in dsDetail.Tables[0].Rows)
+                {
+                    Accountant ac = new Accountant();
+
+                    // Handle the error case, maybe log it or set a default value
+                    ac.Date = Convert.ToDateTime(row["Date"].ToString());
+
+                    ac.InTime = Convert.ToDateTime(row["InTime"].ToString());
+                    ac.OutTime = Convert.ToDateTime(row["OutTime"].ToString());
+                    ac.Hrs = row["HoursWorked"].ToString();
+                    ac.Status = row["Status"].ToString();
+                    ac.Remark = row["Remarks"].ToString();
+
+                    lstAttendance.Add(ac);
+                }
+            }
+            objac.LstAttendence = lstAttendance;
+
+            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+    {
+        new BreadcrumbItem { Name = "DashBoard ", Url ="DashBoard" },
+        new BreadcrumbItem { Name = "Attendance ", Url ="GetPersonalAttendanceAsyncJY" },
+    };
+
+            ViewBag.Breadcrumbs = breadcrumbs;
+            return View(objac);
+        }
+
+
+        /// <summary>
+        /// This  is for provisional Recipt GENERATION
+        /// </summary>
+        /// <returns></returns>
+
+        [HttpGet]
+        public async Task<ActionResult> ProvisionalReciptAsyncJY(string transactionCode)
+        {
+            DataSet ds = await objbal.FetchReciptAsyncJY(transactionCode);
+
+            if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                DataRow row = ds.Tables[0].Rows[0];
+
+                Accountant objac = new Accountant
+                {
+                    ClientLogo = row["CLIENT LOGO"].ToString(),
+                    ProvisionalReceiptNo = row["ProvisionalReceiptNo"].ToString(),
+                    Name = row["Name"].ToString(),
+                    ProvisionalReceiptDate = DateTime.Parse(row["PreciptDate"].ToString()),
+                    TransactionId = row["CHEQUENO."].ToString(),
+                    ChequeDate = DateTime.Parse(row["ChequeDate"].ToString()),
+                    Amount = long.Parse(row["Amount"].ToString()),
+                    StaffName = row["STAFFNAME"].ToString(),
+                    PaymentMode = "Cheque",
+                    DrawnOn = row["DrawnOn"].ToString(),
+                    AdmissionType = row["AdmissionType"].ToString(),
+                    Address = row["Address"].ToString(),
+                    StaffCode = row["Staffcode"].ToString(),
+                    Course = row["Course"] != DBNull.Value ? row["Course"].ToString() : "XXX1",
+                    Batch = row["Batch"] != DBNull.Value ? row["Batch"].ToString() : "XXX1",
+                    TotalFee = row["TotalFee"] != DBNull.Value ? long.Parse(row["TotalFee"].ToString()) : 000000000000,
+                    RemainingFee = row["RemainingFees"] != DBNull.Value ? decimal.Parse(row["RemainingFees"].ToString()) : 000000000000,
+                    NextInstallmentAmount = row["NextInstallmentAmount"] != DBNull.Value ? decimal.Parse(row["NextInstallmentAmount"].ToString()) : 000000000000,
+                    NextInstallmentDate = row["NextInstallmentDate"] != DBNull.Value ? DateTime.Parse(row["NextInstallmentDate"].ToString()) : DateTime.Now
+                };
+
+                // Splitting address into three parts based on length
+                string[] addressParts = SplitAddressJY(objac.Address);
+                objac.addressPart1 = addressParts.Length > 0 ? addressParts[0] : string.Empty;
+                objac.addressPart2 = addressParts.Length > 1 ? addressParts[1] : string.Empty;
+                objac.addressPart3 = addressParts.Length > 2 ? addressParts[2] : string.Empty;
+
+                return PartialView("ProvisionalReciptAsyncJY", objac);
+            }
+
+            return HttpNotFound();
+        }
+
+        [HttpPost]
+
+
+        private string[] SplitAddressJY(string address)
+        {
+            string[] addressParts = new string[3];
+
+            if (!string.IsNullOrEmpty(address))
+            {
+                string[] words = address.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                int totalWords = words.Length;
+
+                int firstPartLength = (int)Math.Ceiling((double)totalWords * 0.5); // 50% of total words
+                int secondPartLength = (int)Math.Ceiling((double)totalWords * 0.3); // 30% of total words
+                int thirdPartLength = totalWords - firstPartLength - secondPartLength; // Remaining words for the third part
+
+
+                addressParts[0] = string.Join(" ", words.Take(firstPartLength));
+                addressParts[1] = string.Join(" ", words.Skip(firstPartLength).Take(secondPartLength));
+                addressParts[2] = string.Join(" ", words.Skip(firstPartLength + secondPartLength));
+
+
+                if (firstPartLength <= 0)
+                {
+                    addressParts[0] = string.Empty;
+                    addressParts[1] = string.Empty;
+                    addressParts[2] = string.Empty;
+                }
+                else if (secondPartLength <= 0)
+                {
+                    addressParts[1] = string.Empty;
+                    addressParts[2] = string.Empty;
+                }
+                else if (thirdPartLength <= 0)
+                {
+                    addressParts[2] = string.Empty;
+                }
+            }
+
+            return addressParts;
+        }
+
+
+
+
+        //----------------Jayash-  Accountant -----------------------------------ENd //
+
+
+
+        #endregion
     }
 }
