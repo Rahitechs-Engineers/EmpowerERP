@@ -449,5 +449,110 @@ namespace GSTEducationERPLibrary.Accountant
         //}
         #endregion
         #endregion //vishals region ends here
+
+
+        #region // Atharv's module ( Fee Collection)
+        public async Task<DataSet> ListPendingFeesStudentAD()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "ListPendingFeesStudentAD");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+
+        public async Task<DataSet> GetAllBank()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetAllBank");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+
+        public async Task<DataSet> GetAllAccountHolder(Accountant obj)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetAllAccountHolder");
+            Param.Add("@BankId", obj.BankId.ToString());
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+
+
+        public async Task<DataSet> GetFeeTypeBank()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetFeeTypeBank");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+
+        public async Task<DataSet> ReciptCodeAD(Accountant obj)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetReciptCodeAD");
+            Param.Add("@BranchCode", obj.Branchcode);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+
+
+        public async Task FeeCollectionAsync(Accountant obj)
+        {
+            DateTime today = DateTime.Today;
+            string formattedDate = today.ToString("yyyy-MM-dd");
+
+            string ChequeDate;
+            if (obj.ChequeDate != null)
+            {
+                DateTime chequedate = obj.ChequeDate;
+                ChequeDate = chequedate.ToString("yyyy-MM-dd");
+            }
+            else
+            {
+                ChequeDate = null;
+            }
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "CollectFeeAD");
+            Param.Add("@CandidateCode", obj.CandidateCode);
+            Param.Add("@FeeCollecteddate", formattedDate);
+            Param.Add("@FeeTypeId", obj.FeeTypeId.ToString());
+            Param.Add("@BankId", obj.AccountHolderId.ToString());
+            Param.Add("@Description", obj.Description);
+
+            // transaction table fields
+
+            Param.Add("@Amount", obj.Amount.ToString());
+            Param.Add("@PaymentMode", obj.PaymentModeId);
+            Param.Add("@TransactionID_checqueNumber", obj.TransactionID_checqueNumber);
+            Param.Add("@ChequeDate", ChequeDate);
+
+            Param.Add("@LoggedStaffCode", obj.StaffCode);
+            Param.Add("@BranchCode", obj.Branchcode);
+            if (obj.PaymentModeId == "Check")
+            {
+                Param.Add("@StatusId", "6");
+            }
+            else
+            {
+                Param.Add("@StatusId", "18");
+            }
+            Param.Add("@TransactionTypeId", "67");
+
+            await DBHelper.ExecuteStoreProcedure("GSTAccountant", Param);
+
+        }
+
+        public async Task<DataSet> GetDataForNewQuery()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "GetDataForNewQuery");
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+        #endregion
     }
 }

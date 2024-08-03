@@ -1,0 +1,175 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+
+    <html>
+    <head>
+        <!-- Theme style -->
+        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+        <!-- DataTables CSS -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+        <!-- DataTables JS -->
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> 
+
+        <script src="~/Content/Admin/js/Icon.js"></script>
+        <!-- Bootstrap 4 -->
+        <style>
+            .success-button {
+                display: inline-block;
+                padding: 2px 2px;
+                background-color: green;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .custom-popup-width {
+                width: 80%;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            .hidden-column {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+
+        <table id="pendingInstallmentsTable" class="table table-bordered @*table-hover*@">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>CourseName</th>
+                    <th>Batch</th>
+                    <th class="hidden-column">CourseFee</th>
+                    <th>TotalFees</th>
+                    <th>TotalPaid</th>
+                    <th>RemainingFees</th>
+                    <th>InstallmentAmount</th>
+                    <th>InstallmentDate</th>
+                    <th>NextInstallmentDate</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.LstPendindFeeStud)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.CourseName</td>
+                        <td>@item.Batch</td>
+                        <td class="hidden-column">@item.CourseFee</td>
+                        <td>@item.TotalFees</td>
+                        <td>@item.TotalPaid</td>
+                        <td>@item.RemainingFees</td>
+                        <td>@item.InstallmentAmount</td>
+                        <td>@item.InstallmentDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.NextInstallmentDate</td>
+                        <td class="icon-links">
+                            <a href="javascript:void(0);" onclick="submitData('@item.CandidateCode')">
+                                <video width="25" height="25" playsinline loop>
+                                    <source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" />
+                                </video>
+                            </a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+        <div class="modal fade" id="pendingInstallmentModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalLabel">Pending Installment Details</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- jQuery -->
+        <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+        <!-- Bootstrap 4 -->
+        <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- DataTables & Plugins -->
+        <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+        <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+        <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+        <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+
+        
+
+
+                <script>
+                $(document).ready(function () {
+                    function submitData(candidateCode) {
+                        console.log("submitData function called with candidateCode:", candidateCode);
+
+                        var row = $("a[onclick=\"submitData('" + candidateCode + "')\"]").closest("tr");
+
+                        var data = {
+                            candidateCode: candidateCode,
+                            name: row.find("td:eq(0)").text().trim(),
+                            batch: row.find("td:eq(1)").text().trim(),
+                            courseName: row.find("td:eq(2)").text().trim(),
+                            courseFee: parseFloat(row.find("td:eq(3)").text().trim()) || 0.0,
+                            totalFees: parseFloat(row.find("td:eq(4)").text().trim()) || 0.0,
+                            totalPaid: parseFloat(row.find("td:eq(5)").text().trim()) || 0.0,
+                            remainingFees: parseFloat(row.find("td:eq(6)").text().trim()) || 0.0,
+                            installmentAmount: parseFloat(row.find("td:eq(7)").text().trim()) || 0.0,
+                            // You can add installmentDate if it's included
+                            //installmentDate: new Date(row.find("td:eq(8)").text().trim()).toISOString()
+                            installmentDate: row.find("td:eq(8)").text().trim()
+                        };
+
+                        console.log("Data to be sent:", data);
+
+                         $.ajax({
+                            url: '@Url.Action("PendingInstallmentCollectingFeeAsyncAD", "Accountant")',
+                            type: 'POST',
+                            data: data,
+                            success: function (result) {
+                                $('#pendingInstallmentModal .modal-body').html(result);
+                                $('#pendingInstallmentModal').modal('show');
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Error loading partial view:", error);
+                            }
+                        });
+                    }
+
+                    window.submitData = submitData;
+                });
+                </script>
+
+
+
+
+
+            </body>
+            </html>
+
+

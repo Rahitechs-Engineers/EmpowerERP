@@ -1,0 +1,286 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+@*@{
+        ViewBag.Title = "PendingInstallmentCollectingFeeAsyncAD";
+        Layout = "~/Views/Shared/_LayoutERP.cshtml";
+    }*@
+
+@using (Html.BeginForm("RecietOfCollectedFeesAsyncAD", "Accountant", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "feeCollectionForm" }))
+{
+    <div class="container">
+        <h4 class="text-center">Pending Installment Collection</h4>
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="form-group" style="display:none;">
+                        @Html.LabelFor(model => model.CandidateCode, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CandidateCode, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.CandidateCode, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Batch, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Batch, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Batch, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CourseName, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CourseFee, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CourseFee, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.CourseFee, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TotalFees, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.TotalFees, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.TotalFees, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group" id="TransactionID_checqueNumber">
+                        @Html.LabelFor(model => model.TransactionID_checqueNumber, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.TransactionID_checqueNumber, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.TransactionID_checqueNumber, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+
+
+                    <div class="form-group">
+                        <label class="control-label">Fee Type</label>
+                        @Html.HiddenFor(model => model.FeeTypeId, new { @Value = "4" })
+                        <input type="text" class="form-control" value="Course Fee" readonly />
+                        @Html.ValidationMessageFor(model => model.FeeTypeId, "", new { @class = "text-danger" })
+                    </div>
+
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.InstallmentDate, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.InstallmentDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.InstallmentDate, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.InstallmentAmount, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.InstallmentAmount, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.InstallmentAmount, "", new { @class = "text-danger" })
+                    </div>
+
+
+                    <div class="form-group" id="paymentMode">
+                        <label style="font-size: 15px;">Payment Mode</label>
+                        @Html.DropDownListFor(model => model.PaymentModeId,
+                                              new SelectList(new List<Object>
+                                              {
+                                                  new { value = "Cash", text = "Cash" },
+                                                  new { value = "Bank", text = "Bank" },
+                                                  new { value = "Cheque", text = "Cheque" }
+                                              },
+                                              "value",
+                                              "text"),
+                                              "Select Payment Mode",
+                                              new { @class = "form-control select2", @id = "paymentModeDropdown" })
+                        @Html.ValidationMessageFor(model => model.PaymentModeId, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.PaymentMode, new { id = "PaymentModeText" })
+                    </div>
+
+                    <div class="form-group" id="BankField">
+                        <label style="font-size: 15px;">Bank</label>
+                        @Html.DropDownListFor(model => model.BankId, (SelectList)ViewBag.Bank, "Select Bank", new { @class = "form-control select2", id = "BankNameID" })
+                        @Html.ValidationMessageFor(model => model.BankId, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group" id="ChequeBankName">
+                        @Html.LabelFor(model => model.ChequeBankName, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.ChequeBankName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ChequeBankName, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group" id="DrawnOn">
+                        @Html.LabelFor(model => model.DrawnOn, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.DrawnOn, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.DrawnOn, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group" id="AccountHolderField">
+                        <label style="font-size: 15px;">Account Holder</label>
+                        @Html.DropDownListFor(model => model.AccountHolderId, Enumerable.Empty<SelectListItem>(), "Select Account Holder name", new { @class = "form-control select2", id = "AccountHolder" })
+                        @Html.ValidationMessageFor(model => model.AccountHolderId, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.AccountHolderName, new { id = "AccountHolderText" })
+                    </div>
+
+                    <div class="form-group" id="ChequeDateField">
+                        @Html.LabelFor(model => model.ChequeDate, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.ChequeDate, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.ChequeDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <input type="submit" value="Collect Fee" class="btn btn-primary" id="collectFeeButton" />
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                @Html.ActionLink("Back to List", "Index")
+            </div>
+        </div>
+    </div>
+}
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- SweetAlert -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#AccountHolderField').hide();
+        $("#ChequeDateField").hide();
+        $("#BankField").hide();
+        $("#TransactionID_checqueNumber").hide();
+        $("#ChequeBankName").hide();
+        $("#TransactionID_checqueNumber_cheque").hide();
+        $("#DrawnOn").hide();
+
+    });
+</script>
+
+<script>
+        $(document).ready(function () {
+            // Handle change event of Bank dropdown
+            $('#BankNameID').change(function () {
+                var bankId = $(this).val();
+                if (bankId) {
+                    $.ajax({
+                        url: '@Url.Action("AccountHolder", "Accountant")',
+                        type: 'GET',
+                        dataType: 'json',
+                        data: { BankId: bankId },
+                        success: function (data) {
+                            // Clear and populate Account Holder dropdown
+                            var dropdown = $('#AccountHolder');
+                            dropdown.empty();
+                            dropdown.append($('<option>').val('').text('Select Account Holder name'));
+                            $.each(data, function (index, item) {
+                                dropdown.append($('<option>').val(item.Value).text(item.Text));
+                            });
+                        },
+                        error: function () {
+                            alert('Failed to load account holders.');
+                        }
+                    });
+                } else {
+                    // Clear Account Holder dropdown if bank is not selected
+                    $('#AccountHolder').empty();
+                }
+            });
+        });
+</script>
+
+
+<script>
+    $("#paymentModeDropdown").change(function () {
+        var SelectedText = $(this).find("option:selected").text();
+        var transactionInput = $("#TransactionID_checqueNumber input");
+
+        if (SelectedText === "Cash") {
+            $("#BankField").hide();
+            $("#AccountHolderField").hide();
+            $("#ChequeDateField").hide();
+            $("#TransactionID_checqueNumber").hide();
+            $("#ChequeBankName").hide();
+            $("#TransactionID_checqueNumber_cheque").hide();
+            $("#DrawnOn").hide();
+        } else if (SelectedText === "Bank") {
+
+            transactionInput.val('');
+            transactionInput.off('input.numericValidation'); 
+
+            $("#BankField").show();
+            $("#TransactionID_checqueNumber").show();
+            $("#AccountHolderField").show();
+            $("#ChequeDateField").hide();
+            $("#ChequeBankName").hide();
+            $("#TransactionID_checqueNumber_cheque").hide();
+            $("#TransactionID_checqueNumber").show();
+            $("#DrawnOn").hide();
+        } else if (SelectedText === "Cheque") {
+
+            transactionInput.val('');
+
+            $("#ChequeBankName").show();
+            $("#ChequeDateField").show();
+            $("#BankField").hide();
+            $("#AccountHolderField").hide();
+            $("#TransactionID_checqueNumber").show();
+            $("#TransactionID_checqueNumber input").on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+            $("#DrawnOn").show();
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        $('#AccountHolder').change(function () {
+            var selectedText = $('#AccountHolder option:selected').text();
+            $('#AccountHolderText').val(selectedText);
+        });
+
+        $('#paymentModeDropdown').change(function () {
+            var selectedText = $('#paymentModeDropdown option:selected').text();
+            $('#PaymentModeText').val(selectedText);
+        });
+    };
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

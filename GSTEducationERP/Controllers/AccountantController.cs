@@ -15,6 +15,29 @@ namespace GSTEducationERP.Controllers
 {
     public class AccountantController : Controller
     {
+        //       ----------------------     Atharv's     -----------------------------------------
+
+        public class Installment
+        {
+            public DateTime InstallmentDate { get; set; }
+            public double InstallmentAmount { get; set; }
+            public double TotalCompletedAmount { get; set; }
+
+        }
+
+        public DateTime BatchStartDate { get; set; }
+        public double GivenNoOfInstallment { get; set; }
+        public double TotalFees { get; set; }
+        public double TotalPaid { get; set; }
+        public double RemainingFees { get; set; }
+        public int Duration { get; set; }
+        DateTime CalculatedInstallmentDate { get; set; }
+        double CalculatedInstallmentAmount { get; set; }
+        double CalculatedTotalCompletedAmount { get; set; }
+
+        List<Installment> upcomingInstallments = new List<Installment>();
+
+ //         -----------------------------------     end         -----------------------------------
         private readonly BALAccountant objbal = new BALAccountant();
         private readonly Accountant objac = new Accountant();
         public class BreadcrumbItem
@@ -1099,6 +1122,344 @@ namespace GSTEducationERP.Controllers
             }
         }
         //------------------------------------Vishal's Purchase Modules ends here------------------------------------------------------------
-        #endregion 
+        #endregion
+
+        
+
+        #region // Atharv's module ( Fee Collection)
+        public async Task<ActionResult> PendingInstallmentsAsyncAD()
+        {
+            return View();
+        }
+
+        public async Task BindBankDropdown()
+        {
+            BALAccountant objbal1 = new BALAccountant();
+            DataSet Bank = await objbal1.GetAllBank();
+            List<SelectListItem> BankList = new List<SelectListItem>();
+
+            foreach (DataRow row in Bank.Tables[0].Rows)
+            {
+                BankList.Add(new SelectListItem
+                {
+                    Text = row["BankName"].ToString(),
+                    Value = row["BankId"].ToString(),
+                });
+            }
+            ViewBag.Bank = new SelectList(BankList, "Value", "Text");
+        }
+
+        public async Task<JsonResult> AccountHolder(int BankId)
+        {
+            BALAccountant objbal1 = new BALAccountant();
+            Accountant accountant = new Accountant();
+            accountant.BankId = BankId;
+            DataSet AccountHolder = await objbal1.GetAllAccountHolder(accountant);
+
+            List<SelectListItem> AccountHolderList = new List<SelectListItem>();
+            foreach (DataRow row in AccountHolder.Tables[0].Rows)
+            {
+                AccountHolderList.Add(new SelectListItem
+                {
+                    Text = row["AccountHolderName"].ToString(),
+                    Value = row["BankId"].ToString(),
+                });
+            }
+            ViewBag.AccountHolderList = AccountHolderList;
+            return Json(AccountHolderList, JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task BindFeeTypeDropdown()
+        {
+            BALAccountant objbal1 = new BALAccountant();
+            DataSet FeeType = await objbal1.GetFeeTypeBank();
+            List<SelectListItem> FeeTypeList = new List<SelectListItem>();
+
+            foreach (DataRow row in FeeType.Tables[0].Rows)
+            {
+                FeeTypeList.Add(new SelectListItem
+                {
+                    Text = row["FeesType"].ToString(),
+                    Value = row["FeesTypeId"].ToString(),
+
+                });
+            }
+            ViewBag.FeesType = new SelectList(FeeTypeList, "Value", "Text");
+        }
+
+        public async Task<ActionResult> PendingInstallmentsListAsyncAD()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account"); // Redirect to login page if staff code is not found in session  
+            }
+            else
+            {
+                string staffCode = Session["StaffCode"].ToString();
+
+
+                DataSet ds = new DataSet();
+                ds = await objbal.ListPendingFeesStudentAD();
+                Accountant objDetails = new Accountant();
+                List<Accountant> lstData1 = new List<Accountant>();
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    Accountant obju = new Accountant
+                    {
+                        CandidateCode = row["CandidateCode"].ToString(),
+                        Name = row["FullName"].ToString(),
+                        ContactNumber = row["ContactNumber"].ToString(),
+                        CourseName = row["CourseName"].ToString(),
+                        Batch = row["BatchName"].ToString(),
+                        CourseFee = Convert.ToDouble(row["CourseFee"]),
+                        //RegistrationFees = Convert.ToDouble(row["RegistrationFees"]),
+                        Discount = Convert.ToDouble(row["Discount"]),
+                        TotalFees = Convert.ToDouble(row["TotalFees"]),
+                        TotalPaid = Convert.ToDouble(row["TotalPaid"]),
+                        RemainingFees = Convert.ToDouble(row["RemainingFees"]),
+                        InstallmentAmount = Convert.ToDouble(row["InstallmentAmount"]),
+                        InstallmentDate = DateTime.Parse(row["LastInstallmentDate"].ToString())
+                        //NextInstallmentDate = DateTime.Parse(row["NextInstallmentDate"].ToString()),
+                        //NextInstallment = Convert.ToDouble(row["NextInstallment"])
+                    };
+                    lstData1.Add(obju);
+                }
+                objDetails.LstPendindFeeStud = lstData1;
+                return PartialView("PendingInstallmentsListAsyncAD", objDetails);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> PendingInstallmentCollectingFeeAsyncAD(string candidateCode, string name, string batch, string courseName, double courseFee, double totalFees, double totalPaid, double remainingFees, double installmentAmount, string installmentDate)
+        {
+
+            DateTime parsedInstallmentDate;
+            // Attempt to parse the string to a DateTime
+            parsedInstallmentDate = DateTime.Parse(installmentDate);
+            // Assign parsed DateTime to InstallmentDate property
+            var viewModel = new Accountant
+            {
+                CandidateCode = candidateCode,
+                Name = name,
+                Batch = batch,
+                CourseName = courseName,
+                CourseFee = courseFee,
+                TotalFees = totalFees,
+                TotalPaid = totalPaid,
+                RemainingFees = remainingFees,
+                InstallmentAmount = installmentAmount,
+                InstallmentDate = parsedInstallmentDate
+            };
+            await BindFeeTypeDropdown();
+            await BindBankDropdown();
+            return PartialView("PendingInstallmentCollectingFeeAsyncAD", viewModel);
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult> RecietOfCollectedFeesAsyncAD()
+        {
+            return View();
+        }
+
+
+
+        [HttpGet]
+        public async Task<ActionResult> ProvisionalReceiptAsyncAD()
+        {
+            return View();
+        }
+
+        [HttpPost]
+
+
+        public async Task<ActionResult> RecietOfCollectedFeesAsyncAD(Accountant model)
+        {
+            string staffCode = Session["StaffCode"].ToString();
+            model.Branchcode = Session["BranchCode"].ToString();
+            BALAccountant bALAccount = new BALAccountant();
+            DataSet ds = await bALAccount.ReciptCodeAD(model);
+
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                model.ReciptCode = ds.Tables[0].Rows[0]["NewFeesCollectioncode"].ToString();
+            }
+
+
+
+            Accountant feesCollection = new Accountant
+            {
+                CandidateCode = model.CandidateCode,
+                Name = model.Name,
+                Description = model.Description,
+                CourseName = model.CourseName,
+                CourseFee = model.CourseFee,
+                BankId = model.BankId,
+                FeeTypeId = model.FeeTypeId,
+                TransactionID_checqueNumber = model.TransactionID_checqueNumber,
+                InstallmentDate = model.InstallmentDate,
+                AccountHolderName = model.AccountHolderName,
+                PaymentModeId = model.PaymentModeId,
+                AccountHolderId = model.AccountHolderId,
+                ChequeDate = model.ChequeDate,
+                Amount = model.InstallmentAmount,
+                StaffCode = staffCode,
+                Branchcode = model.Branchcode,
+                ReciptCode = model.ReciptCode,
+                ChequeBankName = model.ChequeBankName,
+                DrawnOn = model.DrawnOn,
+            };
+            await bALAccount.FeeCollectionAsync(feesCollection);
+            return View(model);
+        }
+
+        public List<Installment> CalculateInstallments(double totalFees, double totalPaid, int givenNoOfInstallment)
+        {
+            List<Installment> installments = new List<Installment>();
+            double installmentAmount = Math.Round(totalFees / givenNoOfInstallment, 2);
+            DateTime currentInstallmentDate = BatchStartDate.AddDays(Duration); // First installment date calculation
+            double totalCompletedAmount = totalPaid;
+
+            for (int i = 0; i < givenNoOfInstallment; i++)
+            {
+                totalCompletedAmount += installmentAmount;
+                installments.Add(new Installment
+                {
+                    InstallmentDate = currentInstallmentDate,
+                    InstallmentAmount = installmentAmount,
+                    TotalCompletedAmount = totalCompletedAmount
+                });
+                currentInstallmentDate = currentInstallmentDate.AddDays(Duration); // Next installment date
+            }
+
+            return installments;
+        }
+
+        public List<Installment> GetUpcomingInstallments(int days, double totalFees, double totalPaid, int givenNoOfInstallment)
+        {
+            List<Installment> allInstallments = CalculateInstallments(totalFees, totalPaid, givenNoOfInstallment);
+            DateTime today = DateTime.Today;
+            DateTime upcomingDate = today.AddDays(days);
+
+            List<Installment> upcomingInstallments = new List<Installment>();
+            double remainingPaid = totalPaid;
+
+            foreach (var installment in allInstallments)
+            {
+                if (installment.InstallmentDate >= today && installment.InstallmentDate <= upcomingDate)
+                {
+                    if (remainingPaid < installment.TotalCompletedAmount)
+                    {
+                        installment.InstallmentAmount = installment.TotalCompletedAmount - remainingPaid;
+                        upcomingInstallments.Add(installment);
+                        remainingPaid += installment.InstallmentAmount; // Update remaining paid amount
+                    }
+                }
+            }
+
+            // Check if last installment date has passed and adjust accordingly
+            if (upcomingInstallments.Count == 0 && allInstallments.Count > 0)
+            {
+                var lastInstallment = allInstallments.Last();
+                if (lastInstallment.InstallmentDate < today)
+                {
+                    lastInstallment.InstallmentAmount = totalFees - totalPaid; // Remaining fee
+                    upcomingInstallments.Add(lastInstallment);
+                }
+            }
+
+            return upcomingInstallments;
+        }
+
+        public async Task<ActionResult> PendingInstallmentslist()
+        {
+            try
+            {
+                string staffCode = Session["StaffCode"].ToString();
+                DataSet ds = await objbal.GetDataForNewQuery();
+                Accountant objDetails = new Accountant();
+                List<Accountant> lstData1 = new List<Accountant>();
+
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    try
+                    {
+                        BatchStartDate = DateTime.Parse(row["StartDate"].ToString());
+                        int givenNoOfInstallment = Convert.ToInt32(row["NoofInstallment"]);
+                        double totalFees = Convert.ToDouble(row["TotalFee"]);
+                        double totalPaid = Convert.ToDouble(row["TotalTransactionAmount"]);
+
+                        // Skip entry if TotalPaid is greater than or equal to TotalFees
+                        if (totalPaid >= totalFees)
+                        {
+                            continue;
+                        }
+
+                        double remainingFees = totalFees - totalPaid;
+                        Duration = Convert.ToInt32(row["InstallmentDuration"]);
+
+                        List<Installment> upcomingInstallments = GetUpcomingInstallments(7, totalFees, totalPaid, givenNoOfInstallment);
+
+                        Accountant obju = new Accountant();
+                        if (upcomingInstallments.Count > 0)
+                        {
+                            var lastInstallment = upcomingInstallments.Last();
+                            obju.InstallmentDate = lastInstallment.InstallmentDate;
+                            obju.InstallmentAmount = lastInstallment.InstallmentAmount;
+                            obju.TotalCompletedAmount = lastInstallment.TotalCompletedAmount;
+
+                            var nextInstallment = upcomingInstallments.Skip(1).FirstOrDefault();
+                            if (nextInstallment != null)
+                            {
+                                obju.NextInstallmentDate = nextInstallment.InstallmentDate;
+                            }
+                            else
+                            {
+                                // If there is no next upcoming installment, the next installment date will be calculated
+                                obju.NextInstallmentDate = lastInstallment.InstallmentDate.AddDays(Duration);
+                            }
+                        }
+                        else if (totalPaid < totalFees) // Handle case where no upcoming installments are found but fees are not fully paid
+                        {
+                            // Use the last installment date and remaining fees as the next installment
+                            var lastInstallmentDate = BatchStartDate.AddDays(Duration * givenNoOfInstallment); // Set to the expected last installment date
+                            obju.InstallmentDate = lastInstallmentDate;
+                            obju.InstallmentAmount = remainingFees;
+
+                            // Calculate the NextInstallmentDate
+                            obju.NextInstallmentDate = lastInstallmentDate.AddDays(Duration);
+                        }
+
+                        // Assigning other properties to obju
+                        obju.CandidateCode = row["CandidateCode"].ToString();
+                        obju.Name = row["FullName"].ToString();
+                        obju.ContactNumber = row["ContactNumber"].ToString();
+                        obju.CourseName = row["CourseName"].ToString();
+                        obju.Batch = row["BatchName"].ToString();
+                        obju.CourseFee = Convert.ToDouble(row["CourseFee"]);
+                        obju.TotalFees = totalFees;
+                        obju.TotalPaid = totalPaid;
+                        obju.RemainingFees = remainingFees;
+
+                        lstData1.Add(obju);
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Error processing row: " + ex.Message);
+                        continue;
+                    }
+                }
+
+                objDetails.LstPendindFeeStud = lstData1;
+
+                return PartialView("PendingInstallmentsListAsyncAD", objDetails);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Error in PendingInstallmentslist: " + ex.Message);
+                return new HttpStatusCodeResult(500, "Internal Server Error");
+            }
+        }
+        #endregion
     }
 }
