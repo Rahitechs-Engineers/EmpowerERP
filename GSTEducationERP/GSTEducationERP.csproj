@@ -1161,7 +1161,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Accountant\_MatchVoucherAsyncVM.cshtml" />
     <Content Include="Views\Accountant\AddExpensesAsyncMB.cshtml" />
-    <Content Include="Views\Accountant\DetailTranscationOfExpenseAsynMB.cshtml" />
+    <Content Include="Views\Accountant\ViewTransactionAsyncMB.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

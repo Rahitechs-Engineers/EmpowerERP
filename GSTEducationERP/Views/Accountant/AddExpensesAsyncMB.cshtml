@@ -28,6 +28,11 @@
         .select2 select2-container select2-container--default select2-container--below select2-container--focus {
             width: 400px !important;
         }
+
+        #Comment{
+            height:100%;
+            width:100% !important;
+        }
     </style>
 
 </head>
@@ -84,41 +89,40 @@
                                     </div>
                                 </div>
                                 <br />
-                                <div id="venderName" class="row">
-                                    <div class="input-group">
-                                        <label for="TransactionAmount" class="form-check-control col-md-4">Vendor Name :</label>
+                               
+                                <div class="row">
+                                    <div id="venderName" class="input-group">
+                                        <label for="VendoreName" class="form-check-control col-md-4">Vendor Name :</label>
                                         <div class="input-group-prepend ">
                                             <span class="input-group-text">
-                                                🤵
+                                                
                                             </span>
                                         </div>
                                         @Html.EditorFor(model => model.VendorName, new { htmlAttributes = new { @class = "form-control col-md-6" } })
                                         @Html.ValidationMessageFor(model => model.VendorName, "", new { @class = "text-danger" })
 
                                     </div>
-                                </div>
-                                <br>
-                                <div class="row">
+
                                     <div id="RefundStudentName" class="col-md-6">
                                         @Html.LabelFor(model => model.StudentName, "Student Name")
-                                        <div class="col-md-10">
+                                        <div class="col-md-12">
                                             @Html.DropDownListFor(model => model.StudentName, new SelectList(ViewBag.RefundCandidatelst, "Value", "Text"), "Select", new { @id = "RefundCandidatelst", @class = "form-control" })
                                             @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                     <div id="RefundPaidAmount" class="col-md-6">
                                         @Html.LabelFor(model => model.PaidFee, "Paid Fee")
-                                        <div class="col-md-10">
+                                        <div class="col-md-12">
                                             @Html.EditorFor(model => model.PaidFee, new { htmlAttributes = new { @id = "CandidatePaidFee", @class = "form-control", @readonly = "readonly" } })
                                             @Html.ValidationMessageFor(model => model.PaidFee, "", new { @class = "text-danger" })
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="row">
+                                <div id="Reference" class="row">
                                     <div id="ReferenceByName" class="col-md-6">
                                         @Html.LabelFor(model => model.ReferenceByName, "Reference By Name")
-                                        <div class="col-md-10">
+                                        <div class="col-md-12">
                                             @Html.DropDownListFor(model => model.ReferenceByName, new SelectList(ViewBag.ReferenceByStudentlst, "Value", "Text"), "Select", new { @id = "ReferenceByStudentlst", @class = "form-control" })
                                             @Html.ValidationMessageFor(model => model.ReferenceByName, "", new { @class = "text-danger" })
                                         </div>
@@ -126,7 +130,7 @@
 
                                     <div id="ReferenceToName" class="col-md-6">
                                         @Html.LabelFor(model => model.ReferenceToName, "Reference To Name")
-                                        <div class="col-md-10">
+                                        <div class="col-md-12">
                                             <select class="form-control" id="ReferenceToStudents" name="ReferenceToStudents">
                                                 <option value="">--Select -------</option>-->
                                                 <!-- This select element will be populated dynamically based on AJAX response -->
@@ -138,6 +142,7 @@
 
 
                                 </div>
+
                                 <div class="row">
                                     <div id="EmployeesForOther" class="input-group">
                                         <label for="EmployeesForOther" class="form-check-control col-md-4">Employee Name :</label>
@@ -146,9 +151,9 @@
                                                 🤵
                                             </span>
                                         </div>
-                                        <select id="Employees" class="form-control" style="width:15vw; height:10vw;">
+                                        <select id="Employees" class="form-control" style="width:20vw; height:10vw;">
                                             <option></option>
-                                            @foreach (var item in ViewBag.ReferenceByStudentlst)
+                                            @foreach (var item in ViewBag.lstStaff)
                                             {
                                                 <option value="@item.Value">@item.Text</option>
                                             }
@@ -189,7 +194,7 @@
                                     <div class="input-group">
                                         <label for="Date" class="form-check-control col-md-4">Description:</label>
 
-                                        @Html.TextAreaFor(model => model.Comment, new { htmlAttributes = new { @id = "Date", @class = "form-control " } })
+                                        @Html.TextAreaFor(model => model.Comment, new { htmlAttributes = new { @id = "Comment", @class = "form-control " } })
                                         @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
 
                                     </div>
@@ -201,8 +206,8 @@
                                 <br />
 
                                 <div class="form-group" style="text-align: center;">
-                                    <button class="btn btn-primary" id="SaveExpAndNext">Save&Next</button>
-                                    <a href="@Url.Action("ExpenseDashboardAsyncMB")" class="btn btn-danger">Cancel</a>
+                                    <button class="btn btn-primary" id="SaveExpAndNext" style="margin-right:30px; width:25%;">SAVE & NEXT</button>
+                                    <a href="@Url.Action("ExpenseDashboardAsyncMB")" class="btn btn-danger" style="width:25%;">CANCEL</a>
                                 </div>
                             </div>
                         </div>
@@ -321,7 +326,7 @@
             });
             function updateTotalAmount() {
                 var totalAmount = 0;
-                var inputAmount = parseFloat($('#Amount').val()) || 0;
+                var inputAmount = parseFloat($('#Amounts').val()) || 0;
                 // Loop through selected options to calculate the total amount
                 $('#VoucherCode option:selected').each(function () {
                  // Extract the voucher amount using regex
@@ -379,9 +384,9 @@
                             traditional: true,
                             success: function (response) {
                                 if (response.success) {
-                                    displayToast("Payment Done successfully!", "success");
+                                    toastr.success("Payment Done successfully!", "success");
                                     if (response.redirectUrl) {
-                                        window.location.href = '@Url.Action("ListOfRegularExpenseAsyncMB", "Accountant")';
+                                        window.location.href = '@Url.Action("ExpenseDashboardAsyncMB", "Accountant")';
                                     }
                                 } else {
                                     $('#updatedBalances').html(response.message || 'Error allocating amount.');
@@ -406,13 +411,14 @@
         $(document).ready(function () {
             $('#TransactionAmount').on('input', function () {
                 var enteredValue = $(this).val();
+                var amount = $('#Amounts').val();
                 var numericValue = enteredValue.replace(/[^\d.]/g, '');
-                // Check if the number of digits exceeds 10
                 if (numericValue.length > 10) {
-                    // Truncate the value to the first 10 digits
                     numericValue = numericValue.substring(0, 10);
                 }
-                // Update the input field with the truncated value
+                if (parseFloat(numericValue) > parseFloat(amount)) {
+                    numericValue = amount;
+                }
                 $(this).val(numericValue);
             });
 
@@ -541,7 +547,7 @@
                                             gotonext(); // Navigate to the next step
                                         }
                                         else {
-                                             window.location.href = '@Url.Action("ListOfRegularExpenseAsyncMB", "Accountant")';
+                                             window.location.href = '@Url.Action("ExpenseDashboardAsyncMB")';
                                         }
                                     });
                                 } else if (response.redirect) {
@@ -588,66 +594,45 @@
             $("#ExpenseCategory").change(function () {
                 var selectedValue = $(this).val();
                 if (selectedValue === "1") {
-
                     $("#ExpenseView").show();
                     $("#venderName").show();
-                    $("#ReferenceToName").hide();
-                    $("#ReferenceByName").hide();
+                    $("#Reference").hide();
                     $("#RefundStudentName").hide();
                     $("#RefundPaidAmount").hide();
                     $("#EmployeesForOther").hide();
-                    $("#ChequeDate").hide();
-
                     $("#btnAddExpense").show();
-                    document.getElementById('PaymentMode').selectedIndex = 0;
                     document.getElementById('TranscationAmount').value = '';
                     document.getElementById('Comment').value = '';
-                    $("#PaymentMode").val("").prop("disabled", false); // Enable dropdown and clear selection
                 } if (selectedValue === "2") {
                     $("#ExpenseView").show();
-                    $("#ReferenceToName").hide();
-                    $("#ReferenceByName").hide();
+                    $("#Reference").hide();
                     $("#RefundStudentName").show();
                     $("#RefundPaidAmount").show();
                     $("#EmployeesForOther").hide();
-                    $("#ChequeDate").hide();
                     $("#venderName").hide();
-
-                    $("#btnAddExpense").show();
-                    document.getElementById('PaymentMode').selectedIndex = 0;
+                    $("#btnAddExpense").show();   
                     document.getElementById('TranscationAmount').value = '';
                     document.getElementById('Comment').value = '';
-                    $("#PaymentMode").val("CASH").prop("disabled", true); // Set to cash and disable dropdown
                 } if (selectedValue === "3") {
                     $("#ExpenseView").show();
-                    $("#ReferenceToName").show();
-                    $("#ReferenceByName").show();
+                    $("#Reference").show();
                     $("#RefundStudentName").hide();
                     $("#RefundPaidAmount").hide();
                     $("#EmployeesForOther").hide();
-                    $("#ChequeDate").hide();
                     $("#venderName").hide();
-
                     $("#btnAddExpense").show();
-                    document.getElementById('PaymentMode').selectedIndex = 0;
                     document.getElementById('TranscationAmount').value = '';
                     document.getElementById('Comment').value = '';
-                    $("#PaymentMode").val("CASH").prop("disabled", true); // Set to cash and disable dropdown
                 } if (selectedValue === "4") {
                     $("#ExpenseView").show();
-                    $("#ReferenceToName").hide();
-                    $("#ReferenceByName").hide();
+                    $("#Reference").hide();
                     $("#RefundStudentName").hide();
                     $("#RefundPaidAmount").hide();
                     $("#EmployeesForOther").show();
-                    $("#ChequeDate").hide();
-
                     $("#venderName").hide();
                     $("#btnAddExpense").show();
-                    document.getElementById('PaymentMode').selectedIndex = 0;
                     document.getElementById('TranscationAmount').value = '';
                     document.getElementById('Comment').value = '';
-                    $("#PaymentMode").val("").prop("disabled", false); // Enable dropdown and clear selection
                 } if (selectedValue === "5") {
                     $("#ExpenseView").show();
                     document.getElementById('TranscationAmount').value = '';
@@ -658,10 +643,8 @@
                     $("#EmployeesForOther").show();
                     $("#venderName").hide();
                     $("#btnAddExpense").show();
-                    document.getElementById('PaymentMode').selectedIndex = 0;
-                    document.getElementById('TranscationAmount').value = '';
                     document.getElementById('Comment').value = '';
-                    $("#PaymentMode").val("").prop("disabled", false); // Enable dropdown and clear selection
+                   
                 }
             });
 

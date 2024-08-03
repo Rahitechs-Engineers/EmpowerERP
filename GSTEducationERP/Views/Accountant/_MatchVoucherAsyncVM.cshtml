@@ -44,7 +44,7 @@
     </style>
 </head>
 <body>
-    <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 25px; right: 25px;">&times;</button>
+
     <div class="card" style="    margin-right:0px; margin-left:0px; margin-top:10px">
         <div class="card-header">
             <h2 class="card-title">MATCH TRANSACTION</h2>
@@ -110,7 +110,7 @@
                             <i class="fas fa-rupee-sign"></i>
                         </span>
                     </div>
-                    @Html.EditorFor(model => model.TransactionAmount, new { htmlAttributes = new {@class = "form-control col-md-6" } })
+                    @Html.EditorFor(model => model.TransactionAmount, new { htmlAttributes = new { @class = "form-control col-md-6" } })
                     @Html.ValidationMessageFor(model => model.TransactionAmount, "", new { @class = "text-danger" })
 
                 </div>
@@ -120,10 +120,11 @@
         <!---Here we can we add the buttons-->
         <div class="form-group" style="text-align: center;">
             <button class="btn btn-success" id="SubmitAmounts">Submit</button>
-            <a href="@Url.Action("DetailsPurchaseAsyncVP")" class="btn btn-danger">Cancel</a>
+            <a href="@Url.Action("ExpenseDashboardAsyncMB")" class="btn btn-danger">Cancel</a>
         </div>
 
     </div>
+    <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 25px; right: 25px;">&times;</button>
     <script>
         $(document).ready(function () {
             $('#VoucherCode').select2({
@@ -214,25 +215,26 @@
                     }
                 });
             } else {
-                displayToast("Please select vouchers and enter a valid paid amount", "error");     
+                displayToast("Please select vouchers and enter a valid paid amount", "error");
             }
         });
 
 
 
     </script>
-    <!--vishal done this script-->
+    <!--mukesh done this script-->
     <script>
         $(document).ready(function () {
             $('#TransactionAmount').on('input', function () {
                 var enteredValue = $(this).val();
+                var amount = $('#Amount').val();
                 var numericValue = enteredValue.replace(/[^\d.]/g, '');
-                // Check if the number of digits exceeds 10
                 if (numericValue.length > 10) {
-                    // Truncate the value to the first 10 digits
                     numericValue = numericValue.substring(0, 10);
                 }
-                // Update the input field with the truncated value
+                if (parseFloat(numericValue) > parseFloat(amount)) {
+                    numericValue = amount;
+                }
                 $(this).val(numericValue);
             });
 

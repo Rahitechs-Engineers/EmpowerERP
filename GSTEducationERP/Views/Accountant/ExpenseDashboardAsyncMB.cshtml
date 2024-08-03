@@ -146,16 +146,16 @@
                         <div class="card-header p-0 border-bottom-0">
                             <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                                 <li class="nav-item">
-                                    <a class="nav-link active" data-toggle="pill" href="@Url.Action("ListOfRegularExpenseAsyncMB","Accountant")" id="RegularExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Regular Expense</a>
+                                    <a class="nav-link active" data-toggle="pill" href="@Url.Action("ListOfExpensesAsyncMB","Accountant")" id="RegularExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Regular Expense</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="pill" href="@Url.Action("ListOfRefernceExpenseAsyncMB","Accountant")" id="ReferenceExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Reference Expense</a>
+                                    <a class="nav-link" data-toggle="pill" href="@Url.Action("ListOfExpensesAsyncMB","Accountant")" id="ReferenceExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Reference Expense</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="pill" href="@Url.Action("ListOfRegularExpenseAsyncMB","Accountant")" id="RefundExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Refund Expense</a>
+                                    <a class="nav-link" data-toggle="pill" href="@Url.Action("ListOfExpensesAsyncMB","Accountant")" id="RefundExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Refund Expense</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="pill" href="@Url.Action("ListOfRegularExpenseAsyncMB","Accountant")" id="OtherExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Other Expense</a>
+                                    <a class="nav-link" data-toggle="pill" href="@Url.Action("ListOfExpensesAsyncMB","Accountant")" id="OtherExpenseTab" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Other Expense</a>
                                 </li>
                             </ul>
                         </div>
@@ -163,28 +163,57 @@
                 </div>
             </div>
             <hr />
+            <div class="row">
+                <div class="col-md-11">
 
-            <div class="col-6">
-                <div class="row justify-content-end">
-                    <!-- Align items to the right -->
-                    <div class="col-md-6 text-right mt-1" style="padding-right:10px;">
+                </div>
+                <div class="col-md-1">
+                    <div class="justify-content-center" style="padding-right:10px;">
                         <a id="AddExpenseLink" title="Add New Expense">
                             <img src="~/Content/Admin/icon/Add.jpeg" style="height:30px; width:30px;" />
                         </a>
                     </div>
+                        <!-- Align items to the right -->
+                        
 
                 </div>
             </div>
+            
 
 
             <div class="row">
 
-                <div class="col-md-4" style="display:flex">
-                    <label style="font-size: 15px;" class="col-md-4">Date To Date</label>
-                    <input type="text" name="datefilter" id="datefilter" value="" class="form-control w-75 col-md-6" title="Filter Date" />
+                <div class="col-md-2 form-group" style="width:fit-content;display:flex">
+                    <label style="padding-right: 10px; padding-left: 10px ">Status</label>
+                    <select id="statusFilter" class="form-control">
+                        <option value="null">Select All</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Completed">Completed</option>
+                    </select>
                 </div>
 
-
+                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
+                    <div class="input-group">
+                        <label for="startDate" class="label-control">Start Date</label>
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input type="date" class="form-control col-md-6" id="startDateFilter" name="startDate">
+                    </div>
+                </div>
+                <div class="col-md-3 form-group" style="width:fit-content;display:flex">
+                    <div class="input-group">
+                        <label for="endDate">End Date   </label>
+                        <div class="input-group-prepend ">
+                            <span class="input-group-text">
+                                <i class="far fa-calendar-alt"></i>
+                            </span>
+                        </div>
+                        <input type="date" class="form-control col-md-6" id="endDateFilter" name="endDate">
+                    </div>
+                </div>
             </div>
             <br/>
 
@@ -222,9 +251,17 @@
         jQuery.noConflict();
         jQuery(document).ready(function ($) {
 
-
+            function filterPurchases(status, startDate, endDate) {
+                debugger;
+                var url = '@Url.Action("Filterforlist", "Accountant")' +
+                    '?status=' + encodeURIComponent(status) +
+                    '&startDate=' + encodeURIComponent(startDate) +
+                    '&endDate=' + encodeURIComponent(endDate);
+                
+            }
 
             function loadTabContent(tabContentUrl, statusId) {
+
 
                 $.ajax({
                     url: tabContentUrl,
@@ -279,15 +316,57 @@
                 });
             }
 
+            function initializeFilterEventHandlers() {
+                var status = $('#statusFilter').val();
+                var startDate = $('#startDateFilter').val();
+                var endDate = $('#endDateFilter').val();
+
+                $('#statusFilter').off('change').on('change', function () {
+                    debugger;
+                    status = $(this).val();
+                    filterPurchases(status, startDate, endDate);
+                });
+
+                $('#startDateFilter').off('change').on('change', function () {
+                    startDate = $(this).val();
+                    filterPurchases(status, startDate, endDate);
+                });
+
+                $('#endDateFilter').off('change').on('change', function () {
+                    endDate = $(this).val();
+                    filterPurchases(status, startDate, endDate);
+                });
+            }
+
+            // Initial filter call if needed
+            var initialStatus = $('#statusFilter').val();
+            var initialStartDate = $('#startDateFilter').val();
+            var initialEndDate = $('#endDateFilter').val();
+
+            if (initialStatus || initialStartDate || initialEndDate) {
+                filterPurchases(initialStatus, initialStartDate, initialEndDate);
+            }
+
+            // Initialize filter event handlers
+            initializeFilterEventHandlers();
 
 
 
+            loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")', 1);
+
+
+            $(this).addClass("active");
+            $("#ReferenceExpenseTab").addClass("active");
+            $("#ReferenceExpenseTab").removeClass("active");
+            $("#RefundExpenseTab").removeClass("active");
+
+            loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")', 1);
 
              /// Here when we click on RegularExpenseTab then we have open the Regular view ////
 
             $("#RegularExpenseTab").click(function () {
 
-                loadTabContent('@Url.Action("ListOfRegularExpenseAsyncMB", "Accountant")');
+                loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")',1);
 
             });
 
@@ -295,16 +374,21 @@
             /// Here when we click on ReferenceExpenseTab then we have open the reference view open////
 
             $("#ReferenceExpenseTab").click(function () {
-                
-                 loadTabContent('@Url.Action("ListOfReferenceExpenseAsyncMB", "Accountant")');
+
+                 loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")',3);
             });
 
             /// Here when we click on RefundExpenseTab then we have open the Refund view  open////
 
             $("#RefundExpenseTab").click(function () {
 
-                loadTabContent('@Url.Action("ListOfRefundExpenseAsyncMB", "Accountant")');
+                loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")',2);
             });
+
+            $("#OtherExpenseTab").click(function () {
+                 loadTabContent('@Url.Action("ListOfExpensesAsyncMB", "Accountant")', 5);
+
+             });
 
 
 
@@ -362,6 +446,9 @@
                     }
                 });
             });
+
+
+
 
         });
 

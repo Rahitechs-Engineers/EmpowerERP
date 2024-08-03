@@ -64,10 +64,15 @@ namespace GSTEducationERPLibrary.Accountant
         public string TranscationChequedate { get; set; }
         public string TransactionCode { get; set; }
         public float TransactionAmount { get; set; }
+        public float TotalAmount { get; set; }
         public string Status { get; set; }
+        public DateTime ChequeClearenceDate { get; set; }
         
 
         public List<Accountant> lstRegularExpense {  get; set; }
+        public List<Accountant> lstExpenseMB {  get; set; }
+        public List<Accountant> lstExpenseMB1 {  get; set; }
+
 
     }
 }
