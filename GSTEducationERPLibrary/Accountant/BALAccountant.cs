@@ -9,11 +9,12 @@ using Helper;
 using System.Runtime.Remoting.Messaging;
 using System.Web.UI.WebControls.WebParts;
 using System.Text.RegularExpressions;
+using static GSTEducationERPLibrary.Accountant.Accountant;
 
 namespace GSTEducationERPLibrary.Accountant
 {
-	public class BALAccountant
-	{
+    public class BALAccountant
+    {
         MSSQL DBHelper = new MSSQL();
         Dictionary<string, string> Param = new Dictionary<string, string>();
 
@@ -41,7 +42,8 @@ namespace GSTEducationERPLibrary.Accountant
                 Param.Add("@VoucherDate", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
                 Param.Add("@StatusId", 6.ToString());
                 await DBHelper.ExecuteStoreProcedure("GSTAccountant", Param);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception("An error occurred while registering the assigned project. Details: " + ex.Message);
             }
@@ -88,7 +90,8 @@ namespace GSTEducationERPLibrary.Accountant
                 Param.Add("@flag", "GetVoucher");
                 DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
                 return ds;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception("An error occurred while fetching course names. Details: " + ex.Message);
             }
@@ -449,5 +452,76 @@ namespace GSTEducationERPLibrary.Accountant
         //}
         #endregion
         #endregion //vishals region ends here
+
+        #region //Siddhi's BALClass Cheque Details
+        /// <summary>
+        /// Shows List of Cheques received from student
+        /// </summary>
+        /// <param name="accountantProp"></param>
+        /// <returns></returns>
+        public async Task<DataSet> ListAllChequeReceiptAsyncSM(AccountantProp accountantProp)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "ListAllChequeReceiptSM");
+            Param.Add("@BranchCode", accountantProp.branchcode);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+        /// <summary>
+        /// Gets the data cheques given for Expense and Purchase
+        /// </summary>
+        /// <param name="accountantProp"></param>
+        /// <returns></returns>
+        public async Task<DataSet> ListAllChequeExpenseAsyncSM(AccountantProp accountantProp)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "ListAllChequeExpenseSM");
+            Param.Add("@BranchCode", accountantProp.branchcode);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+        /// <summary>
+        /// This method is used to show student receipt
+        /// </summary>
+        /// <param name="accountant"></param>
+        /// <returns></returns>
+        public async Task<SqlDataReader> ViewStudentFeeChequeAsyncSM(AccountantProp accountant)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "ViewStudentFeeChequeAsyncSM");
+            Param.Add("@TransactionCode", accountant.TransactionCode);
+            //Param.Add("@BranchCode", accountant.branchcode);
+            SqlDataReader dr = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
+            return dr;
+        }
+        /// <summary>
+        /// This method is used to update the cheque clearance date of Student cheque and Expense/Purchase cheque
+        /// </summary>
+        /// <param name="accountant"></param>
+        /// <returns></returns>
+        public async Task UpdateFeeTransactionChequeAsyncSM(AccountantProp accountant)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "UpdateFeeTransactionChequeSM");
+            Param.Add("@StatusId", accountant.StatusId.ToString());
+            Param.Add("@TransactionCode", accountant.TransactionCode);
+            Param.Add("@NewChequeClearanceDate", accountant.NewClearanceDate.ToString("yyyy-MM-dd HH:mm:ss"));
+            Param.Add("@Description", accountant.Description);
+            //Param.Add("@BranchCode", accountant.branchcode);
+            await DBHelper.ExecuteStoreProcedure("GSTAccountant", Param);
+        }
+        /// <summary>
+        /// Gets the data of status to bind to dropdown
+        /// </summary>
+        /// <returns></returns>
+        public async Task<DataSet> ShowStatusChequeAsyncSM()
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "ShowChequeStatusSM");
+            //Param.Add("@BranchCode", accountant.branchcode);
+            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+            return ds;
+        }
+        #endregion
     }
 }

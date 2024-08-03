@@ -1,0 +1,222 @@
+﻿@model GSTEducationERPLibrary.Accountant.AccountantProp
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cheque Receipt Table</title>
+    <link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+    <table id="ChequeReceiptTable" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                @*<th>Sr. No.</th>*@
+                <th>Receipt No.</th>
+                <th>Student Name</th>
+                <th>Admission Type</th>
+                <th>Received Date</th>
+                <th>Cheque No.</th>
+                <th>Cheque Date</th>
+                <th>Amount</th>
+                <th>Cheque Submit Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@{
+                    int serialNumber = 1;
+                }*@
+            @foreach (var item in Model.lstChequeReceipt)
+            {
+                <tr>
+                    @*<td>@serialNumber</td>*@
+                    <td>@Html.DisplayFor(modelItem => item.TransactionCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AdmissionType)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ChequeNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ChequeDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td>
+                        @if (item.ChequeClearanceDate == null)
+                        {
+                            <span class="highlight">Not cleared</span>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.ChequeClearanceDate)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Status == "Pending")
+                        {
+                            <span class="badge bg-orange">@Html.DisplayFor(modelItem => item.Status)</span>
+                        }
+                        @if (item.Status == "Completed")
+                        {
+                            <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status)</span>
+
+                        }
+                        @if (item.Status == "Bounced")
+                        {
+                            <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+
+                        }
+
+                    </td>
+                    <td>
+                        @if (item.Status == "Pending")
+                        {
+                            <a href="javascript:;" class="sectionEditLink icon" data-id="@item.TransactionCode" data-url="@Url.Action("ShowStudentFeeChequeAsyncSM", "Accountant", new { transactioncode = item.TransactionCode, chequeDate = item.ChequeDate })" data-toggle="modal" data-target="#SectionModal" title="Clear Cheque">
+                                <video width="25" height="25" playsinline loop>
+                                    <source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" />
+                                </video>
+                            </a>
+                        }
+                        @if (item.Status == "Completed")
+                        {
+                            <a href="@Url.Action("StudentReceiptAsyncSM", "Accountant", new { transactionCode = item.TransactionCode })" target="_blank" class="icon" title="View Receipt">
+                                <video width="25" height="25" playsinline loop>
+                                    <source src="~/Content/Admin/icon/view.mp4" type="video/mp4" />
+                                </video>
+                            </a>
+                        }
+                    </td>
+                </tr>
+                //serialNumber++;
+            }
+        </tbody>
+    </table>
+
+    <div class="modal fade" id="SectionModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalLabel">Cheque Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Content will be loaded dynamically here -->
+                    <form id="ChequeUpdateForm" method="post" action="@Url.Action("ShowStudentFeeChequeAsyncSM", "Accountant")">
+                        <!-- Your form fields here -->
+                        <input type="hidden" id="TransactionCode" name="TransactionCode" value="" />
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <!-- DataTables & Plugins -->
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('#ChequeReceiptTable').on('click', '.sectionEditLink', function (event) {
+                var transactionCode = $(this).data('id');
+                var url = $(this).data('url');
+                var status = $(this).closest('tr').find('td:nth-child(9)').text().trim();
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#SectionModal .modal-body').html(data);
+                        // Set the TransactionCode in the form
+                        $('#SectionModal .modal-body #TransactionCode').val(transactionCode);
+                        $('#partial-view-container').html(data);
+                        $('#SectionModal').modal('show');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('An error occurred while loading the details:', xhr.responseText);
+                        alert('An error occurred while loading the details: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+
+    @section scripts {
+        <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+        <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+        <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+        <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+        <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                var table = $('#ChequeReceiptTable').DataTable({
+                    "responsive": true,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "stateSave": true,
+                    "buttons": [
+                        {
+                            extend: 'pdf',
+                            text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />',
+                            titleAttr: 'PDF'
+                        },
+                        {
+                            extend: 'excel',
+                            text: '<img src="/Content/Admin/icon/xls-file.png" title="excel" alt="excel" height="20" width="20" />',
+                            titleAttr: 'Excel'
+                        },
+                        {
+                            extend: 'colvis',
+                            text: '<img src="/Content/Admin/icon/columns.png" title="columns" alt="columns" height="20" width="20" />',
+                            titleAttr: 'Columns'
+                        }
+                    ],
+                    "order": [[1, 'asc']],
+                    "language": {
+                        "emptyTable": "No data available",
+                        "search": "Search:",
+                        "zeroRecords": "No matching records found",
+                        "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                        "infoEmpty": "No entries to show",
+                        "paginate": {
+                            "first": "First",
+                            "last": "Last",
+                            "next": "Next",
+                            "previous": "Previous"
+                        }
+                    }
+                });
+
+                table.buttons().container().appendTo('#ChequeReceiptTable_wrapper .col-md-6:eq(0)');
+            });
+        </script>
+    }
+</body>
+</html>

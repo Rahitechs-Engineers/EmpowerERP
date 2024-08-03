@@ -1,0 +1,214 @@
+﻿@model GSTEducationERPLibrary.Accountant.AccountantProp
+
+<link href="~/Content/plugins/fontawesome-free/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="~/Content/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="~/Content/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<style>
+    .hidden-column {
+        display: none;
+    }
+</style>
+
+<div class="card-body">
+    <table id="ChequeExpenseList" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                @*<th>Sr. No.</th>*@
+                <th>Puchase/Expense Code</th>
+                <th>Vendor Name</th>
+                <th>Cheque No.</th>
+                <th>Received Date</th>
+                <th>Cheque Date</th>
+                <th>Amount</th>
+                <th>Bank Name</th>
+                <th class="hidden-column">Account Number</th>
+                <th>Cheque Clearance Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @*@{
+                int serialNumber = 1;
+            }*@
+            @foreach (var item in Model.lstChequeExpense)
+            {
+                <tr>
+                    @*<td>@serialNumber</td>*@
+                    <td>@Html.DisplayFor(modelItem => item.TransactionCode)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ChequeNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TransactionDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ChequeDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Amount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.BankName)</td>
+                    <td class="hidden-column">@Html.DisplayFor(modelItem => item.AccountNumber)</td>
+                    <td>
+                        @if (item.ChequeClearanceDate == null)
+                        {
+                            <span class="highlight">Not cleared</span>
+                        }
+                        else
+                        {
+                            @Html.DisplayFor(modelItem => item.ChequeClearanceDate)
+                        }
+                    </td>
+                    <td>
+                        @if (item.Status == "Pending")
+                        {
+                            <span class="badge bg-orange">@Html.DisplayFor(modelItem => item.Status)</span>
+                        }
+                        @if (item.Status == "Completed")
+                        {
+                            <span class="badge bg-success">@Html.DisplayFor(modelItem => item.Status)</span>
+
+                        }
+                        @if (item.Status == "Bounced")
+                        {
+                            <span class="badge bg-danger">@Html.DisplayFor(modelItem => item.Status)</span>
+
+                        }
+                    </td>
+
+                    <td>
+                        @if (item.Status != "Completed")
+                        {
+                            <a href="javascript:;" class="sectionEditLink" data-id="@item.TransactionCode"
+                               data-url="@Url.Action("UpdateExpenseChequeDateAsyncSM", "Accountant", new { id = item.TransactionCode, name = item.Name, amount = item.Amount, chequeno = item.ChequeNumber, chequedate = item.ChequeDate, bankName = item.BankName, accNumber = item.AccountNumber})"
+                               data-toggle="modal" data-target="#SectionModal">
+                                <video width="25" height="25" playsinline loop><source src="~/Content/Admin/icon/Edit%20Details.mp4" type="video/mp4" /></video>
+                            </a>
+                        }
+                    </td>
+                </tr>
+                //serialNumber++;
+            }
+        </tbody>
+    </table>
+    <div class="modal fade" id="SectionModal">
+        <div class="modal-dialog modal-lg" style="background-color: white; max-width: 70; max-height: 30;">
+            <div class="modal-content" style="background-color: white;">
+                <button class="close text-danger" data-dismiss="modal" style="position: absolute; top: 8px; right: 6px;">&times;</button>
+                <div class="modal-body">
+                    <!-- Content will be loaded dynamically here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- DataTables  & Plugins -->
+    <script src="~/Content/plugins/jquery/jquery.min.js"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="~/Content/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            $('#ChequeExpenseList').on('click', '.sectionEditLink', function (event) {
+                event.preventDefault();
+                var transactionCode = $(this).data('id');
+                var url = $(this).data('url');
+
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (data) {
+                        $('#SectionModal .modal-body').html(data);
+                        $('#SectionModal').modal('show');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('An error occurred while loading the details:', xhr.responseText);
+                        alert('An error occurred while loading the details: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+
+@section scripts {
+    <script src="~/Content/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Content/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="~/Content/plugins/jszip/jszip.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="~/Content/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="~/Content/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#ChequeExpenseList').DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "stateSave": true,
+                "buttons": [
+                    {
+                        extend: 'pdfHtml5',
+                        text: '<i class="fas fa-file-pdf"></i> PDF',
+                        titleAttr: 'Export to PDF',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'excelHtml5',
+                        text: '<i class="fas fa-file-excel"></i> Excel',
+                        titleAttr: 'Export to Excel',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'csvHtml5',
+                        text: '<i class="fas fa-file-csv"></i> CSV',
+                        titleAttr: 'Export to CSV',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'copyHtml5',
+                        text: '<i class="fas fa-copy"></i> Copy',
+                        titleAttr: 'Copy to clipboard',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5, 6]
+                        }
+                    },
+                    {
+                        extend: 'print',
+                        text: '<i class="fas fa-print"></i> Print',
+                        titleAttr: 'Print table'
+                    }
+                ]
+            });
+
+            // Append buttons to a specific container (optional)
+            table.buttons().container().appendTo($('#ChequeExpenseList_wrapper .col-md-6:eq(0)'));
+        });
+    </script>
+}

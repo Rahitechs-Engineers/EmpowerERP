@@ -99,5 +99,126 @@ namespace GSTEducationERPLibrary.Accountant
         #endregion
         //---------------------------vishals properties ends here-----------------------------------------------------------------------------------------------
 
+        //-----------Siddhi's Properties for receipt------------------------------------------------------------//
+        #region
+        //------------------------Atharv Receipt Start------------------------------------------/
+        public string CandidateCode { get; set; }
+        public string StaffName { get; set; }
+        public string Department { get; set; }
+        public string Designation { get; set; }
+        public long AccountNo { get; set; }
+        public string IFSCCode { get; set; }
+        public double GrossSalary { get; set; }
+        public List<Accountant> lstEmp { get; set; }
+        public string Name { get; set; }
+        public string CourseName { get; set; }
+        public double CourseFee { get; set; }
+        public double TotalFees { get; set; }
+        public double InstallmentAmount { get; set; }
+        public List<Accountant> LstPendindFeeStud { get; set; }
+        public List<Accountant> lstArrangeDemo { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Transaction Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        public string ChequeNumber { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayName("Cheque Clearance Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
+        public DateTime? ChequeClearanceDate { get; set; } // Changed to nullable DateTime
+        public string Branchcode { get; set; }
+        public string ProvisionalReceiptNo { get; set; }
+        public DateTime ReceiptDate { get; set; }
+        public string EnrollmentNumber { get; set; }
+        public string Batch { get; set; }
+        public double RemainingFee { get; set; }
+        public double NextInstallmentAmount { get; set; }
+        public string InstallmentNo { get; set; }
+        public string DrawnOn { get; set; }
+        public string AdmissionType { get; set; }
+        public string Comment { get; set; }
+        public string Course { get; set; }
+        public int Id { get; set; }
+        public int NumberOfPaidInstallments { get; set; }
+        public string FeeType { get; set; }
+        public string CreditTo { get; set; }
+        public int AccountHolderId { get; set; }
+        public string StudentName { get; set; }
+        public int FeeTypeId { get; set; }
+        public string PaymentModeId { get; set; }
+        [RegularExpression("^[0-9]*$", ErrorMessage = "Only numeric values are allowed.")]
+        public string TransactionID_checqueNumber { get; set; }
+        public string LoggedStaffCode { get; set; }
+        public string AccountHolderName { get; set; }
+        public string ReciptCode { get; set; }
+        public string ContactNumber { get; set; }
+        public double RegistrationFees { get; set; }
+        public double TotalPaid { get; set; }
+        public double RemainingFees { get; set; }
+        public DateTime LastInstallmentDate { get; set; }
+        public double NextInstallment { get; set; }
+        public DateTime InstallmentDate { get; set; }
+        public DateTime NextInstallmentDate { get; set; }
+        public double TotalCompletedAmount { get; set; }
+        public string ChequeBankName { get; set; }
+        #endregion
+
+        #region //Siddhi Property Class ChequeDetails
+
+        #endregion
+    }
+    public class AccountantProp
+    {
+
+        //[DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime ChequeDateReceipt { get; set; }
+        public string VendorName { get; set; }
+
+        //public float Amount { get; set; }
+        public string TransactionId { get; set; }
+        public string StaffCode { get; set; }
+        public int StatusId { get; set; }
+        public List<AccountantProp> lstChequeExpense { get; set; }
+        public List<AccountantProp> lstChequeReceipt { get; set; }
+        public string TransactionCode { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Transaction Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime TransactionDate { get; set; }
+        public string ChequeNumber { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Cheque Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? ChequeDate { get; set; }
+        public string Name { get; set; }
+
+        public float Amount { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Cheque Clearance Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Required(ErrorMessage = "Cheque Clearance Date is required.")]
+        public DateTime? ChequeClearanceDate { get; set; }
+        public string branchcode { get; set; }
+        public string ProvisionalReceiptNo { get; set; }
+        public DateTime ReceiptDate { get; set; }
+        public string Batch { get; set; }
+        public string PaymentMode { get; set; }
+        //public string TransactionId { get; set; }
+        public string DrawnOn { get; set; }
+        public string AdmissionType { get; set; }
+        public string Course { get; set; }
+        public string BankName { get; set; }
+        public string Status { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Cheque Clearance Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime NewClearanceDate { get; set; }
+        public string Description { get; set; }
+        public long AccountNumber { get; set; }
     }
 }

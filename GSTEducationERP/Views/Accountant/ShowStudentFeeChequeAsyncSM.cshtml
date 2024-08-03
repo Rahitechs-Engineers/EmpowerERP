@@ -1,0 +1,243 @@
+﻿@model GSTEducationERPLibrary.Accountant.AccountantProp
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <style>
+        h2 {
+            color: #007bff;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .back-button {
+            font-size: 20px;
+            margin-right: 180px;
+            color: #007bff;
+            transition: color 0.3s ease;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            position: absolute;
+            top: 80px;
+        }
+
+        .text-danger {
+            color: red;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .validation-summary-errors {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+            .validation-summary-errors ul {
+                list-style-type: none;
+                padding-left: 0;
+            }
+    </style>
+</head>
+<body>
+    @using (Html.BeginForm("ShowStudentFeeChequeAsyncSM", "Accountant", FormMethod.Post, new { id = "chequeForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <div class="form-container">
+                
+                @Html.ValidationSummary(true, "", new { @class = "validation-summary-errors" })
+
+                <input type="hidden" id="AdmissionType" name="AdmissionType" value="@Model.AdmissionType" />
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label class="control-label">Fee Receipt Code</label>
+                        @*@Html.LabelFor(model => model.TransactionCode, htmlAttributes: new { @class = "control-label" })*@
+                        @Html.EditorFor(model => model.TransactionCode, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.TransactionCode, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label">Student Name</label>
+                        @*@Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })*@
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label class="control-label">Cheque Number</label>
+                        @*@Html.LabelFor(model => model.ChequeNumber, htmlAttributes: new { @class = "control-label" })*@
+                        @Html.EditorFor(model => model.ChequeNumber, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.ChequeNumber, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Cheque Date</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ChequeDateReceipt, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;", id = "ChequeDateReceipt", @readonly = "readonly" } })
+                            @Html.ValidationMessageFor(model => model.ChequeDateReceipt, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Amount, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label">Cheque Submit Date</label>
+                        @Html.EditorFor(model => model.NewClearanceDate, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;", id = "NewClearanceDate" } })
+                        @Html.ValidationMessageFor(model => model.NewClearanceDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row batch-course">
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Batch, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Batch, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Batch, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(model => model.Course, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Course, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.Course, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <label class="control-label">Drawn On</label>
+                        @*@Html.LabelFor(model => model.DrawnOn, htmlAttributes: new { @class = "control-label" })*@
+                        @Html.EditorFor(model => model.DrawnOn, new { htmlAttributes = new { @class = "form-control", style = "width: 300px;", @readonly = "readonly" } })
+                        @Html.ValidationMessageFor(model => model.DrawnOn, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-6">
+                        <label class="control-label">Status</label>
+                        @*@Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label" })*@
+                        @Html.DropDownListFor(model => model.StatusId, new SelectList(ViewBag.StatusList, "Value", "Text"), "Select Status", new { @class = "form-control", style = "width: 300px;" })
+                        @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <!--<div class="form-group row">
+                    <div class="col-md-6">
+                        <label class="control-label">Status</label>-->
+                        @*@Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label" })*@
+                        <!--@Html.DropDownListFor(model => model.StatusId, new SelectList(ViewBag.StatusList, "Value", "Text"), "Select Status", new { @class = "form-control", style = "width: 300px;" })
+                        @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+                    </div>
+                </div>-->
+
+            <div class="form-group text-center">
+                <input type="submit" value="Save" class="btn btn-primary btn-success btn-custom" id="save-button" />
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    }
+    <div id="error-message" class="text-danger" style="display:none;"></div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <script type="text/javascript">
+        jQuery(document).ready(function ($) {
+            var admissionType = $('#AdmissionType').val();
+            if (admissionType === "EXTERNAL") {
+                $('.batch-course').hide();
+            }
+
+            function parseDate(dateString) {
+                var parts = dateString.split('-');
+                if (parts.length !== 3) {
+                    console.error("Invalid date format:", dateString);
+                    return new Date(NaN);
+                }
+                if (parts[0].length === 4) {
+                    return new Date(parts[0], parts[1] - 1, parts[2]);
+                } else {
+                    return new Date(parts[2], parts[1] - 1, parts[0]);
+                }
+            }
+
+            function isDateValid(referenceDate, selectedDate) {
+                const refDate = parseDate(referenceDate);
+                const selDate = parseDate(selectedDate);
+                const currentDate = new Date();
+                currentDate.setHours(0, 0, 0, 0); // Reset time to start of day
+
+                if (isNaN(refDate.getTime()) || isNaN(selDate.getTime())) {
+                    console.error("Invalid date input - Ref:", referenceDate, "Selected:", selectedDate);
+                    return false;
+                }
+                const threeMonthsLater = new Date(refDate.getFullYear(), refDate.getMonth() + 3, refDate.getDate());
+
+                // Check if selected date is not before reference date, not after 3 months, and not after current date
+                return selDate >= refDate && selDate <= threeMonthsLater && selDate <= currentDate;
+            }
+
+            $('#NewClearanceDate').on('change', function () {
+                var chequeDate = $('#ChequeDateReceipt').val();
+                var selectedDate = $(this).val();
+                if (isDateValid(chequeDate, selectedDate)) {
+                    // Valid date
+                } else {
+                    var refDate = parseDate(chequeDate);
+                    var maxDate = new Date(refDate.getFullYear(), refDate.getMonth() + 3, refDate.getDate());
+                    var currentDate = new Date();
+                    var formattedMaxDate = formatDate(maxDate > currentDate ? currentDate : maxDate);
+
+                    toastr.error('Selected date must be between ' + chequeDate + ' and ' + formattedMaxDate + ', and not later than today.', 'Invalid Date');
+                    $('#NewClearanceDate').val('');
+                }
+            });
+
+            function formatDate(date) {
+                var day = String(date.getDate()).padStart(2, '0');
+                var month = String(date.getMonth() + 1).padStart(2, '0');
+                var year = date.getFullYear();
+                return day + '-' + month + '-' + year;
+            }
+
+            $('#chequeForm').on('submit', function (e) {
+                var chequeDate = $('#ChequeDateReceipt').val();
+                var selectedDate = $('#NewClearanceDate').val();
+                var refDate = parseDate(chequeDate);
+                var minDate = refDate;
+                var maxDate = new Date(refDate.getFullYear(), refDate.getMonth() + 3, refDate.getDate());
+                var currentDate = new Date();
+                maxDate = maxDate > currentDate ? currentDate : maxDate;
+
+                if (!isDateValid(chequeDate, selectedDate)) {
+                    toastr.error('Date must be between ' + formatDate(minDate) + ' and ' + formatDate(maxDate) + ', and not later than today.', 'Invalid Date');
+                    e.preventDefault();
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Saved successfully',
+                        text: 'The cheque details have been saved.',
+                        timer: 3000, 
+                        showConfirmButton: false
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

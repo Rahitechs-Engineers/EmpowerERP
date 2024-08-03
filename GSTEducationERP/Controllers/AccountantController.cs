@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Util;
+using static GSTEducationERPLibrary.Accountant.Accountant;
 
 namespace GSTEducationERP.Controllers
 {
@@ -17,6 +18,8 @@ namespace GSTEducationERP.Controllers
     {
         private readonly BALAccountant objbal = new BALAccountant();
         private readonly Accountant objac = new Accountant();
+        AccountantProp objprop = new AccountantProp();
+
         public class BreadcrumbItem
         {
             public string Name { get; set; }
@@ -1099,6 +1102,281 @@ namespace GSTEducationERP.Controllers
             }
         }
         //------------------------------------Vishal's Purchase Modules ends here------------------------------------------------------------
-        #endregion 
+        #endregion
+
+        #region //Siddhi's Cheque Receipt Details
+        /// <summary>
+        /// This method shows list of students who has given cheque
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> ListAllChequeReceiptAsyncSM(string filter = "All", string status = "All")
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                objprop.branchcode = Session["BranchCode"].ToString();
+                DataSet ds = await objbal.ListAllChequeReceiptAsyncSM(objprop);
+                List<AccountantProp> lstData1 = new List<AccountantProp>();
+
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    string admissionType = ds.Tables[0].Rows[i]["ADMISSION TYPE"].ToString();
+                    string chequeStatus = ds.Tables[0].Rows[i]["STATUS"].ToString();
+
+                    if ((filter == "All" || admissionType.Equals(filter, StringComparison.OrdinalIgnoreCase)) &&
+                        (status == "All" || chequeStatus.Equals(status, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        AccountantProp objAcc = new AccountantProp
+                        {
+                            TransactionCode = ds.Tables[0].Rows[i]["RECEIPT NO."].ToString(),
+                            TransactionDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["RECEIVED DATE"].ToString()),
+                            ChequeNumber = ds.Tables[0].Rows[i]["CHEQUE NO."].ToString(),
+                            ChequeDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CHEQUE DATE"].ToString()),
+                            Name = ds.Tables[0].Rows[i]["STUDENT NAME"].ToString(),
+                            AdmissionType = admissionType,
+                            Amount = Convert.ToInt64(ds.Tables[0].Rows[i]["Amount"].ToString())
+                        };
+
+                        if (ds.Tables[0].Rows[i]["CHEQUE CLEARANCE DATE"] != DBNull.Value &&
+                            !string.IsNullOrEmpty(ds.Tables[0].Rows[i]["CHEQUE CLEARANCE DATE"].ToString()))
+                        {
+                            objAcc.ChequeClearanceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CHEQUE CLEARANCE DATE"].ToString());
+                        }
+
+                        objAcc.Status = chequeStatus;
+
+                        // Ensure unique TransactionCode
+                        if (!lstData1.Any(x => x.TransactionCode == objAcc.TransactionCode))
+                        {
+                            lstData1.Add(objAcc);
+                        }
+                    }
+                }
+                AccountantProp obj = new AccountantProp { lstChequeReceipt = lstData1 };
+                return PartialView("ListAllChequeReceiptAsyncSM", obj);
+            }
+        }
+
+        /// <summary>
+        /// This is main view where the list binds
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task<ActionResult> ListAllChequesAsyncSM()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// It displays list of cheque given by client to vendor through expense or purchase 
+        /// </summary>
+        /// <returns></returns>
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<ActionResult> _ListAllChequeExpenseAsyncSM(string status = "All")
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                objprop.branchcode = Session["BranchCode"].ToString();
+                DataSet ds = await objbal.ListAllChequeExpenseAsyncSM(objprop);
+                List<AccountantProp> lstData1 = new List<AccountantProp>();
+
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    string chequeStatus = ds.Tables[0].Rows[i]["STATUS"].ToString();
+
+                    if (status == "All" || chequeStatus.Equals(status, StringComparison.OrdinalIgnoreCase))
+                    {
+                        AccountantProp objAcc = new AccountantProp
+                        {
+                            TransactionCode = ds.Tables[0].Rows[i]["RECEIPT NO."].ToString(),
+                            TransactionDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["HANDOVERED DATE"].ToString()),
+                            ChequeNumber = ds.Tables[0].Rows[i]["CHEQUE NO."].ToString(),
+                            ChequeDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CHEQUE DATE"].ToString()),
+                            Name = ds.Tables[0].Rows[i]["VENDOR NAME"].ToString(),
+                            BankName = ds.Tables[0].Rows[i]["BANK NAME"].ToString(),
+                            AccountNumber = Convert.ToInt64(ds.Tables[0].Rows[i]["ACCOUNT NUMBER"].ToString()),
+                            Amount = Convert.ToInt64(ds.Tables[0].Rows[i]["Amount"].ToString())
+                        };
+
+                        if (ds.Tables[0].Rows[i]["CHEQUE CLEARANCE DATE"] != DBNull.Value &&
+                            !string.IsNullOrEmpty(ds.Tables[0].Rows[i]["CHEQUE CLEARANCE DATE"].ToString()))
+                        {
+                            objAcc.ChequeClearanceDate = Convert.ToDateTime(ds.Tables[0].Rows[i]["CHEQUE CLEARANCE DATE"].ToString());
+                        }
+
+                        objAcc.Status = chequeStatus;
+                        lstData1.Add(objAcc);
+                    }
+                }
+                AccountantProp obj = new AccountantProp { lstChequeExpense = lstData1 };
+                return PartialView("_ListAllChequeExpenseAsyncSM", obj);
+            }
+        }
+
+        /// <summary>
+        /// This method is used to show the student fee details and clear cheque date
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="chequeDate"></param>
+        /// <returns></returns>
+
+        [HttpGet]
+        public async Task<ActionResult> ShowStudentFeeChequeAsyncSM(string transactioncode, DateTime chequeDate)
+        {
+            await ShowStatusChequeAsyncSM();
+            AccountantProp accountant = new AccountantProp();
+            accountant.TransactionCode = transactioncode;
+            accountant.ChequeDateReceipt = chequeDate;
+            accountant.NewClearanceDate = chequeDate;
+            DateTime cheqdate = accountant.ChequeDateReceipt;
+            string ChequeDateReceipt = cheqdate.ToString("yyyy-MM-dd");
+            SqlDataReader dr;
+            dr = await objbal.ViewStudentFeeChequeAsyncSM(accountant);
+            while (dr.Read())
+            {
+                accountant.TransactionCode = dr["RECEIPT NO."].ToString();
+                accountant.Name = dr["STUDENT NAME"].ToString();
+                accountant.TransactionDate = Convert.ToDateTime(dr["RECEIVED DATE"]);
+                accountant.ChequeNumber = dr["CHEQUE NO."].ToString();
+                accountant.Amount = Convert.ToInt64(dr["AMOUNT"]);
+                accountant.DrawnOn = dr["DRAWN ON"].ToString();
+                accountant.Batch = dr["BATCH CODE"].ToString();
+                accountant.Course = dr["COURSE CODE"].ToString();
+                accountant.PaymentMode = "Cheque";
+                accountant.AdmissionType = dr["ADMISSION TYPE"].ToString();
+            }
+            dr.Close();
+
+            return PartialView(accountant);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ShowStudentFeeChequeAsyncSM(AccountantProp objAcc)
+        {
+
+            await objbal.UpdateFeeTransactionChequeAsyncSM(objAcc);
+            return RedirectToAction("ListAllChequesAsyncSM");
+        }
+
+        /// <summary>
+        /// This is used to clear cheque date given to vendors
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="amount"></param>
+        /// <param name="chequeno"></param>
+        /// <param name="chequedate"></param>
+        /// <returns></returns>
+
+        [HttpGet]
+        public async Task<ActionResult> UpdateExpenseChequeDateAsyncSM(string id, string name, long amount, string chequeno, DateTime chequedate, string bankName, long accNumber)
+        {
+            await ShowStatusChequeAsyncSM();
+            AccountantProp model = new AccountantProp
+            {
+                TransactionCode = id,
+                VendorName = name,
+                Amount = amount,
+                ChequeNumber = chequeno,
+                ChequeDateReceipt = chequedate,
+                NewClearanceDate = chequedate,
+                BankName = bankName,
+                AccountNumber = accNumber
+            };
+            return PartialView("UpdateExpenseChequeDateAsyncSM", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> UpdateExpenseChequeDateAsyncSM(AccountantProp objAcc)
+        {
+            await objbal.UpdateFeeTransactionChequeAsyncSM(objAcc);
+            return RedirectToAction("ListAllChequesAsyncSM");
+        }
+
+        /// <summary>
+        /// This method is used to bind status to dropdown in view of update cheque date
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task ShowStatusChequeAsyncSM()
+        {
+            DataSet ds = await objbal.ShowStatusChequeAsyncSM();
+            Dictionary<string, string> uniqueStatus = new Dictionary<string, string>();
+
+            foreach (DataRow row in ds.Tables[0].Rows)
+            {
+                string statusId = row["StatusId"].ToString();
+                string status = row["Status"].ToString();
+
+                if (!uniqueStatus.ContainsKey(statusId))
+                {
+                    uniqueStatus.Add(statusId, status);
+                }
+            }
+
+            List<SelectListItem> lststatus = uniqueStatus.Select(x => new SelectListItem
+            {
+                Text = x.Key,
+                Value = x.Value
+            }).ToList();
+
+            ViewBag.StatusList = new SelectList(lststatus, "Text", "Value");
+        }
+
+        /// <summary>
+        /// This method shows student fees receipt
+        /// </summary>
+        /// <param name="transactionCode"></param>
+        /// <returns></returns>
+
+        public async Task<ActionResult> StudentReceiptAsyncSM(string transactionCode)
+        {
+            AccountantProp accountant = new AccountantProp
+            {
+                TransactionCode = transactionCode
+            };
+
+            SqlDataReader dr = await objbal.ViewStudentFeeChequeAsyncSM(accountant);
+            if (dr.Read())
+            {
+                Accountant model = new Accountant
+                {
+                    ReciptCode = dr["RECEIPT NO."].ToString(),
+                    Name = dr["STUDENT NAME"].ToString(),
+                    TransactionDate = DateTime.Parse(dr["RECEIVED DATE"].ToString()),
+                    TransactionID_checqueNumber = dr["CHEQUE NO."].ToString(),
+                    ChequeDate = DateTime.Parse(dr["CHEQUE DATE"].ToString()),
+                    Amount = (long)decimal.Parse(dr["AMOUNT"].ToString()), // Explicit cast from decimal to long
+                    ChequeClearanceDate = dr["CHEQUE CLEARANCE DATE"] != DBNull.Value ? (DateTime?)DateTime.Parse(dr["CHEQUE CLEARANCE DATE"].ToString()) : null,
+                    StaffName = dr["STAFF NAME"].ToString(),
+                    CourseName = dr["COURSE CODE"].ToString(),
+                    Batch = dr["BATCH NAME"].ToString(),
+                    ChequeBankName = dr["DRAWN ON"].ToString(),
+                    AdmissionType = dr["ADMISSION TYPE"].ToString(),
+                    PaymentModeId = "Cheque"
+                };
+
+                return View(model);
+            }
+            return HttpNotFound();
+
+        }
+
+        #endregion
     }
 }
