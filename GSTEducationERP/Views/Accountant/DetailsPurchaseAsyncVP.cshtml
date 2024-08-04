@@ -233,7 +233,7 @@
                 <div class="col-md-2 form-group" style="width:fit-content;display:flex">
                     <label style="padding-right: 10px; padding-left: 10px ">Status</label>
                     <select id="statusFilter" class="form-control">
-                        <option value="null">Select All</option>
+                        <option value="selectall">Select All</option>
                         <option value="Pending">Pending</option>
                         <option value="Completed">Completed</option>
                     </select>
@@ -260,6 +260,15 @@
                         </div>
                         <input type="date" class="form-control col-md-6" id="endDateFilter" name="endDate">
                     </div>
+                </div>
+                <div class="col-md-2">
+                    <span>
+                        <a href="javascript:void(0);" id="refreshIcon" class="icon" onclick="refreshFilter()">
+                            <video width="25" height="25" playsinline loop>
+                                <source src="~/Content/Admin/icon/Refresh.mp4" type="video/mp4">
+                            </video>
+                        </a>
+                    </span>
                 </div>
             </div>
             <div class="modal" id="StudentModal">
@@ -352,15 +361,12 @@
                 }
             });
         });
-
-        // Handling click event for ViewPurchase and EditPurchase
-        document.querySelectorAll('#ViewPurchase').forEach(function(element) {
-            element.addEventListener('click', function(e) {
-                e.preventDefault(); // Prevent the default anchor behavior
-                var purchaseCode = this.getAttribute('data-purchasecode');
-                window.location.href = '@Url.Action("ViewPurchaseAsyncVP", "Accountant")?purchaseCode=' + purchaseCode;
-            });
+        $('#PurchaseList').on('click', '#ViewPurchase', function () {
+            debugger;
+            var purchaseCode = this.getAttribute('data-purchasecode');
+            window.location.href = '@Url.Action("ViewPurchaseAsyncVP", "Accountant")?purchaseCode=' + purchaseCode;
         });
+        
 
         document.querySelectorAll('#EditPurchase').forEach(function(element) {
             element.addEventListener('click', function (e) {
@@ -371,7 +377,14 @@
         });
 
 
-
+        //refresh buuton
+        function refreshFilter() {
+            $('#statusFilter').val("selectall");
+            $('#startDateFilter').val(null);
+            $('#endDateFilter').val(null);
+            initializeFilterEventHandlers();
+        }
+        $('#refreshIcon').on('click', refreshFilter )
     });
     </script>
 
@@ -388,81 +401,82 @@
             timeOut: 4000 // How long the toast will be displayed (in milliseconds)
         };
     </script>
+    <!--filter here-->
     <script type="text/javascript">
-jQuery.noConflict();
-jQuery(document).ready(function ($) {
-    function filterPurchases(status, startDate, endDate) {
-        var url = '@Url.Action("FilterPurchases", "Accountant")' +
-            '?status=' + encodeURIComponent(status) +
-            '&startDate=' + encodeURIComponent(startDate) +
-            '&endDate=' + encodeURIComponent(endDate);
+    jQuery.noConflict();
+    jQuery(document).ready(function ($) {
+        function filterPurchases(status, startDate, endDate) {
+            var url = '@Url.Action("FilterPurchases", "Accountant")' +
+                '?status=' + encodeURIComponent(status) +
+                '&startDate=' + encodeURIComponent(startDate) +
+                '&endDate=' + encodeURIComponent(endDate);
 
-        $.ajax({
-            url: url,
-            type: 'GET',
-            success: function (response) {
-                // Replace the content of the div with the new table
-                $('#PurchaseList').html(response);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (response) {
+                    // Replace the content of the div with the new table
+                    $('#PurchaseList').html(response);
 
-                // Reinitialize the DataTable
-                var table = $('#PurchaseList table').DataTable({
-                    "responsive": true,
-                    "lengthChange": false,
-                    "autoWidth": false,
-                    "stateSave": true,
-                    "dom": 'Bfrtip',
-                    "buttons": [
-                        { extend: 'copy', text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />', titleAttr: 'Copy' },
-                        { extend: 'csv', text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="20" width="20" />', titleAttr: 'CSV' },
-                        { extend: 'excel', text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />', titleAttr: 'Excel' },
-                        { extend: 'pdf', text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />', titleAttr: 'PDF' },
-                        { extend: 'print', text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />', titleAttr: 'Print' },
-                        { extend: 'colvis', text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />', titleAttr: 'Columns' }
-                    ]
-                });
+                    // Reinitialize the DataTable
+                    var table = $('#PurchaseList table').DataTable({
+                        "responsive": true,
+                        "lengthChange": false,
+                        "autoWidth": false,
+                        "stateSave": true,
+                        "dom": 'Bfrtip',
+                        "buttons": [
+                            { extend: 'copy', text: '<img src="/Content/Admin/icon/copy.png" title="Copy" alt="Copy" height="20" width="20" />', titleAttr: 'Copy' },
+                            { extend: 'csv', text: '<img src="/Content/Admin/icon/csv.jpg" title="CSV" alt="CSV" height="20" width="20" />', titleAttr: 'CSV' },
+                            { extend: 'excel', text: '<img src="/Content/Admin/icon/xls-file.png" title="xls" alt="xls" height="20" width="20" />', titleAttr: 'Excel' },
+                            { extend: 'pdf', text: '<img src="/Content/Admin/icon/pdf-file.png" title="pdf" alt="pdf" height="20" width="20" />', titleAttr: 'PDF' },
+                            { extend: 'print', text: '<img src="/Content/Admin/icon/printer.png" title="printer" alt="printer" height="20" width="20" />', titleAttr: 'Print' },
+                            { extend: 'colvis', text: '<img src="/Content/Admin/icon/column.jpg" title="column" alt="column" height="20" width="20" />', titleAttr: 'Columns' }
+                        ]
+                    });
 
-                // Move DataTable buttons to correct position
-                table.buttons().container().appendTo('#PurchaseList .col-md-6:eq(0)');
-            },
-            error: function (xhr, status, error) {
-                console.error('AJAX Error:', status, error);
-            }
-        });
-    }
+                    // Move DataTable buttons to correct position
+                    table.buttons().container().appendTo('#PurchaseList .col-md-6:eq(0)');
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                }
+            });
+        }
 
-    function initializeFilterEventHandlers() {
-        var status = $('#statusFilter').val();
-        var startDate = $('#startDateFilter').val();
-        var endDate = $('#endDateFilter').val();
+        function initializeFilterEventHandlers() {
+            var status = $('#statusFilter').val();
+            var startDate = $('#startDateFilter').val();
+            var endDate = $('#endDateFilter').val();
 
-        $('#statusFilter').off('change').on('change', function () {
-            status = $(this).val();
-            filterPurchases(status, startDate, endDate);
-        });
+            $('#statusFilter').off('change').on('change', function () {
+                status = $(this).val();
+                filterPurchases(status, startDate, endDate);
+            });
 
-        $('#startDateFilter').off('change').on('change', function () {
-            startDate = $(this).val();
-            filterPurchases(status, startDate, endDate);
-        });
+            $('#startDateFilter').off('change').on('change', function () {
+                startDate = $(this).val();
+                filterPurchases(status, startDate, endDate);
+            });
 
-        $('#endDateFilter').off('change').on('change', function () {
-            endDate = $(this).val();
-            filterPurchases(status, startDate, endDate);
-        });
-    }
+            $('#endDateFilter').off('change').on('change', function () {
+                endDate = $(this).val();
+                filterPurchases(status, startDate, endDate);
+            });
+        }
 
-    // Initial filter call if needed
-    var initialStatus = $('#statusFilter').val();
-    var initialStartDate = $('#startDateFilter').val();
-    var initialEndDate = $('#endDateFilter').val();
+        // Initial filter call if needed
+        var initialStatus = $('#statusFilter').val();
+        var initialStartDate = $('#startDateFilter').val();
+        var initialEndDate = $('#endDateFilter').val();
 
-    if (initialStatus || initialStartDate || initialEndDate) {
-        filterPurchases(initialStatus, initialStartDate, initialEndDate);
-    }
+        if (initialStatus || initialStartDate || initialEndDate) {
+            filterPurchases(initialStatus, initialStartDate, initialEndDate);
+        }
 
-    // Initialize filter event handlers
-    initializeFilterEventHandlers();
-});
+        // Initialize filter event handlers
+        initializeFilterEventHandlers();
+    });
     </script>
 
 

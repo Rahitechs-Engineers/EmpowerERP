@@ -60,3 +60,12 @@ C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducat
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEduca.4B0C6BB9.Up2Date
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
 C:\Users\Shreyas\OneDrive\Desktop\Rahitech\ERP Project\GSTEducationERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\bin\Debug\Helper.dll
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEduca.4B0C6BB9.Up2Date
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb

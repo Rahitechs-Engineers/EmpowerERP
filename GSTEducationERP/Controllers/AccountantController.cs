@@ -368,24 +368,32 @@ namespace GSTEducationERP.Controllers
         [HttpGet]
         public async Task<ActionResult> FilterPurchases(string status, DateTime? startDate, DateTime? endDate)
         {
-            List<Accountant> purchases = Session["ListforFilter"] as List<Accountant>;
-            if (!string.IsNullOrEmpty(status) && status != "null")
+            try
             {
-                purchases = purchases.Where(p => p.Status == status).ToList();
-            }
+                List<Accountant> purchases = Session["ListforFilter"] as List<Accountant>;
+                if (!string.IsNullOrEmpty(status) && status != "selectall")
+                {
+                    purchases = purchases.Where(p => p.Status == status).ToList();
+                }
 
-            if (startDate.HasValue)
-            {
-                purchases = purchases.Where(p => p.TransactionDate >= startDate.Value).ToList();
-            }
+                if (startDate.HasValue)
+                {
+                    purchases = purchases.Where(p => p.TransactionDate >= startDate.Value).ToList();
+                }
 
-            if (endDate.HasValue)
-            {
-                purchases = purchases.Where(p => p.TransactionDate <= endDate.Value).ToList();
+                if (endDate.HasValue)
+                {
+                    purchases = purchases.Where(p => p.TransactionDate <= endDate.Value).ToList();
+                }
+                ViewBag.Currency = Session["Currency"].ToString();
+                Accountant obj = new Accountant { lstPurchaseVP = purchases };
+                return await Task.Run(() => PartialView("_PurchaseListAsyncVP", obj));
             }
-            ViewBag.Currency = Session["Currency"].ToString();
-            Accountant obj = new Accountant { lstPurchaseVP = purchases };
-            return await Task.Run(() => PartialView("_PurchaseListAsyncVP", obj));
+            catch (Exception ex) 
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return await Task.Run(()=> View("error"));
+            }
         }
 
         /// <summary>
@@ -420,8 +428,6 @@ namespace GSTEducationERP.Controllers
                     //fetching the banks here for the add purchase 
                     await ListStatusAsyncVP();//fetching the status here i don't know why
                     //setting the date by default todays
-                    //objac.TransactionDate = DateTime.Now;
-                    //objac.ChequeDate = DateTime.Now;
                     await ListHsnCodeAsyncVP();//getting thehsncode link for dropdown
                     await ListTaxAsyncVP();//getting the applied tax viewbag from methode
                     await PaymentmodesAsyncVP();//getting the payment modes to dropdown
@@ -548,6 +554,7 @@ namespace GSTEducationERP.Controllers
             //fetching the list of purchased itmes here
             List<Accountant> lstitems = new List<Accountant>();
             List<Accountant> lsttransaction = new List<Accountant>();
+            objac.BranchCode = Session["BranchCode"].ToString();
             DataSet ds = await objbal.ListPurchasedItemsAsyncVP(objac);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -641,6 +648,7 @@ namespace GSTEducationERP.Controllers
         {
             objac.PurchaseCode = PurchaseCode;
             SqlDataReader dr;
+            objac.BranchCode = Session["BranchCode"].ToString();
             dr = await objbal.ValidatePurchaseAsyncVP(objac);
             if (dr.Read())
             {
@@ -695,28 +703,7 @@ namespace GSTEducationERP.Controllers
                 //}
             }
         }
-        /// <summary>
-        /// don't know what is this for
-        /// </summary>
-        /// <param name="objA"></param>
-        /// <returns></returns>
-        private async Task<ActionResult> SavePurchasePaymentAsyncVP(Accountant objA)
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                //updating the purchase details like transaction amount ,payment mode,voucher details 
-                await objbal.SavePurchasePaymentAsyncVP(objA);
-                await objbal.SaveVoucherPurchaseAsyncVP(objA);
-                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-            }
-        }
         
-
-
         /// <summary>
         /// this action methode written for the viewing the purchase bill for the purchase dashboard
         /// </summary>
@@ -732,15 +719,17 @@ namespace GSTEducationERP.Controllers
             {
                 //bread crumbs here
                 List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
-            {
+                {
 
                     new BreadcrumbItem { Name = "Dashboard", Url =Url.Action("AccountantDashboardAsyncSGS", "Accountant")  },
                     new BreadcrumbItem { Name = "Purchase", Url = Url.Action("DetailsPurchaseAsyncVP","Accountant") },
-                    new BreadcrumbItem { Name = "View Purchase", Url = Url.Action("ViewPurchaseAsyncVP", "Accountant") },
-            };
+                    new BreadcrumbItem { Name = "View Purchase",Url = Url.Action("ViewPurchaseAsyncVP", "Accountant") + "?PurchaseCode=" + PurchaseCode },
+
+                };
 
                 ViewBag.Breadcrumbs = breadcrumbs;
                 objac.PurchaseCode = PurchaseCode;
+                objac.BranchCode = Session["BranchCode"].ToString();
                 SqlDataReader dr;
                 dr = await objbal.ListPurchasesDetailsAsyncVP(objac);
                 if (dr.Read())
@@ -759,6 +748,7 @@ namespace GSTEducationERP.Controllers
                 var (listitem, listtransaction) = await ListPurchasItemsAsyncVP(PurchaseCode);
                 objac.lstPurchaseItemVP = listitem;
                 objac.lstTransactionVP = listtransaction;
+                ViewBag.transactionList=listtransaction;
                 //giving the currency hard coded
                 ViewBag.Currency = "&#x20b9;";
                 return await Task.Run(() => View("ViewPurchaseAsyncVP", objac));
@@ -785,13 +775,14 @@ namespace GSTEducationERP.Controllers
 
                         new BreadcrumbItem { Name = "Dashboard", Url =Url.Action("AccountantDashboardAsyncSGS", "Accountant")  },
                         new BreadcrumbItem { Name = "Purchase", Url = Url.Action("DetailsPurchaseAsyncVP","Accountant") },
-                        new BreadcrumbItem { Name = "Update Purchase", Url = Url.Action("UpdatePurchaseAsyncVP", "Accountant") },
+                        new BreadcrumbItem { Name = "Update Purchase",Url = Url.Action("UpdatePurchaseAsyncVP", "Accountant") + "?PurchaseCode=" + PurchaseCode },
                 };
 
                 ViewBag.Breadcrumbs = breadcrumbs;
                 //getting the details from the database for this purchase code
                 objac.TransactionCode = PurchaseCode;
                 objac.PurchaseCode = PurchaseCode;
+                objac.BranchCode = Session["BranchCode"].ToString();
                 ViewBag.Currency = "&#x20b9;";
                 ViewBag.IsitEdit = true;
                 SqlDataReader dr = await objbal.ListPurchasesDetailsAsyncVP(objac);
@@ -806,8 +797,10 @@ namespace GSTEducationERP.Controllers
                 }
                 await ListHsnCodeAsyncVP();//getting thehsncode link for dropdown
                 await ListTaxAsyncVP();//getting the tax for purchased item list
-                await ListPurchasedItemsAsyncVP(objac);
-                //await ListStatusAsyncVP();//fetching the status here i don't know why
+                List<Accountant>lst1= new List<Accountant>();
+                List<Accountant>lst2= new List<Accountant>();
+
+                await ListPurchasedItemsAsyncVP(objac);//getting the list of purchased items
                 await PaymentmodesAsyncVP();//getting the payment modes to dropdown
                 return await Task.Run(() => View("AddPurchaseAsyncVP", accountant));
             }
@@ -820,9 +813,10 @@ namespace GSTEducationERP.Controllers
         [HttpGet]
         private async Task ListPurchasedItemsAsyncVP(Accountant objA)
         {
+
             //fetching the list of purchased itmes here
             List<Accountant> lstitems = new List<Accountant>();
-            DataSet ds = await objbal.ListPurchasedItemsAsyncVP(objac);
+            DataSet ds = await objbal.ListPurchasedItemsAsyncVP(objA);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -843,7 +837,7 @@ namespace GSTEducationERP.Controllers
             ViewBag.ListofItems = lstitems;
         }
         /// <summary>
-        /// updating the purchase details in transactions 
+        /// updating the purchase details in transactions for purchase
         /// </summary>
         /// <param name="objA"></param>
         /// <returns></returns>
@@ -991,17 +985,29 @@ namespace GSTEducationERP.Controllers
             }
             else
             {
-                objac.BranchCode = Session["BranchCode"].ToString();
-                //fetching the banks here for the add purchase 
-                objac.VendorName = vendorName;
-                DataSet ds = await objbal.ListVouchersAsyncVP(objac);
-                List<SelectListItem> VoucherList = new List<SelectListItem>();
-                foreach (DataRow dr in ds.Tables[0].Rows)
+                //try
+                //{
+
+                //}
+                //catch (Exception ex) { }
+                if (!string.IsNullOrEmpty(vendorName))
                 {
-                    VoucherList.Add(new SelectListItem { Text = $"{dr["VoucherCode"].ToString() + "-" + dr["PaidTo"].ToString() + "-" + dr["Balance"].ToString()}", Value = dr["VoucherCode"].ToString() });
+                    objac.BranchCode = Session["BranchCode"].ToString();
+                    //fetching the banks here for the add purchase 
+                    objac.VendorName = vendorName;
+                    DataSet ds = await objbal.ListVouchersAsyncVP(objac);
+                    List<SelectListItem> VoucherList = new List<SelectListItem>();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        VoucherList.Add(new SelectListItem { Text = $"{dr["VoucherCode"].ToString() + "-" + dr["PaidTo"].ToString() + "-" + dr["Balance"].ToString()}", Value = dr["VoucherCode"].ToString() });
+                    }
+                    ViewBag.VoucherCode = VoucherList;
+                    return await Task.Run(() => Json(new { success = true, data = VoucherList }, JsonRequestBehavior.AllowGet));
                 }
-                ViewBag.VoucherCode = VoucherList;
-                return await Task.Run(() => Json(new { success = true, data = VoucherList }, JsonRequestBehavior.AllowGet));
+                else
+                {
+                    return await Task.Run(() => Json(new { success = true, message = "vendor code is null" }, JsonRequestBehavior.AllowGet));
+                }
             }
         }
         /// <summary>
@@ -1035,9 +1041,18 @@ namespace GSTEducationERP.Controllers
             {
                 //try
                 //{(
-                objac.ItemId = int.Parse(itemId);
-                await objbal.DeletePurchasedItemAsyncVP(objac);
-                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                if (string.IsNullOrEmpty(itemId)) 
+                {
+                    objac.ItemId = int.Parse(itemId);
+                    await objbal.DeletePurchasedItemAsyncVP(objac);
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else 
+                {
+                    return Json(new { success = false,message="itemid is null" }, JsonRequestBehavior.AllowGet);
+
+                }
+
                 //}
                 //catch
                 //{
@@ -1046,6 +1061,7 @@ namespace GSTEducationERP.Controllers
             }
         }
         //------------------------------------Vishal's Purchase Modules ends here------------------------------------------------------------
+       
         #endregion 
     }
 }

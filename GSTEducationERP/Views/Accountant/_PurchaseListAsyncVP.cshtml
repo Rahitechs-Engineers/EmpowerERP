@@ -1,6 +1,6 @@
 ﻿@model GSTEducationERPLibrary.Accountant.Accountant
 @{
-    var currency =Html.Raw(ViewBag.Currency);
+    var currency = Html.Raw(ViewBag.Currency);
 }
 <div class="card" style="margin:1vw">
     <div class="card-body">
@@ -32,11 +32,11 @@
                         Purchase Date
                     </th>
                     @*<th hidden>
-                        @Html.DisplayNameFor(model => model.PaymentMode)
-                    </th>
-                    <th hidden>
-                        @Html.DisplayNameFor(model => model.TranId_CheqNo)
-                    </th>*@
+                            @Html.DisplayNameFor(model => model.PaymentMode)
+                        </th>
+                        <th hidden>
+                            @Html.DisplayNameFor(model => model.TranId_CheqNo)
+                        </th>*@
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
@@ -89,11 +89,11 @@
                                 @Html.DisplayFor(modelItem => item.TransactionDate)
                             </td>
                             @*<td hidden>
-                                @Html.HiddenFor(modelItem => item.PaymentMode)
-                            </td>
-                            <td hidden>
-                                @Html.HiddenFor(modelItem => item.TranId_CheqNo)
-                            </td>*@
+                                    @Html.HiddenFor(modelItem => item.PaymentMode)
+                                </td>
+                                <td hidden>
+                                    @Html.HiddenFor(modelItem => item.TranId_CheqNo)
+                                </td>*@
                             <td>
                                 @if (item.Status == "Completed")
                                 {
@@ -151,4 +151,6 @@
     </div>
 </div>
 <!--scripts herer for icons-->
+<script src="~/Content/Admin/js/Icon.js"></script>
+
 <!----->

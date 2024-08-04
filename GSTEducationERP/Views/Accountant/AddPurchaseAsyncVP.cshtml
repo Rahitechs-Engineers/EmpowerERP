@@ -27,7 +27,7 @@
     <link href="~/Content/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
     <!--select2 library-->
     <style>
-        #btnupdate, #btnsave, #btncancel,#btnptmsave,#btnptmcancel {
+        #btnupdate, #btnsave, #btncancel, #btnptmsave, #btnptmcancel {
             display: flex;
             width: 10vw;
             height: fit-content;
@@ -1205,7 +1205,8 @@
             // Append the cloned row to the table
             $("#tblpurchaseitem tbody").append($clone);
         }
-       function getPurchasedItems() {
+        function getPurchasedItems() {
+            debugger;
             var listOfItems = @Html.Raw(Json.Encode(ViewBag.ListofItems));
             var $tableBody = $('#tblpurchaseitem tbody');
 
