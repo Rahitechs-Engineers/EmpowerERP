@@ -1169,6 +1169,7 @@
     <Content Include="Views\Accountant\_AttendenceOfAllStaffssAsync.cshtml" />
     <Content Include="Views\Accountant\_AttendenceOfStaffssAsync.cshtml" />
     <Content Include="Views\Accountant\_ListOfStaffSSAsync.cshtml" />
+    <Content Include="Views\Accountant\GetSpecificStaffAttendanceAsyncSS.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

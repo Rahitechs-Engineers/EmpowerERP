@@ -78,9 +78,6 @@ namespace GSTEducationERP.Controllers
                 return View();
             }
         }
-
-
-
         [HttpGet]
         public async Task<ActionResult> RegisterTestAsycTS()
         {
@@ -106,8 +103,6 @@ namespace GSTEducationERP.Controllers
                 return View();
             }
         }
-
-
         [HttpGet]
         public async Task<ActionResult> ListVoucherAsyncSGS()
         {
@@ -168,8 +163,6 @@ namespace GSTEducationERP.Controllers
                 return PartialView("ListVoucherAsyncSGS", objtr1);
             }
         }
-
-
         [HttpGet]
         public async Task<ActionResult> ListPendingVoucherAsyncSGS()
         {
@@ -231,7 +224,7 @@ namespace GSTEducationERP.Controllers
             }
         }
         [HttpGet]
-        public async Task<ActionResult> ListCompletedVoucherAsyncSGS()
+         public async Task<ActionResult> ListCompletedVoucherAsyncSGS()
         {
             if (Session["StaffCode"] == null)
             {
@@ -291,7 +284,6 @@ namespace GSTEducationERP.Controllers
             return PartialView("ListCompletedVoucherAsyncSGS", objtr1);
             }
         }
-
         [HttpGet]
         public async Task<ActionResult> AddVoucherAsyncSGS()
         {
@@ -1534,6 +1526,35 @@ namespace GSTEducationERP.Controllers
         }
 
         /// <summary>
+        /// This Method used to get specific staff attendance
+        /// </summary>
+        /// <param name="staffCode"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> GetSpecificStaffAttendanceAsyncSS(string staffCode)
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                List<Accountant> AllFullStaffAttendanceList = Session[AllStaffAttendanceListSessionKey] as List<Accountant>;
+
+               
+                    // Filter the list for the specific staff code
+                    List<Accountant> SpecificStaffAttendanceList = AllFullStaffAttendanceList
+                        .Where(a => a.StaffCode == staffCode)
+                        .ToList();
+
+                    Accountant obj = new Accountant { lstAllEmpAttendance = SpecificStaffAttendanceList };
+                    return View(obj);
+                
+
+            }
+        }
+
+
+        /// <summary>
         /// Advance Payment View 
         /// </summary>
         /// <returns></returns>
@@ -1595,7 +1616,6 @@ namespace GSTEducationERP.Controllers
             }
             return staffList;
         }
-
 
         #endregion// Shrikant Staff PayRoll modules End here
     }
