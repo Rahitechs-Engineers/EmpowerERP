@@ -20,23 +20,27 @@
                         Items Count
                     </th>
                     <th>
+                        Purchase Date
+                    </th>
+
+                    <th>
                         @Html.DisplayNameFor(model => model.TransactionAmount) (@currency)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.BalanceAmount) (@currency)
+                        Balance (@currency)
                     </th>
                     <th>
                         Total Amount (@currency)
                     </th>
-                    <th>
-                        Purchase Date
+                    <th class="destbl">
+                        @Html.DisplayNameFor(model => model.Description)
                     </th>
                     @*<th hidden>
-                            @Html.DisplayNameFor(model => model.PaymentMode)
-                        </th>
-                        <th hidden>
-                            @Html.DisplayNameFor(model => model.TranId_CheqNo)
-                        </th>*@
+            @Html.DisplayNameFor(model => model.PaymentMode)
+        </th>
+        <th hidden>
+            @Html.DisplayNameFor(model => model.TranId_CheqNo)
+        </th>*@
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
@@ -68,6 +72,9 @@
                                 </a>
                             </td>
                             <td>
+                                @Html.DisplayFor(modelItem => item.TransactionDate)
+                            </td>
+                            <td>
                                 @Html.DisplayFor(modelItem => item.TransactionAmount)
                             </td>
                             <td>
@@ -85,15 +92,15 @@
                                      item.TransactionAmount + item.BalanceAmount
                                  )
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TransactionDate)
-                            </td>
                             @*<td hidden>
                                     @Html.HiddenFor(modelItem => item.PaymentMode)
                                 </td>
                                 <td hidden>
                                     @Html.HiddenFor(modelItem => item.TranId_CheqNo)
                                 </td>*@
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
                             <td>
                                 @if (item.Status == "Completed")
                                 {

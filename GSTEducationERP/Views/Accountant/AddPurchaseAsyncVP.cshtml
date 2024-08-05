@@ -39,7 +39,9 @@
             border-collapse: collapse;
             width: 100%;
         }
-
+        .mandatoryField{
+            color:red;
+        }
         .custom-table-row-456 {
             display: flex;
             justify-content: space-between;
@@ -161,17 +163,22 @@
                 <div class="row justify-content-center ">
                     <div class="col-md-3">
                         <div class="input-group ">
-                            <label class="control-label col-md-4">Invoice No.: </label>
-                            <div class="col-md-6 justify-content-end" style="margin-left:10px">
-                                @Html.LabelFor(Model => Model.TransactionCode, new { @id = "ptmtransactioncode" })
-                                @*<label id=""> </label>*@
-                            </div>
+                            <label class="control-label col-md-4" for="BillNumber">Bill No.: </label>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        #
+                                    </span>
+                                </div>
+                                @Html.EditorFor(model => model.BillNumber, new { htmlAttributes = new { @class = "form-control col-md-6" } })
+                                @*@Html.LabelFor(Model => Model.TransactionCode, new { @id = "ptmtransactioncode" })*@
                         </div>
                     </div>
                     <div class="col-md-5">
                         <div class="input-group ">
-                            @Html.LabelFor(model => model.VendorName, htmlAttributes: new { @class = "control-label col-md-4" })
-
+                            <label for="VendorName" class="control-label col-md-4">
+                                Vendor Name <span class="mandatoryField">*</span> :
+                            </label>
+                            @*@Html.LabelFor(model => model.VendorName, htmlAttributes: new { @class = "control-label col-md-4" })*@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">
                                     🤵🏿
@@ -183,8 +190,9 @@
                     </div>
                     <div class="col-md-4">
                         <div class="input-group ">
-                            @Html.LabelFor(model => model.TransactionDate, htmlAttributes: new { @class = "control-label col-md-4" })
-
+                            <label for="TransactionDate" class="control-label col-md-5">
+                                Transaction Date <span class="mandatoryField">*</span> :
+                            </label>                           
                             <div class="input-group-prepend ">
                                 <span class="input-group-text">
                                     <i class="far fa-calendar-alt"></i>
@@ -207,14 +215,14 @@
                                 <table class="table table-bordered" id="tblpurchaseitem">
                                     <thead>
                                         <tr>
-                                            <th hidden style="width: 30%;">Item Id</th>
+                                            <th hidden style="width: 30%;">Item Id </th>
                                             <th hidden style="width: 30%;">Transaction code</th>
-                                            <th style="width: 25%;">Item Name</th>
-                                            <th style="width: 25%;">HSN Code</th>
-                                            <th style="width: 10%;">Quantity</th>
-                                            <th style="width: 15%;">Unit Price (@currency)</th>
-                                            <th style="width: 10%;">Discount(%)</th>
-                                            <th style="width: 20%;">Applied Tax(%)</th>
+                                            <th style="width: 25%;">Item Name  <span class="mandatoryField">*</span></th>
+                                            <th style="width: 20%;">HSN Code <span class="mandatoryField">*</span></th>
+                                            <th style="width: 10%;">Quantity <span class="mandatoryField">*</span></th>
+                                            <th style="width: 15%;">Unit Price (@currency) <span class="mandatoryField">*</span></th>
+                                            <th style="width: 12%;">Discount(%) <span class="mandatoryField">*</span></th>
+                                            <th style="width: 30%;">Applied Tax(%) <span class="mandatoryField">*</span></th>
                                             <th style="width: 1%;">Action</th>
                                         </tr>
                                     </thead>
@@ -230,7 +238,7 @@
                                                 <div class="input-group ">
                                                     <div class="input-group-prepend ">
                                                         <span class="input-group-text">
-                                                            @currency
+                                                           #
                                                         </span>
                                                     </div>
                                                     <input type="text" class="form-control" />
@@ -240,7 +248,7 @@
                                                 <div class="input-group ">
                                                     <div class="input-group-prepend ">
                                                         <span class="input-group-text">
-                                                            @currency
+                                                           #
                                                         </span>
                                                     </div>
                                                     <select class="form-control">
@@ -280,7 +288,7 @@
                                                 <div class="input-group ">
                                                     <div class="input-group-prepend ">
                                                         <span class="input-group-text">
-                                                            @currency
+                                                            %
                                                         </span>
                                                     </div>
                                                     <select class="form-control">
@@ -311,11 +319,14 @@
                 <!---->
                 <!--here the description and the colapse for the add voucher and payment details-->
                 @* description box for the purchase*@
-                <div class="form-group col-md-12">
-                    @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+            <div class="form-group col-md-12">
+                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+                <span class="mandatoryField">*</span>
+                <div>
                     @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 2, required = "required" })
                     @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
                 </div>
+            </div>
                 <!--here will the save and cancel buttons-->
                 <div class="row" style="justify-content:center;">
 
@@ -323,25 +334,15 @@
                     {
                         <input type="button" id="btnupdate" class="btn btn-block bg-gradient-blue btn-block" value="Update" />
 
-                        @*<div class="col-md-6">
-                                <input type="button" id="btnupdate" class="btn btn-block bg-gradient-blue btn-block"  value="Update" />
-
-                            </div>*@
-
                     }
                     else
                     {
                         <input type="button" id="btnsave" class="btn btn-block bg-gradient-success btn-block" value="Save" />
-                        @*<div class="col-md-6">
-                                <input type="button" id="btnsave" class="btn btn-block bg-gradient-success btn-block" value="Save" />
-
-                            </div>*@
+                      
                     }
 
                     <input type="button" class="btn btn-block bg-gradient-danger btn-block" id="btncancel" value="Cancel" />
-                    @*<div class="col-md-6">
-                            <input type="button" class="btn btn-block bg-gradient-danger btn-block" id="btncancel"  value="Cancel" />
-                        </div>*@
+                   
                 </div>
             </div>
         </div>

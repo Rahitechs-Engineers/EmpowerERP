@@ -91,6 +91,10 @@
         .select2 select2-container select2-container--default select2-container--focus {
             width: 100% !important;
         }
+        .destbl {
+            max-width: 400px;
+           width:200px;
+        }
     </style>
     <!--datatable css for the table-->
     <style>
@@ -263,7 +267,7 @@
                 </div>
                 <div class="col-md-2">
                     <span>
-                        <a href="javascript:void(0);" id="refreshIcon" class="icon" onclick="refreshFilter()">
+                        <a href="javascript:void(0);" id="refreshIcon" class="icon" >
                             <video width="25" height="25" playsinline loop>
                                 <source src="~/Content/Admin/icon/Refresh.mp4" type="video/mp4">
                             </video>
@@ -366,7 +370,7 @@
             var purchaseCode = this.getAttribute('data-purchasecode');
             window.location.href = '@Url.Action("ViewPurchaseAsyncVP", "Accountant")?purchaseCode=' + purchaseCode;
         });
-        
+
 
         document.querySelectorAll('#EditPurchase').forEach(function(element) {
             element.addEventListener('click', function (e) {
@@ -377,14 +381,7 @@
         });
 
 
-        //refresh buuton
-        function refreshFilter() {
-            $('#statusFilter').val("selectall");
-            $('#startDateFilter').val(null);
-            $('#endDateFilter').val(null);
-            initializeFilterEventHandlers();
-        }
-        $('#refreshIcon').on('click', refreshFilter )
+       
     });
     </script>
 
@@ -476,6 +473,16 @@
 
         // Initialize filter event handlers
         initializeFilterEventHandlers();
+        //refresh buuton
+        function refreshFilter() {
+            $('#statusFilter').val("selectall");
+            $('#startDateFilter').val(null);
+            $('#endDateFilter').val(null);
+             window.location.href = '@Url.Action("DetailsPurchaseAsyncVP", "Accountant")';
+        }
+        $('#refreshIcon').on('click', function () {
+            refreshFilter();
+        });
     });
     </script>
 
