@@ -144,6 +144,7 @@ namespace GSTEducationERPLibrary.Accountant
         public String PresentDays { get; set; }
         public String PayableDays { get; set; }
         public string StaffName { get; set; }
+        public int CurrentInstallment { get; set; }
 
         //----------------Jayash-  Accountant -----------------------------------End //
         #endregion

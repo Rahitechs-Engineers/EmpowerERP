@@ -253,7 +253,7 @@
                     <p>@Model.addressPart2</p>
                     <p>@Model.addressPart3</p>
                 </div>
-               
+
             </div>
             <h2>Provisional Receipt Voucher</h2>
             <div class="receipt-details">
@@ -286,7 +286,7 @@
                     {
 
 
-                <p>Batch:- @Model.Batch</p>
+                        <p>Batch:- @Model.Batch</p>
                     }
 
                 </div>
@@ -309,6 +309,19 @@
             </table>
             <div class="receipt-footer">
                 <p>Amount In Words:-<span id="inWordsAmount"></span></p>
+                @if (Model.CurrentInstallment == 0)
+                {
+                    <p id="currentInstallment" hidden>Current Installment: @Model.CurrentInstallment.ToString()</p>
+                }
+                else
+                {
+                    <p id="currentInstallment">Current Installment: @Model.CurrentInstallment.ToString()</p>
+                }
+
+
+
+
+
                 @if (Model.TotalFee == 000000000000)
                 {
                     <p hidden> Total Fee:- @Model.TotalFee.ToString("C")</p>
@@ -327,6 +340,9 @@
 
                     <p>Remaining Fee:- @Model.RemainingFee.ToString("C")</p>
                 }
+
+
+
                 @if (Model.NextInstallmentDate != DateTime.Now)
                 {
                     <p hidden>Next Installment Date :- @Model.NextInstallmentDate.ToString("d MMMM yyyy")</p>
@@ -418,5 +434,33 @@
         return words;
         }
 
+</script>
+<script type="text/javascript">
+    function getInstallmentWithSuffix(installment) {
+        if (installment === 0) {
+            return installment;
+        }
+
+        const suffixes = ["<sup>th</sup>", "<sup>st</sup>", "<sup>nd</sup>", "<sup>rd</sup>"];
+        const v = installment % 100;
+
+        return installment + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var installment = @Model.CurrentInstallment;
+        if (installment > 10) {
+            installment = 10;
+        }
+        var installmentText = getInstallmentWithSuffix(installment);
+        var installmentElement = document.getElementById("currentInstallment");
+
+        if (installment === 0) {
+            installmentElement.hidden = true;
+        } else {
+            installmentElement.hidden = false;
+            installmentElement.innerHTML = "Current Installment: " + installmentText;
+        }
+    });
 </script>
 

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.EnterpriseServices;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -1199,6 +1200,8 @@ namespace GSTEducationERP.Controllers
                     Course = row["Course"] != DBNull.Value ? row["Course"].ToString() : "XXX1",
                     Batch = row["Batch"] != DBNull.Value ? row["Batch"].ToString() : "XXX1",
                     TotalFee = row["TotalFee"] != DBNull.Value ? long.Parse(row["TotalFee"].ToString()) : 000000000000,
+                    CurrentInstallment = row["PaidInstallments"] != DBNull.Value ? Convert.ToInt32(row["PaidInstallments"]) : 000000000000,
+
                     RemainingFee = row["RemainingFees"] != DBNull.Value ? decimal.Parse(row["RemainingFees"].ToString()) : 000000000000,
                     NextInstallmentAmount = row["NextInstallmentAmount"] != DBNull.Value ? decimal.Parse(row["NextInstallmentAmount"].ToString()) : 000000000000,
                     NextInstallmentDate = row["NextInstallmentDate"] != DBNull.Value ? DateTime.Parse(row["NextInstallmentDate"].ToString()) : DateTime.Now
@@ -1215,6 +1218,7 @@ namespace GSTEducationERP.Controllers
 
             return HttpNotFound();
         }
+
 
         [HttpPost]
 
