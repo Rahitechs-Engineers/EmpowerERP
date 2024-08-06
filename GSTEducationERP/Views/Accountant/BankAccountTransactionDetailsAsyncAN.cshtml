@@ -54,143 +54,30 @@
         <table>
             <tr>
                 <td><p><strong>Bank Name:</strong> @Model.BankName</p></td>
-                <td><p><strong>Account Number:</strong> @Model.BankAccountNumber</p></td>
+                <td><p><strong>Branch:</strong> @Model.BankBrach</p></td>
+            </tr>
+            <tr>
+                <td><p><strong>Bank Opening Date:</strong> @Model.BankAccountOpeningDate</p></td>
+                <td><p><strong>Account Type:</strong> @Model.AccountType</p></td>
+
             </tr>
             <tr>
                 <td><p><strong>Account Holder:</strong> @Model.AccountHolderName</p></td>
-                <td><p><strong>Account Type:</strong> @Model.AccountType</p></td>
-            </tr>
-            <tr>
-                <td><p><strong>Branch:</strong> @Model.BankBrach</p></td>
-                <td><p><strong>Bank Opening Date:</strong> @Model.BankAccountOpeningDate</p></td>
+                <td><p><strong>Account Number:</strong> @Model.BankAccountNumber</p></td>
             </tr>
             <tr>
                 <td><p><strong>IFSC Code:</strong> @Model.IFSCCode</p></td>
                 <td><p><strong>MICR Code:</strong> @Model.MICRCode</p></td>
             </tr>
             <tr>
-                <td><p><strong>Remaining Balace:</strong> @String.Format("{0:N2} ₹", Model.BankAmount)</p></td>
+                <td><p><strong>Closing Balace:</strong> @String.Format("{0:N2} ₹", Model.BankAmount)</p></td>
                 <td><p><strong>Opening Balance:</strong> @String.Format("{0:N2} ₹", Model.BankAccountOpeningBalance)</p></td>
             </tr>
-        </table>
-    </div>
-
-
-
-    <div class="card">
-        <div class="card-body">
-            @if (Model.lstBankTransactions.Count == 0)
-            {
-                <h3 style="text-align:center"><strong>No bank transactions have been made yet</strong></h3>
-            }
-            else
-            {
-
-        <div id="Table">
-            @*<table id="example1" class="table table-bordered table-striped">
-        <thead>
             <tr>
-
-                <th>
-                    Transaction Date
-                </th>
-
-                <th>
-                    Transaction Code
-                </th>
-                <th>
-                    Ammount
-                </th>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Transaction Id
-                </th>
-                <th>
-                    Description
-                </th>
-                <th>
-                    Status
-                </th>
-                <th>
-                    Transaction Type
-                </th>
+                <td><p><strong>Minimum Balace:</strong> @String.Format("{0:N2} ₹", Model.BankAccountMinimumBalance)</p></td>
+                <td><p><strong>Bank Account Added Date:</strong> @Model.Date</p></td>
             </tr>
-        </thead>
-
-        @foreach (var item in Model.lstBankTransactions)
-        {
-            <tbody>
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Date)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TransactionCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Amount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ReceiverBankAccountHolderName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TransactionId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TransactionType)
-                    </td>
-                </tr>
-            </tbody>
-                }
-
-        </table>*@
-            <div style="overflow-y: auto; height: 200px;">
-                <table id="example1" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th hidden>Transaction Date</th>
-                            <th>Transaction Date</th>
-                            @*<th>Transaction Code</th>*@
-                            <th>Amount</th>
-                            <th>Name</th>
-                            <th>Transaction Id</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Transaction Type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <tbody>
-                        @foreach (var item in Model.lstBankTransactions)
-                        {
-                            <tr style="@(item.TransactionType == "Credit" ? "color:green;" : item.TransactionType == "Debit" ? "color:red;" : "")">
-                                <td hidden>@Html.DisplayFor(modelItem => item.Date)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                                @*<td>@Html.DisplayFor(modelItem => item.TransactionCode)</td>*@
-                                <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                                <td>@Html.DisplayFor(modelItem => item.ReceiverBankAccountHolderName)</td>
-                                <td>@Html.DisplayFor(modelItem => item.TransactionId)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Description)</td>
-                                <td>@Html.DisplayFor(modelItem => item.Status)</td>
-                                <td>@Html.DisplayFor(modelItem => item.TransactionType)</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-
-
-        </div>
-            }
-        </div>
+        </table>
     </div>
 
 

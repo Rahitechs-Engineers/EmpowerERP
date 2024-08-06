@@ -243,6 +243,15 @@
                                                         <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
                                                     </video>
                                                 </a>
+
+                                                <a href="@Url.Action("BankAccountStatementAsyncAN", "Accountant", new { item.BankId })" class="icon" title="Bank Statement">
+                                                    <video width="25" height="25" playsinline loop>
+                                                        <source src="~/Content/Admin/icon/list.mp4" type="video/mp4">
+                                                    </video>
+                                                </a>
+
+
+
                                             }
                                             else
                                             {
@@ -307,7 +316,7 @@
             <div class="modal-dialog modal-lg" role="document" style="max-width: 70%; width: 70%;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel" style="color: #33CCCC;">Bank Statement</h5>
+                        <h5 class="modal-title" id="exampleModalLabel" style="color: #33CCCC;">Bank Account Details</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -329,6 +338,8 @@
         <script src="~/Scripts/bootstrap.js"></script>
 
         <script src="~/Scripts/bootstrap.min.js"></script>
+
+    
         <script>
             $(document).on('click', '.bank-transaction', function (e) {
                 e.preventDefault();

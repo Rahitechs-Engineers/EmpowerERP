@@ -23,7 +23,7 @@ namespace GSTEducationERP.Controllers
             public string Name { get; set; }
             public string Url { get; set; }
         }
-
+        #region // Vouvcher
         // GET: Accountant
         public ActionResult AccountantDashboardAsyncSGS()
         {
@@ -319,6 +319,7 @@ namespace GSTEducationERP.Controllers
             }
             
         }
+        #endregion 
         #region //Vishals purchase modules starts here
         //------------------------------------Vishal's Purchase Modules strts here------------------------------------------------------------
         /// <summary>
@@ -1134,7 +1135,12 @@ namespace GSTEducationERP.Controllers
                     obj.TransactionCount = Convert.ToInt32(ds.Tables[0].Rows[i]["TotalTransactions"].ToString());
                     lstBanklist.Add(obj);
                 }
-
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+                        {
+                            new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncSGS" },
+                            new BreadcrumbItem { Name = "Bank Account List", Url = "BankAccountListAsyncAN" },
+                        };
+                ViewBag.Breadcrumbs = breadcrumbs;
                 objac.lstBankAccounts = lstBanklist;
                 return View(objac);
             }
@@ -1186,7 +1192,7 @@ namespace GSTEducationERP.Controllers
                 await objbal.AddNewBankAccountAsyncAN(obj);
                 return RedirectToAction("BankAccountListAsyncAN");
             }
-        }
+        } 
 
         /// <summary>
         /// Show the Transactions of Perticular Bank
@@ -1216,12 +1222,50 @@ namespace GSTEducationERP.Controllers
                     objDetails.AccountType = dr["AccountType"].ToString();
                     objDetails.BankBrach = dr["Branch"].ToString();
                     objDetails.BankAccountOpeningDate = Convert.ToDateTime(dr["AccountOpeningDate"].ToString());
+                    objDetails.Date = Convert.ToDateTime(dr["Date"].ToString());
                     objDetails.IFSCCode = dr["IFSCCode"].ToString();
                     objDetails.MICRCode = dr["MICRCode"].ToString();
                     objDetails.BankAmount = float.Parse(dr["Balance"].ToString());
                     objDetails.BankAccountOpeningBalance = float.Parse(dr["OpeningBalance"].ToString());
+                    objDetails.BankAccountMinimumBalance = float.Parse(dr["MinimumBalance"].ToString());
                 }
                 dr.Close();
+                return PartialView("BankAccountTransactionDetailsAsyncAN", objDetails);
+            }
+        }
+
+
+        /// <summary>
+        /// Bank Account Statement (Transactions)
+        /// </summary>
+        /// <param name="BankId"></param>
+        /// <returns>Statement</returns>
+        [HttpGet]
+        public async Task<ActionResult> BankAccountStatementAsyncAN(int BankId)
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                Accountant objDetails = new Accountant();
+                objDetails.BankId = BankId;
+                objDetails.BranchCode = Session["BranchCode"].ToString();
+                SqlDataReader dr = await objbal.BankAccountTransactionDetailsAsync(objDetails);
+
+                if (dr.Read())
+                {
+                    objDetails.BankName = dr["BankName"].ToString();
+                    objDetails.BankAccountNumber = Convert.ToInt64(dr["AccountNumber"].ToString());
+                    objDetails.AccountHolderName = dr["AccountHolderName"].ToString();
+                    objDetails.BankAmount = float.Parse(dr["Balance"].ToString());
+                }
+                dr.Close();
+
+                //Accountant objDetails = new Accountant();
+                //objDetails.BankId = BankId;
+                //objDetails.BranchCode = Session["BranchCode"].ToString();
                 DataSet ds = await objbal.BankTransactionHistory(objDetails);
                 List<Accountant> lstBankTrans = new List<Accountant>();
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -1230,26 +1274,41 @@ namespace GSTEducationERP.Controllers
                     obj.Date = Convert.ToDateTime(ds.Tables[0].Rows[i]["TransactionDate"].ToString());
                     obj.TransactionCode = ds.Tables[0].Rows[i]["TransactionCode"].ToString();
                     obj.Amount = float.Parse(ds.Tables[0].Rows[i]["Amount"].ToString());
-                    // obj.StaffName = ds.Tables[0].Rows[i]["StaffName"].ToString();
                     obj.Description = ds.Tables[0].Rows[i]["Description"].ToString();
                     obj.ReceiverBankAccountHolderName = ds.Tables[0].Rows[i]["BankAccountHolderName"].ToString();
                     obj.Status = ds.Tables[0].Rows[i]["Status"].ToString();
                     obj.TransactionId = ds.Tables[0].Rows[i]["TransactionId"].ToString();
                     obj.TransactionType = ds.Tables[0].Rows[i]["TransactionType"].ToString();
+                    obj.Balance = float.Parse(ds.Tables[0].Rows[i]["RunningBalance"].ToString());
                     lstBankTrans.Add(obj);
                 }
-
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+                        {
+                            new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncSGS" },
+                            new BreadcrumbItem { Name = "Bank Account List", Url = "BankAccountListAsyncAN" },
+                            new BreadcrumbItem { Name = "Bank Account Statement", Url = "BankAccountStatementAsyncAN" },
+                        };
+                ViewBag.Breadcrumbs = breadcrumbs;
                 objDetails.lstBankTransactions = lstBankTrans;
                 //  return View(ObjAccountant);
 
-                return PartialView("BankAccountTransactionDetailsAsyncAN", objDetails);
+                return View("BankAccountStatementAsyncAN", objDetails);
             }
         }
 
 
-
+        /// <summary>
+        /// Show Cash Transactions
+        /// </summary>
+        /// <returns>List of Cash Transactions</returns>
         public async Task<ActionResult> CashTransactionsAsyncAN()
         {
+            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+              {
+                  new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncSGS" },
+                  new BreadcrumbItem { Name = "Cash Transactions", Url = "CashTransactionsAsyncAN" },
+              };
+            ViewBag.Breadcrumbs = breadcrumbs;
             return await Task.Run(() => View());
         }
 

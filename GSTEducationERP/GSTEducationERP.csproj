@@ -198,6 +198,7 @@
     <Content Include="Content\Admin\icon\Interview.mp4" />
     <Content Include="Content\Admin\icon\Lab.mp4" />
     <Content Include="Content\Admin\icon\left-arrow.mp4" />
+    <Content Include="Content\Admin\icon\list.mp4" />
     <Content Include="Content\Admin\icon\Mail.mp4" />
     <Content Include="Content\Admin\icon\menu.mp4" />
     <Content Include="Content\Admin\icon\menu_2.mp4" />
@@ -1171,6 +1172,7 @@
     <Content Include="Views\Accountant\CashReceiptListAsyncAN.cshtml" />
     <Content Include="Views\Accountant\CashRecievedViewAN.cshtml" />
     <Content Include="Views\Accountant\CashTransactionsAsyncAN.cshtml" />
+    <Content Include="Views\Accountant\BankAccountStatementAsyncAN.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
