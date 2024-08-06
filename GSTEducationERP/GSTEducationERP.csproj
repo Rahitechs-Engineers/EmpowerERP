@@ -1162,6 +1162,11 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Accountant\AddExpensesAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\ExpenseDashboardAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\ListOfExpensesAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\ViewTransactionAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\_MatchVoucherAsyncVMB.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
