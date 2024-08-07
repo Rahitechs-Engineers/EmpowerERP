@@ -69,3 +69,24 @@ D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEd
 D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEduca.4B0C6BB9.Up2Date
 D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
 D:\Vishal's Project\GSTEduERP2\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+<<<<<<< HEAD
+E:\NewERPProject\EmpowerERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+E:\NewERPProject\EmpowerERP\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+E:\NewERPProject\EmpowerERP\GSTEducationERPLibrary\bin\Debug\Helper.dll
+E:\NewERPProject\EmpowerERP\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+E:\NewERPProject\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+E:\NewERPProject\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+E:\NewERPProject\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEduca.4B0C6BB9.Up2Date
+E:\NewERPProject\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+E:\NewERPProject\EmpowerERP\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+=======
+D:\ERPPRojectJay\EmpowerERP3\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.dll
+D:\ERPPRojectJay\EmpowerERP3\GSTEducationERPLibrary\bin\Debug\GSTEducationERPLibrary.pdb
+D:\ERPPRojectJay\EmpowerERP3\GSTEducationERPLibrary\bin\Debug\Helper.dll
+D:\ERPPRojectJay\EmpowerERP3\GSTEducationERPLibrary\bin\Debug\Helper.pdb
+D:\ERPPRojectJay\EmpowerERP3\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.AssemblyReference.cache
+D:\ERPPRojectJay\EmpowerERP3\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.csproj.CoreCompileInputs.cache
+D:\ERPPRojectJay\EmpowerERP3\GSTEducationERPLibrary\obj\Debug\GSTEduca.4B0C6BB9.Up2Date
+D:\ERPPRojectJay\EmpowerERP3\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.dll
+D:\ERPPRojectJay\EmpowerERP3\GSTEducationERPLibrary\obj\Debug\GSTEducationERPLibrary.pdb
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
