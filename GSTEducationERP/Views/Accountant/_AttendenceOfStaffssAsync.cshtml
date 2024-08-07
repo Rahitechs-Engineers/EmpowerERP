@@ -1,0 +1,247 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+<html>
+<head>
+    <link href="~/Content/Admin/css/UI.css" rel="stylesheet" />
+    <style>
+        .modal-header .close {
+            font-size: 2.5rem; /* Set the font size */
+            padding: 15px; /* Increase padding to increase overall size */
+            transition: color 0.3s; /* Add transition effect for smooth hover */
+        }
+
+            .modal-header .close:hover {
+                color: red; /* Change the color on hover */
+            }
+
+        .payment-section {
+            margin-bottom: 20px; /* Space between payment section and table */
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Center items vertically */
+            justify-content: space-between; /* Space out items */
+        }
+
+            .payment-section p {
+                font-size: 18px; /* Font size for total selected salary */
+                font-weight: bold; /* Make the font bold */
+                color: red; /* Red color for the result */
+                margin: 0; /* Remove default margin */
+            }
+
+        .btn-make-payment {
+            background-color: #28a745; /* Green background color */
+            color: white; /* White text color */
+            border: none; /* Remove border */
+            padding: 10px 20px; /* Add padding */
+            font-size: 16px; /* Font size */
+            cursor: pointer; /* Pointer cursor on hover */
+            border-radius: 5px; /* Rounded corners */
+        }
+
+            .btn-make-payment:hover {
+                background-color: #218838; /* Darker green on hover */
+            }
+    </style>
+</head>
+<body>
+    <div class="payment-section">
+        <p>Total Salary: <span id="totalSelectedSalary">0.00</span></p>
+        <button id="makePaymentBtn" class="btn-make-payment">Credit Salary</button>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table id="ShortlistedStudents" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" /> Select All
+                        </th>
+                        <th>
+                            Staff Name
+                        </th>
+                        <th>
+                            Department
+                        </th>
+                        <th>
+                            Designation
+                        </th>
+                        <th>
+                            Paid Days
+
+                        </th>
+                        <th>
+                            No Of
+                            Days
+                            Present
+
+                        </th>
+                        <th>
+                            Paid
+                            Leave
+
+                        </th>
+                        <th>
+                            Unpaid
+                            Days
+                        </th>
+                        <th>
+                            Net
+                            Payable
+                            Days
+                        </th>
+                        <th>
+                            Monthly Basic Salary
+                        </th>
+                        <th>
+                            Net Salary
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="staffListBody">
+                    @if (Model != null && Model.lstEmpAttendance != null)
+                    {
+                        for (int i = 0; i < Model.lstEmpAttendance.Count; i++)
+                        {
+                            var item = Model.lstEmpAttendance[i];
+                            <tr data-department-id="@item.DepartmentID">
+                                <td>
+                                    <input type="checkbox" class="staff-checkbox" data-id="@item.StaffCode" data-salary="@item.AdjustedNetSalary" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.StaffName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DepartmentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Designation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PaidDays)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PresentDays)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PaidLeaveCount)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AbsentDays)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.PayableDays)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MonthlyBasicSalary)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AdjustedNetSalary)
+                                </td>
+                                <td style="text-align: center;">
+                                    <div>
+                                        <a href="#" class="icon" data-url="@Url.Action("DetailsAttendanceOfStaff", "Trainer", new {})"
+                                           data-toggle="modal" data-target="#EditTaskModal" title="View">
+                                            <video width="25" height="25" playsinline loop>
+                                                <source src="~/Content/Admin/icon/view.mp4" type="video/mp4" />
+                                            </video>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="resultModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title " id="resultModalLabel">Schedule Interview</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="background-color:transparent">
+                    <!-- Result form content will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Content/plugins/jquery/jquery.min.js" type="text/javascript"></script>
+    <script src="~/Content/plugins/bootstrap/js/bootstrap.bundle.min.js" type="text/javascript"></script>
+    <script src="~/Content/Admin/js/Icon.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#selectAll').click(function () {
+                var isChecked = $(this).prop('checked');
+                $('.staff-checkbox').prop('checked', isChecked);
+                updateTotalSalary();
+            });
+
+            $('.staff-checkbox').change(function () {
+                var allChecked = $('.staff-checkbox').length === $('.staff-checkbox:checked').length;
+                $('#selectAll').prop('checked', allChecked);
+                updateTotalSalary();
+            });
+
+            function updateTotalSalary() {
+                var total = 0;
+                $('.staff-checkbox:checked').each(function () {
+                    var salary = parseFloat($(this).data('salary')) || 0;
+                    total += salary;
+                });
+                $('#totalSelectedSalary').text(total.toFixed(2));
+            }
+
+
+            $('.icon').click(function () {
+                var action = $(this).data('action');
+                var id = $(this).data('id');
+                var round1 = 'First';
+
+                $('#resultModalLabel').text(action);
+
+                $('#resultModal .modal-body').load('/Placement/ScheduleInterviewAsyncSN?id=' + id + '&round=' + round1, function (response, status, xhr) {
+                    if (status === "error") {
+                        console.log('Error:', xhr.status, xhr.statusText);
+                    }
+                });
+            });
+
+            $('#resultModal').on('click', '#btnCancel', function () {
+                $('#resultModal').modal('hide');
+            });
+
+            $('#makePaymentBtn').click(function () {
+                var selectedStaffIds = [];
+                $('.staff-checkbox:checked').each(function () {
+                    selectedStaffIds.push($(this).data('id'));
+                });
+
+                // Perform the payment action (e.g., send the selected staff IDs to the server)
+                $.ajax({
+                    url: '@Url.Action("MakePayment", "Accountant")',
+                    type: 'POST',
+                    data: JSON.stringify({ staffIds: selectedStaffIds }),
+                    contentType: 'application/json',
+                    success: function (response) {
+                        alert('Payment processed successfully.');
+                        // Optionally, refresh the table or perform other actions
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
