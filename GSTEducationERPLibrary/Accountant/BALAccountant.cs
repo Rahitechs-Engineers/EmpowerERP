@@ -87,6 +87,65 @@ namespace GSTEducationERPLibrary.Accountant
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
+        public async Task<DataSet> VoucherTypeAsyncSGS(Accountant objT)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                Param.Add("@flag", "GetVoucherType");
+                DataSet ds1 = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving assigned projects. Details: " + ex.Message);
+            }
+        }
+        public async Task<DataSet> BankAccountforVoucherAsyncSGS(Accountant objT)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                Param.Add("@flag", "GetBankData");
+                Param.Add("@StaffCode", objT.StaffCode);
+                DataSet ds1 = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving assigned projects. Details: " + ex.Message);
+            }
+        }
+        public async Task<DataSet> StaffNameforVoucherAsyncSGS(Accountant objT)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                Param.Add("@Flag", "GetStaffData");
+               // Param.Add("@StaffCode", objT.StaffCode);
+                Param.Add("@BranchCode", objT.BranchCode.ToString());
+                DataSet ds1 = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving assigned projects. Details: " + ex.Message);
+            }
+        }
+        public async Task<string> GetMaxVoucherCodeAsyncSGS(Accountant obj)
+        {
+            Dictionary<String, String> Param = new Dictionary<String, String>();
+            Param.Add("@Flag", "GetMaxVoucherCodeAsyncSGS");
+            //Param.Add("@BranchCode", ObjA.BranchCode);
+            SqlDataReader ds = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
+            string LastTransactionCode = "";
+            while (ds.Read())
+            {
+                LastTransactionCode = ds["VoucherCode"].ToString();
+            }
+            string newPurchaseCode = IncrementPurchaseCode(LastTransactionCode);
+            return newPurchaseCode;
+        }
         #region //this is vishlas region for the purchase module
         //=================================================================vishals purchase module starts here===========================================================================
         /// <summary>
@@ -249,6 +308,7 @@ namespace GSTEducationERPLibrary.Accountant
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "SavePurchaseAsyncVP");
             Param.Add("@TransactionCode", ObjA.TransactionCode);
+            //Param.Add("@TransactionCode", ObjA.BillNumber);
             Param.Add("@VendorName", ObjA.VendorName);
             Param.Add("@TransactionDate", ObjA.TransactionDate.ToString("yyyy-MM-dd"));
             Param.Add("@TransactionAmount", 0.ToString());

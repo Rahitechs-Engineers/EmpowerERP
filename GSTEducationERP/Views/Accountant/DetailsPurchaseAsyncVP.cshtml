@@ -217,7 +217,7 @@
                     <div class="col-md-8">
                         <div class="row g-6 justify-content-end">
                             <div class="col-3">
-                                <button id="addvoucherButton" type="button" class="btn btn-block bg-gradient-info btn-block" onclick="location.href = '/Placement/ListInternalRelesedStudentsPRAsync', '/Placement/ListInternalOnHoldStudentsPRAsync'">
+                                <button id="addvoucherButton" type="button" class="btn btn-block bg-gradient-info btn-block" onclick="location.href = '/Accountant/AddVoucherAsyncSGS'">
                                     <i class="far fa-google-plus"></i>Add Voucher
                                 </button>
                             </div>
@@ -267,7 +267,7 @@
                 </div>
                 <div class="col-md-2">
                     <span>
-                        <a href="javascript:void(0);" id="refreshIcon" class="icon" >
+                        <a href="javascript:void(0);" id="refreshIcon" class="icon">
                             <video width="25" height="25" playsinline loop>
                                 <source src="~/Content/Admin/icon/Refresh.mp4" type="video/mp4">
                             </video>
@@ -305,7 +305,23 @@
 
 
     }
-
+    <div class="modal fade" id="BankModal" tabindex="-1" role="dialog" aria-labelledby="BankModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="BankModalLabel">Add Voucher</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- jQuery -->
     <script src="~/Content/plugins/jquery/jquery.min.js"></script>
@@ -337,7 +353,20 @@
     <script type="text/javascript">
     jQuery.noConflict();
     jQuery(document).ready(function ($) {
-
+        //Add purchase modal pop up view here
+        $('#addvoucherButton').on('click', function () {
+            $.ajax({
+                url: '@Url.Action("AddVoucherAsyncSGS", "Accountant")',
+                type: 'GET',
+                success: function (data) {
+                    $('#BankModal .modal-body').html(data);
+                    $('#BankModal').modal('show');
+                },
+                error: function () {
+                    Swal.fire('Error', 'Failed to load content', 'error');
+                }
+            });
+        });
         // Handling click event for PopUpitem
         $('#PurchaseList').on('click', '#PopUpitem', function () {
             var PurchaseCode = $(this).data('id');
@@ -381,7 +410,7 @@
         });
 
 
-       
+
     });
     </script>
 

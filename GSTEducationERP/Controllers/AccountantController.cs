@@ -293,30 +293,101 @@ namespace GSTEducationERP.Controllers
             if (Session["StaffCode"] == null)
             {
                 return await Task.Run(() => RedirectToAction("Login", "Account"));
-            } else
+            }
+            else
             {
-                return View();
+                objac.StaffCode = Session["StaffCode"].ToString(); // Retrieve staff code from session
+                objac.BranchCode = Session["BranchCode"].ToString(); // Retrieve branch code from session
+
+                // Voucher Type List
+                List<SelectListItem> VoucherTypeList = new List<SelectListItem>();
+                DataSet ds = await objbal.VoucherTypeAsyncSGS(objac);
+                List<SelectListItem> TypeList = new List<SelectListItem>();
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    TypeList.Add(new SelectListItem
+                    {
+                        Text = dr["Status"].ToString(),
+                        Value = dr["StatusId"].ToString()
+                    });
+                }
+                VoucherTypeList.AddRange(TypeList);
+                ViewBag.VoucherTypeList = VoucherTypeList;
+
+                // Voucher Code
+                objac.VoucherCode = await objbal.GetMaxVoucherCodeAsyncSGS(objac);
+                ViewBag.VoucherNumber = objac.VoucherCode; // This line might be redundant now
+
+                // Staff List
+                List<SelectListItem> combinedReportingList = new List<SelectListItem>();
+                DataSet ds1 = await objbal.StaffNameforVoucherAsyncSGS(objac);
+                List<SelectListItem> StaffList = new List<SelectListItem>();
+                foreach (DataRow dr in ds1.Tables[0].Rows)
+                {
+                    StaffList.Add(new SelectListItem
+                    {
+                        Text = dr["StaffName"].ToString(),
+                        Value = dr["StaffCode"].ToString()
+                    });
+                }
+                combinedReportingList.AddRange(StaffList);
+                ViewBag.combinedReportingList = combinedReportingList;
+
+                // Bank Account List
+                List<SelectListItem> BankAccountList = new List<SelectListItem>();
+                DataSet ds2 = await objbal.BankAccountforVoucherAsyncSGS(objac);
+                List<SelectListItem> BankList = new List<SelectListItem>();
+                foreach (DataRow dr in ds2.Tables[0].Rows)
+                {
+                    string bankName = dr["BankName"].ToString();
+                    string accountHolderName = dr["AccountHolderName"].ToString();
+                    string accountNumber = dr["AccountNumber"].ToString();
+
+                    BankList.Add(new SelectListItem
+                    {
+                        Text = $"{bankName} - {accountHolderName} - {accountNumber}",
+                        Value = dr["BankId"].ToString()
+                    });
+                }
+                BankAccountList.AddRange(BankList);
+                ViewBag.BankAccountList = BankAccountList;
+
+                // Breadcrumbs
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Name = "AccountantDashboard", Url = "AccountantDashboardAsyncSGS" },
+            new BreadcrumbItem { Name = "Voucher Managment", Url = "ListAllVouchersAsyncSGS" },
+            new BreadcrumbItem { Name = "Add Voucher", Url = "AddCashVoucherAsyncSGS" },
+        };
+
+                ViewBag.Breadcrumbs = breadcrumbs;
+                return PartialView(objac);
             }
         }
+
+
         [HttpPost]
-        public async Task<ActionResult> AddVoucherAsyncSGSAsync(Accountant objA)
+        public async Task<ActionResult> AddVoucherAsyncSGS(Accountant objA)
         {
             if (Session["StaffCode"] == null)
             {
                 return await Task.Run(() => RedirectToAction("Login", "Account"));
-            } else {
+            }
+            else
+            {
                 try
                 {
-                    //objA.StaffCode = Session["StaffCode"].ToString();
-                    //objA.BranchCode = Session["BranchCode"].ToString();
+                    objA.StaffCode = Session["StaffCode"].ToString();
+                    objA.BranchCode = Session["BranchCode"].ToString();
                     await objbal.AddVoucherAsyncSGS(objA);
-                    return Json(new { success = true, message = "Data saved successfully" });
-                } catch (Exception ex)
+                    return RedirectToAction("ListAllVouchersAsyncSGS");
+                }
+                catch (Exception ex)
                 {
                     return Json(new { success = false, message = "An error occurred while saving data: " + ex.Message });
                 }
             }
-            
+
         }
         #region //Vishals purchase modules starts here
         //======================================================Vishal's Purchase Modules starts here===================================================================================
