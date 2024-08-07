@@ -17,17 +17,12 @@ namespace GSTEducationERP.Controllers
     {
         private readonly BALAccountant objbal = new BALAccountant();
         private readonly Accountant objac = new Accountant();
-        private const string StaffListSessionKey = "FullStaffList";
-        private const string StaffAttendanceListSessionKey = "FullStaffAttendanceList";
-        private const string AdvancePayStaffListSessionKey = "AdvancePayStaffList";
-        private const string AllStaffAttendanceListSessionKey = "AllFullStaffAttendanceList";
-
         public class BreadcrumbItem
         {
             public string Name { get; set; }
             public string Url { get; set; }
         }
-
+       
         // GET: Accountant
         public ActionResult AccountantDashboardAsyncSGS()
         {
@@ -78,6 +73,9 @@ namespace GSTEducationERP.Controllers
                 return View();
             }
         }
+
+
+
         [HttpGet]
         public async Task<ActionResult> RegisterTestAsycTS()
         {
@@ -103,6 +101,8 @@ namespace GSTEducationERP.Controllers
                 return View();
             }
         }
+
+
         [HttpGet]
         public async Task<ActionResult> ListVoucherAsyncSGS()
         {
@@ -163,6 +163,8 @@ namespace GSTEducationERP.Controllers
                 return PartialView("ListVoucherAsyncSGS", objtr1);
             }
         }
+
+
         [HttpGet]
         public async Task<ActionResult> ListPendingVoucherAsyncSGS()
         {
@@ -224,7 +226,7 @@ namespace GSTEducationERP.Controllers
             }
         }
         [HttpGet]
-         public async Task<ActionResult> ListCompletedVoucherAsyncSGS()
+        public async Task<ActionResult> ListCompletedVoucherAsyncSGS()
         {
             if (Session["StaffCode"] == null)
             {
@@ -284,39 +286,112 @@ namespace GSTEducationERP.Controllers
             return PartialView("ListCompletedVoucherAsyncSGS", objtr1);
             }
         }
+
         [HttpGet]
         public async Task<ActionResult> AddVoucherAsyncSGS()
         {
             if (Session["StaffCode"] == null)
             {
                 return await Task.Run(() => RedirectToAction("Login", "Account"));
-            } else
+            }
+            else
             {
-                return View();
+                objac.StaffCode = Session["StaffCode"].ToString(); // Retrieve staff code from session
+                objac.BranchCode = Session["BranchCode"].ToString(); // Retrieve branch code from session
+
+                // Voucher Type List
+                List<SelectListItem> VoucherTypeList = new List<SelectListItem>();
+                DataSet ds = await objbal.VoucherTypeAsyncSGS(objac);
+                List<SelectListItem> TypeList = new List<SelectListItem>();
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    TypeList.Add(new SelectListItem
+                    {
+                        Text = dr["Status"].ToString(),
+                        Value = dr["StatusId"].ToString()
+                    });
+                }
+                VoucherTypeList.AddRange(TypeList);
+                ViewBag.VoucherTypeList = VoucherTypeList;
+
+                // Voucher Code
+                objac.VoucherCode = await objbal.GetMaxVoucherCodeAsyncSGS(objac);
+                ViewBag.VoucherNumber = objac.VoucherCode; // This line might be redundant now
+
+                // Staff List
+                List<SelectListItem> combinedReportingList = new List<SelectListItem>();
+                DataSet ds1 = await objbal.StaffNameforVoucherAsyncSGS(objac);
+                List<SelectListItem> StaffList = new List<SelectListItem>();
+                foreach (DataRow dr in ds1.Tables[0].Rows)
+                {
+                    StaffList.Add(new SelectListItem
+                    {
+                        Text = dr["StaffName"].ToString(),
+                        Value = dr["StaffCode"].ToString()
+                    });
+                }
+                combinedReportingList.AddRange(StaffList);
+                ViewBag.combinedReportingList = combinedReportingList;
+
+                // Bank Account List
+                List<SelectListItem> BankAccountList = new List<SelectListItem>();
+                DataSet ds2 = await objbal.BankAccountforVoucherAsyncSGS(objac);
+                List<SelectListItem> BankList = new List<SelectListItem>();
+                foreach (DataRow dr in ds2.Tables[0].Rows)
+                {
+                    string bankName = dr["BankName"].ToString();
+                    string accountHolderName = dr["AccountHolderName"].ToString();
+                    string accountNumber = dr["AccountNumber"].ToString();
+
+                    BankList.Add(new SelectListItem
+                    {
+                        Text = $"{bankName} - {accountHolderName} - {accountNumber}",
+                        Value = dr["BankId"].ToString()
+                    });
+                }
+                BankAccountList.AddRange(BankList);
+                ViewBag.BankAccountList = BankAccountList;
+
+                // Breadcrumbs
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Name = "AccountantDashboard", Url = "AccountantDashboardAsyncSGS" },
+            new BreadcrumbItem { Name = "Voucher Managment", Url = "ListAllVouchersAsyncSGS" },
+            new BreadcrumbItem { Name = "Add Voucher", Url = "AddCashVoucherAsyncSGS" },
+        };
+
+                ViewBag.Breadcrumbs = breadcrumbs;
+                return PartialView(objac);
             }
         }
+
+
         [HttpPost]
-        public async Task<ActionResult> AddVoucherAsyncSGSAsync(Accountant objA)
+        public async Task<ActionResult> AddVoucherAsyncSGS(Accountant objA)
         {
             if (Session["StaffCode"] == null)
             {
                 return await Task.Run(() => RedirectToAction("Login", "Account"));
-            } else {
+            }
+            else
+            {
                 try
                 {
-                    //objA.StaffCode = Session["StaffCode"].ToString();
-                    //objA.BranchCode = Session["BranchCode"].ToString();
+                    objA.StaffCode = Session["StaffCode"].ToString();
+                    objA.BranchCode = Session["BranchCode"].ToString();
                     await objbal.AddVoucherAsyncSGS(objA);
-                    return Json(new { success = true, message = "Data saved successfully" });
-                } catch (Exception ex)
+                    return RedirectToAction("ListAllVouchersAsyncSGS");
+                }
+                catch (Exception ex)
                 {
                     return Json(new { success = false, message = "An error occurred while saving data: " + ex.Message });
                 }
             }
-            
+
         }
         #region //Vishals purchase modules starts here
-        //------------------------------------Vishal's Purchase Modules strts here------------------------------------------------------------
+        //======================================================Vishal's Purchase Modules starts here===================================================================================
+        #region//main view code for purchase by vishal pardeshi
         /// <summary>
         /// this action result methode for the purchase dashboard ...getting the all the purchases 
         /// </summary>
@@ -348,10 +423,197 @@ namespace GSTEducationERP.Controllers
                 //{
                 //    throw (ex);
                 //}
+                Session["ListforFilter"] = model;
+                Session["Currency"] = "&#x20b9;";
                 return await Task.Run(() => View("DetailsPurchaseAsyncVP", objac));
 
             }
         }
+        /// <summary>
+        /// this action result methode is written for thr purchase purpose
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns>filter llst</returns>
+        [HttpGet]
+        public async Task<ActionResult> FilterPurchases(string status, DateTime? startDate, DateTime? endDate)
+        {
+            try
+            {
+                List<Accountant> purchases = Session["ListforFilter"] as List<Accountant>;
+                if (!string.IsNullOrEmpty(status) && status != "selectall")
+                {
+                    purchases = purchases.Where(p => p.Status == status).ToList();
+                }
+
+                if (startDate.HasValue)
+                {
+                    purchases = purchases.Where(p => p.TransactionDate >= startDate.Value).ToList();
+                }
+
+                if (endDate.HasValue)
+                {
+                    purchases = purchases.Where(p => p.TransactionDate <= endDate.Value).ToList();
+                }
+                ViewBag.Currency = Session["Currency"].ToString();
+                Accountant obj = new Accountant { lstPurchaseVP = purchases };
+                return await Task.Run(() => PartialView("_PurchaseListAsyncVP", obj));
+            }
+            catch (Exception ex) 
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return await Task.Run(()=> View("error"));
+            }
+        }
+
+        /// <summary>
+        /// this action methode is wrriten for the getting the view for the add purchase 
+        /// </summary>
+        /// <returns>the viewbags for the dropdowns in the add purchase</returns>
+        [HttpGet]
+        public async Task<ActionResult> AddPurchaseAsyncVP()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                try
+                {
+                    objac.BranchCode = Session["BranchCode"].ToString();
+                    objac.StaffCode = Session["StaffCode"].ToString();
+                    //breadcrumbs here
+                    List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+                {
+
+                        new BreadcrumbItem { Name = "Dashboard", Url =Url.Action("AccountantDashboardAsyncSGS", "Accountant")  },
+                        new BreadcrumbItem { Name = "Purchase", Url = Url.Action("DetailsPurchaseAsyncVP","Accountant") },
+                        new BreadcrumbItem { Name = "Add Purchase", Url = Url.Action("AddPurchaseAsyncVP", "Accountant") },
+                };
+
+                    ViewBag.Breadcrumbs = breadcrumbs;
+                    //getting the last purchase code and making increment to it and inserting it to database
+                    objac.TransactionCode = await GetPurchaseCoedAsyncVP(objac);
+                    //fetching the banks here for the add purchase 
+                    await ListStatusAsyncVP();//fetching the status here i don't know why
+                    //setting the date by default todays
+                    await ListHsnCodeAsyncVP();//getting thehsncode link for dropdown
+                    await ListTaxAsyncVP();//getting the applied tax viewbag from methode
+                    await PaymentmodesAsyncVP();//getting the payment modes to dropdown
+                    ViewBag.Currency = "&#x20b9;";
+                    ViewBag.IsitEdit = false;//sending the viewbag for checking the view is edit or not
+                    return await Task.Run(() => PartialView("AddPurchaseAsyncVP", objac));
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.ErrorMessage = "An error occurred while processing the request." + ex;
+                    return View("Error");
+                }
+            }
+        }
+        /// <summary>
+        /// post methode for saving the purchase details to database
+        /// </summary>
+        /// <param name="objac"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> AddPurchaseAsyncVP(Accountant objac)
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                //saving the details to database about the purchase
+                //try
+                //{
+                objac.StaffCode = Session["StaffCode"].ToString();
+                objac.BranchCode = Session["BranchCode"].ToString();
+                await objbal.SavePurchaseAsyncVP(objac);
+                Accountant objpi = new Accountant();
+                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                //}
+                //catch (Exception ex)
+                //{
+                //    return Json(new { success = false, message = "Invalid purchase items data." + ex }, JsonRequestBehavior.AllowGet);
+                //}
+            }
+
+        }
+        /// <summary>
+        /// this is the action result methode for the match voucher partial view
+        /// </summary>
+        /// <param name="TCode"></param>
+        /// <param name="Amount"></param>
+        /// <returns>partial view of match voucher</returns>
+        [HttpGet]
+        public async Task<ActionResult> MatchVoucherAsyncVM(string TCode, float Amount)
+        {
+            Accountant obj = new Accountant();
+            obj.TransactionCode = TCode;
+            obj.Amount = Amount;
+            var parts = TCode.Split('-');
+            obj.VendorName = parts[1];
+            await ListVoucherAsyncVP(parts[1]);
+            return PartialView("_MatchVoucherAsyncVM", obj);
+        }
+        /// <summary>
+        /// this is the post methode for the inserting the data of transactions and voucher code into voucher link
+        /// </summary>
+        /// <param name="vouchers"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> MatchVoucherAsyncVM(string TranscationCode, float? TransactionAmount, List<Accountant> vouchers, string description)
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (vouchers == null || !vouchers.Any())
+            {
+                return Json(new { success = false, message = "No vouchers provided." });
+            }
+
+            if (!TransactionAmount.HasValue || TransactionAmount.Value <= 0)
+            {
+                return Json(new { success = false, message = "Invalid transaction amount." });
+            }
+
+            double remainingPaidAmount = TransactionAmount.Value;
+
+            foreach (var voucher in vouchers)
+            {
+                if (remainingPaidAmount <= 0)
+                {
+                    break;
+                }
+
+                double amountToUse = Math.Min(remainingPaidAmount, voucher.Amount);
+                remainingPaidAmount -= amountToUse;
+                double newBalance = voucher.Amount - amountToUse;
+
+                // Update the voucher's details
+                voucher.TransactionAmount = (float)amountToUse;
+                voucher.TransactionCode = TranscationCode;
+                voucher.Description = description;
+                try
+                {
+                    await objbal.SaveVoucherPurchaseAsyncVP(voucher);
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = $"Error updating voucher {voucher.VoucherCode}: {ex.Message}" });
+                }
+            }
+
+            return Json(new { success = true, redirectUrl = Url.Action("DetailsPurchaseAsyncVP", "Accountant") }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
 
         /// <summary>
         /// this list methode is written for the fetching the Purchased item list 
@@ -363,6 +625,7 @@ namespace GSTEducationERP.Controllers
             //fetching the list of purchased itmes here
             List<Accountant> lstitems = new List<Accountant>();
             List<Accountant> lsttransaction = new List<Accountant>();
+            objac.BranchCode = Session["BranchCode"].ToString();
             DataSet ds = await objbal.ListPurchasedItemsAsyncVP(objac);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
@@ -436,6 +699,7 @@ namespace GSTEducationERP.Controllers
                         TransactionAmount = row.IsNull("TransactionAmount") ? 0.0 : Convert.ToDouble(row["TransactionAmount"]),
                         BalanceAmount = row.IsNull("BalanceAmount") ? 0.0 : Convert.ToDouble(row["BalanceAmount"]),
                         TransactionDate = row.IsNull("TransactionDate") ? DateTime.MinValue : Convert.ToDateTime(row["TransactionDate"]),
+                        Description= row.IsNull("Description") ? string.Empty : row["Description"].ToString(),
                         PaymentMode = row.IsNull("PaymentMode") ? string.Empty : row["PaymentMode"].ToString(),
                         TranId_CheqNo = row.IsNull("TransactionID") ? string.Empty : row["TransactionID"].ToString(),
                         Status = row.IsNull("Status") ? string.Empty : row["Status"].ToString()
@@ -452,102 +716,25 @@ namespace GSTEducationERP.Controllers
         /// <param name="PurchaseCode"></param>
         /// <returns>true/false</returns>
         [HttpPost]
-        public async Task<JsonResult> ValidatePurchaseAsyncVP(string PurchaseCode)
+        public async Task<ActionResult> ValidatePurchaseAsyncVP(string PurchaseCode)
         {
             objac.PurchaseCode = PurchaseCode;
             SqlDataReader dr;
+            objac.BranchCode = Session["BranchCode"].ToString();
             dr = await objbal.ValidatePurchaseAsyncVP(objac);
             if (dr.Read())
             {
                 objac.VendorName = dr["VendorName"].ToString();
                 //purchase code exists in the database
-                return Json(objac, JsonRequestBehavior.AllowGet);
+                return Json(new {success=false}, JsonRequestBehavior.AllowGet);
             }
             else
             {
                 //purchase code doesn't exists
-                return Json(JsonRequestBehavior.AllowGet);
+                return Json(new {success=true},JsonRequestBehavior.AllowGet);
             }
         }
 
-        /// <summary>
-        /// this action methode is wrriten for the getting the view for the add purchase 
-        /// </summary>
-        /// <returns>the viewbags for the dropdowns in the add purchase</returns>
-        [HttpGet]
-        public async Task<ActionResult> AddPurchaseAsyncVP()
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                try
-                {
-                    objac.BranchCode = Session["BranchCode"].ToString();
-                    objac.StaffCode = Session["StaffCode"].ToString();
-                    //breadcrumbs here
-                    List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
-                {
-
-                        new BreadcrumbItem { Name = "Dashboard", Url =Url.Action("AccountantDashboardAsyncSGS", "Accountant")  },
-                        new BreadcrumbItem { Name = "Purchase", Url = Url.Action("DetailsPurchaseAsyncVP","Accountant") },
-                        new BreadcrumbItem { Name = "Add Purchase", Url = Url.Action("AddPurchaseAsyncVP", "Accountant") },
-                };
-
-                    ViewBag.Breadcrumbs = breadcrumbs;
-                    //getting the last purchase code and making increment to it and inserting it to database
-                    objac.TransactionCode = await GetPurchaseCoedAsyncVP(objac);
-                    //fetching the banks here for the add purchase 
-                    await ListStatusAsyncVP();//fetching the status here i don't know why
-                    //setting the date by default todays
-                    objac.TransactionDate = DateTime.Now;
-                    objac.ChequeDate = DateTime.Now;
-                    await ListHsnCodeAsyncVP();//getting thehsncode link for dropdown
-                    await ListTaxAsyncVP();//getting the applied tax viewbag from methode
-                    await PaymentmodesAsyncVP();//getting the payment modes to dropdown
-                    ViewBag.Currency = "&#x20b9;";
-                    ViewBag.IsitEdit = false;//sending the viewbag for checking the view is edit or not
-                    return await Task.Run(() => PartialView("AddPurchaseAsyncVP", objac));
-                }
-                catch (Exception ex)
-                {
-                    ViewBag.ErrorMessage = "An error occurred while processing the request." + ex;
-                    return View("Error");
-                }
-            }
-        }
-        /// <summary>
-        /// post methode for saving the purchase details to database
-        /// </summary>
-        /// <param name="objac"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<ActionResult> AddPurchaseAsyncVP(Accountant objac)
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                //saving the details to database about the purchase
-                //try
-                //{
-                objac.StaffCode = Session["StaffCode"].ToString();
-                objac.BranchCode = Session["BranchCode"].ToString();
-                await objbal.SavePurchaseAsyncVP(objac);
-                Accountant objpi = new Accountant();
-                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-                //}
-                //catch (Exception ex)
-                //{
-                //    return Json(new { success = false, message = "Invalid purchase items data." + ex }, JsonRequestBehavior.AllowGet);
-                //}
-            }
-
-        }
         /// <summary>
         /// this action result methode is for the saving the purchased items details
         /// </summary>
@@ -588,86 +775,7 @@ namespace GSTEducationERP.Controllers
                 //}
             }
         }
-        private async Task<ActionResult> SavePurchasePaymentAsyncVP(Accountant objA)
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                //updating the purchase details like transaction amount ,payment mode,voucher details 
-                await objbal.SavePurchasePaymentAsyncVP(objA);
-                await objbal.SaveVoucherPurchaseAsyncVP(objA);
-                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
-            }
-        }
-        //pop up for the match voucher start here
-        [HttpGet]
-        public async Task<ActionResult> MatchVoucherAsyncVM(string TCode, float Amount)
-        {
-            Accountant obj = new Accountant();
-            obj.TransactionCode = TCode;
-            obj.Amount = Amount;
-            var parts = TCode.Split('-');
-            obj.VendorName = parts[1];
-            await ListVoucherAsyncVP(parts[1]);
-            return PartialView("_MatchVoucherAsyncVM", obj);
-        }
-        /// <summary>
-        /// this is the post methode for the inserting the data of transactions and voucher code into voucher link
-        /// </summary>
-        /// <param name="vouchers"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<ActionResult> MatchVouccherAsyncVB(string TranscationCode, float? TransactionAmount, List<Accountant> vouchers, string description)
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            if (vouchers == null || !vouchers.Any())
-            {
-                return Json(new { success = false, message = "No vouchers provided." });
-            }
-
-            if (!TransactionAmount.HasValue || TransactionAmount.Value <= 0)
-            {
-                return Json(new { success = false, message = "Invalid transaction amount." });
-            }
-
-            double remainingPaidAmount = TransactionAmount.Value;
-
-            foreach (var voucher in vouchers)
-            {
-                if (remainingPaidAmount <= 0)
-                {
-                    break;
-                }
-
-                double amountToUse = Math.Min(remainingPaidAmount, voucher.Amount);
-                remainingPaidAmount -= amountToUse;
-                double newBalance = voucher.Amount - amountToUse;
-
-                // Update the voucher's details
-                voucher.TransactionAmount = (float)amountToUse;
-                voucher.TransactionCode = TranscationCode;
-                voucher.Description = description;
-                try
-                {
-                    await objbal.SaveVoucherPurchaseAsyncVP(voucher);
-                }
-                catch (Exception ex)
-                {
-                    return Json(new { success = false, message = $"Error updating voucher {voucher.VoucherCode}: {ex.Message}" });
-                }
-            }
-
-            return Json(new { success = true, redirectUrl = Url.Action("DetailsPurchaseAsyncVP", "Accountant") }, JsonRequestBehavior.AllowGet);
-        }
-
-
+        
         /// <summary>
         /// this action methode written for the viewing the purchase bill for the purchase dashboard
         /// </summary>
@@ -683,23 +791,24 @@ namespace GSTEducationERP.Controllers
             {
                 //bread crumbs here
                 List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
-            {
+                {
 
                     new BreadcrumbItem { Name = "Dashboard", Url =Url.Action("AccountantDashboardAsyncSGS", "Accountant")  },
                     new BreadcrumbItem { Name = "Purchase", Url = Url.Action("DetailsPurchaseAsyncVP","Accountant") },
-                    new BreadcrumbItem { Name = "View Purchase", Url = Url.Action("ViewPurchaseAsyncVP", "Accountant") },
-            };
+                    new BreadcrumbItem { Name = "View Purchase",Url = Url.Action("ViewPurchaseAsyncVP", "Accountant") + "?PurchaseCode=" + PurchaseCode },
+
+                };
 
                 ViewBag.Breadcrumbs = breadcrumbs;
                 objac.PurchaseCode = PurchaseCode;
+                objac.BranchCode = Session["BranchCode"].ToString();
                 SqlDataReader dr;
                 dr = await objbal.ListPurchasesDetailsAsyncVP(objac);
                 if (dr.Read())
                 {
                     DateTime transactionDate = Convert.ToDateTime(dr["TransactionDate"]);
-                    string formattedDate = transactionDate.ToString("dd-MM-yyyy");
+                    ViewBag.TransactionDate = transactionDate.ToString("dd-MM-yyyy");
                     ViewBag.TransactionCode = PurchaseCode;
-                    ViewBag.TransactionDate = formattedDate;
                     ViewBag.VendorName = dr["VendorName"].ToString();
                     ViewBag.TransactionAmount = dr["TransactionAmount"].ToString() == "0" ? 0 : long.Parse(dr["TransactionAmount"].ToString());
                     ViewBag.TransactionAmount = dr["BalanceAmount"].ToString() == "0" ? 0 : long.Parse(dr["BalanceAmount"].ToString());
@@ -711,6 +820,7 @@ namespace GSTEducationERP.Controllers
                 var (listitem, listtransaction) = await ListPurchasItemsAsyncVP(PurchaseCode);
                 objac.lstPurchaseItemVP = listitem;
                 objac.lstTransactionVP = listtransaction;
+                ViewBag.transactionList=listtransaction;
                 //giving the currency hard coded
                 ViewBag.Currency = "&#x20b9;";
                 return await Task.Run(() => View("ViewPurchaseAsyncVP", objac));
@@ -737,14 +847,14 @@ namespace GSTEducationERP.Controllers
 
                         new BreadcrumbItem { Name = "Dashboard", Url =Url.Action("AccountantDashboardAsyncSGS", "Accountant")  },
                         new BreadcrumbItem { Name = "Purchase", Url = Url.Action("DetailsPurchaseAsyncVP","Accountant") },
-                        new BreadcrumbItem { Name = "Update Purchase", Url = Url.Action("UpdatePurchaseAsyncVP", "Accountant") },
+                        new BreadcrumbItem { Name = "Update Purchase",Url = Url.Action("UpdatePurchaseAsyncVP", "Accountant") + "?PurchaseCode=" + PurchaseCode },
                 };
 
                 ViewBag.Breadcrumbs = breadcrumbs;
                 //getting the details from the database for this purchase code
                 objac.TransactionCode = PurchaseCode;
                 objac.PurchaseCode = PurchaseCode;
-                accountant.TransactionDate = DateTime.Now;
+                objac.BranchCode = Session["BranchCode"].ToString();
                 ViewBag.Currency = "&#x20b9;";
                 ViewBag.IsitEdit = true;
                 SqlDataReader dr = await objbal.ListPurchasesDetailsAsyncVP(objac);
@@ -759,8 +869,10 @@ namespace GSTEducationERP.Controllers
                 }
                 await ListHsnCodeAsyncVP();//getting thehsncode link for dropdown
                 await ListTaxAsyncVP();//getting the tax for purchased item list
-                await ListPurchasedItemsAsyncVP(objac);
-                //await ListStatusAsyncVP();//fetching the status here i don't know why
+                List<Accountant>lst1= new List<Accountant>();
+                List<Accountant>lst2= new List<Accountant>();
+
+                await ListPurchasedItemsAsyncVP(objac);//getting the list of purchased items
                 await PaymentmodesAsyncVP();//getting the payment modes to dropdown
                 return await Task.Run(() => View("AddPurchaseAsyncVP", accountant));
             }
@@ -773,9 +885,10 @@ namespace GSTEducationERP.Controllers
         [HttpGet]
         private async Task ListPurchasedItemsAsyncVP(Accountant objA)
         {
+
             //fetching the list of purchased itmes here
             List<Accountant> lstitems = new List<Accountant>();
-            DataSet ds = await objbal.ListPurchasedItemsAsyncVP(objac);
+            DataSet ds = await objbal.ListPurchasedItemsAsyncVP(objA);
             if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
             {
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -796,7 +909,7 @@ namespace GSTEducationERP.Controllers
             ViewBag.ListofItems = lstitems;
         }
         /// <summary>
-        /// updating the purchase details in transactions 
+        /// updating the purchase details in transactions for purchase
         /// </summary>
         /// <param name="objA"></param>
         /// <returns></returns>
@@ -867,103 +980,6 @@ namespace GSTEducationERP.Controllers
                 //}
             }
         }
-        #region //not using vishals methodes
-        ///// <summary>
-        ///// fetching the banks here any bropdown in purchase i need
-        ///// </summary>
-        ///// <param name="Bank"></param>
-        ///// <returns></returns>
-        //[HttpGet]
-        //private async Task ListBankAsyncVP(Accountant obj)
-        //{
-        //    obj.BranchCode = Session["BranchCode"].ToString();
-        //    //fetching the banks here for the add purchase 
-        //    DataSet ds = await objbal.ListBankAsyncVP(obj);
-        //    List<SelectListItem> BankList = new List<SelectListItem>();
-        //    foreach (DataRow dr in ds.Tables[0].Rows)
-        //    {
-        //        BankList.Add(new SelectListItem { Text = dr["BankName"].ToString(), Value = dr["BankName"].ToString() });
-        //    }
-        //    ViewBag.BankId = BankList;
-        //    //return BankList;
-        //}
-        ///// <summary>
-        ///// this methode is wrriten for the all the account holder name for the selected bank
-        ///// </summary>
-        ///// <returns>viewbag for bank holder name</returns>
-        //private async Task<JsonResult> BankHolderNameAsyncVP(string BankNamehere)
-        //{
-        //    objac.BranchCode = Session["BranchCode"].ToString();
-        //    objac.BankName = BankNamehere;
-        //    //fetching the banks here for the add purchase 
-        //    DataSet ds = await objbal.ListBankHolderNameAsyncVP(objac);
-        //    List<SelectListItem> BankList = new List<SelectListItem>();
-        //    foreach (DataRow dr in ds.Tables[0].Rows)
-        //    {
-        //        BankList.Add(new SelectListItem { Text = dr["AccountHolder"].ToString(), Value = dr["BankId"].ToString() });
-        //    }
-
-        //    ViewBag.BankName = BankList;
-        //    //return await Task.Run(() => BankList);
-        //    return Json(BankList, JsonRequestBehavior.AllowGet);
-        //}
-        /////<Summery>
-        /////this action methode for the getting the bank account types
-        /////</Summery>
-        /////<return>the bank types ie. saving,current</return>
-        //private async Task BankTypesAsyncVP()
-        //{
-        //    List<SelectListItem> lstp = new List<SelectListItem>
-        //            {
-        //                new SelectListItem { Value = "SAVING", Text = "SAVING" },
-        //                new SelectListItem { Value = "CURRENT", Text = "CURRENT" }
-        //            };
-        //    await Task.Run(() => ViewBag.BankType = lstp);
-
-        //}
-        ///// <summary>
-        ///// the action is to return the list of purchase items for the select ed purchase
-        ///// </summary>
-        ///// <param name="PurchaseCode"></param>
-        ///// <returns>tlist of purchased items for pop up in the details page</returns>
-        //[HttpGet]
-        //public async Task<ActionResult> ListPurchasedItemsAsyncVP(string PurchaseCode)
-        //{
-        //    //try
-        //    //{
-        //    objac.PurchaseCode = PurchaseCode;
-        //    List<Accountant> lstitems = new List<Accountant>();
-        //    DataSet ds = await objbal.ListPurchasedItemsAsyncVP(objac);
-        //    if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-        //    {
-
-        //        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
-        //        {
-        //            Accountant objP = new Accountant();
-        //            objP.ItemId = Convert.ToInt32(ds.Tables[0].Rows[i]["PurchaseItemId"].ToString());
-        //            objP.TransactionCode = PurchaseCode;
-        //            objP.ItemName = ds.Tables[0].Rows[i]["ItemName"].ToString();
-        //            objP.Quantity = Convert.ToInt32(ds.Tables[0].Rows[i]["Quantity"].ToString());
-        //            objP.HSNCode = ds.Tables[0].Rows[i]["HSNCode"].ToString();
-        //            objP.UnitPrice = decimal.Parse(ds.Tables[0].Rows[i]["UnitPrice"].ToString());
-        //            objP.Discount = Convert.ToDouble(ds.Tables[0].Rows[i]["Discount"].ToString());
-        //            objP.AppliedTax = ds.Tables[0].Rows[i]["TaxRate"].ToString();
-        //            objP.Amount = float.Parse(ds.Tables[0].Rows[i]["DiscountAmount"].ToString());//this is discounted amount
-        //            objP.BalanceAmount = Convert.ToDouble(ds.Tables[0].Rows[i]["TaxAmount"].ToString());//this is tax amount 
-        //            objP.TransactionAmount = Convert.ToDouble(ds.Tables[0].Rows[i]["TotalPrice"].ToString());//this is total amount
-        //            lstitems.Add(objP);
-        //        }
-        //    }
-        //    objac.lstPurchaseItemVP = lstitems;
-        //    //return PartialView("_ListPurchasedItemsAsyncVP", objac);
-        //    return Json(lstitems, JsonRequestBehavior.AllowGet);
-        //    //}
-        //    //catch
-        //    //{
-        //    //    return View("Error");
-        //    //}
-        //}
-        #endregion
         /// <summary>
         /// fetching the last purchase code and making the increment by 1 and sending it to add purchase form
         /// </summary>
@@ -1041,17 +1057,29 @@ namespace GSTEducationERP.Controllers
             }
             else
             {
-                objac.BranchCode = Session["BranchCode"].ToString();
-                //fetching the banks here for the add purchase 
-                objac.VendorName = vendorName;
-                DataSet ds = await objbal.ListVouchersAsyncVP(objac);
-                List<SelectListItem> VoucherList = new List<SelectListItem>();
-                foreach (DataRow dr in ds.Tables[0].Rows)
+                //try
+                //{
+
+                //}
+                //catch (Exception ex) { }
+                if (!string.IsNullOrEmpty(vendorName))
                 {
-                    VoucherList.Add(new SelectListItem { Text = $"{dr["VoucherCode"].ToString() + "-" + dr["PaidTo"].ToString() + "-" + dr["Balance"].ToString()}", Value = dr["VoucherCode"].ToString() });
+                    objac.BranchCode = Session["BranchCode"].ToString();
+                    //fetching the banks here for the add purchase 
+                    objac.VendorName = vendorName;
+                    DataSet ds = await objbal.ListVouchersAsyncVP(objac);
+                    List<SelectListItem> VoucherList = new List<SelectListItem>();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        VoucherList.Add(new SelectListItem { Text = $"{dr["VoucherCode"].ToString() + "-" + dr["PaidTo"].ToString() + "-" + dr["Balance"].ToString()}", Value = dr["VoucherCode"].ToString() });
+                    }
+                    ViewBag.VoucherCode = VoucherList;
+                    return await Task.Run(() => Json(new { success = true, data = VoucherList }, JsonRequestBehavior.AllowGet));
                 }
-                ViewBag.VoucherCode = VoucherList;
-                return await Task.Run(() => Json(new { success = true, data = VoucherList }, JsonRequestBehavior.AllowGet));
+                else
+                {
+                    return await Task.Run(() => Json(new { success = true, message = "vendor code is null" }, JsonRequestBehavior.AllowGet));
+                }
             }
         }
         /// <summary>
@@ -1085,9 +1113,18 @@ namespace GSTEducationERP.Controllers
             {
                 //try
                 //{(
-                objac.ItemId = int.Parse(itemId);
-                await objbal.DeletePurchasedItemAsyncVP(objac);
-                return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                if (string.IsNullOrEmpty(itemId)) 
+                {
+                    objac.ItemId = int.Parse(itemId);
+                    await objbal.DeletePurchasedItemAsyncVP(objac);
+                    return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+                }
+                else 
+                {
+                    return Json(new { success = false,message="itemid is null" }, JsonRequestBehavior.AllowGet);
+
+                }
+
                 //}
                 //catch
                 //{
@@ -1096,537 +1133,7 @@ namespace GSTEducationERP.Controllers
             }
         }
         //------------------------------------Vishal's Purchase Modules ends here------------------------------------------------------------
-        #endregion
-
-        #region // Shrikant Staff PayRoll modules starts here
-
-
-        //-----------------Shrikant StaffPayRoll Start -----------------------------------------------------------------------//
-
-        /// <summary>
-        /// This method is Used for just checking user is loged or not 
-        /// if loged than show main view of staff payRoll
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult> GetStaffForPaySSAsync()
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                await DeparmentBindSSAsync();
-                await PositionBindSSAsync();
-                await LoadAndStoreFullStaffList();
-
-                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
-        {
-            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
-            new BreadcrumbItem { Name = "StaffPayRoll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") }
-        };
-
-                ViewBag.Breadcrumbs = breadcrumbs;
-
-                return View();
-            }
-        }
-
-        /// <summary>
-        /// this method create to Load and Store Full Staff List in Session
-        /// </summary>
-        /// <returns>it not returns any thing</returns>
-        [HttpGet]
-        private async Task LoadAndStoreFullStaffList()
-        {
-
-            if (Session[StaffListSessionKey] == null)
-            {
-                string BranchCode = Session["BranchCode"].ToString();
-                DataSet ds = await objbal.StaffListSSAsync(BranchCode);
-                List<Accountant> fullStaffList = ConvertDataSetToAccountantList(ds);
-                Session[StaffListSessionKey] = fullStaffList;
-            }
-        }
-
-        /// <summary>
-        /// this Method is used Store data into model property 
-        /// </summary>
-        /// <param name="ds"></param>
-        /// <returns>List of Accountant</returns>
-        private List<Accountant> ConvertDataSetToAccountantList(DataSet ds)
-        {
-            List<Accountant> staffList = new List<Accountant>();
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    Accountant objP = new Accountant
-                    {
-                        StaffCode = dr["StaffCode"].ToString(),
-                        DepartmentID = Convert.ToInt32(dr["DepartmentId"]),
-                        StaffName = dr["Staff Name"].ToString(),
-                        DepartmentName = dr["Department"].ToString(),
-                        Designation = dr["Designation"].ToString(),
-                        BankName = dr["Bank"].ToString(),
-                        BranchName = dr["Branch Name"].ToString(),
-                        AccountNo = Convert.ToInt64(dr["Account Number"].ToString()),
-                        IFSCCode = dr["IFSCCode"].ToString(),
-                        GrossSalary = Convert.ToInt64(dr["GrossSalary"])
-                    };
-                    staffList.Add(objP);
-                }
-            }
-            return staffList;
-        }
-
-        /// <summary>
-        /// This method is Partial View of StaffDetailes Page
-        /// we call this method when page is load
-        /// </summary>
-        /// <returns> partial View</returns>
-        public async Task<ActionResult> ListOfStaffSSAsync()
-        {
-            List<Accountant> fullStaffList = Session[StaffListSessionKey] as List<Accountant>;
-            Accountant obj = new Accountant { lstEmp = fullStaffList };
-            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
-        {
-            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
-            new BreadcrumbItem { Name = "StaffPayRoll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
-            new BreadcrumbItem { Name = "ListOFStaff", Url = Url.Action("_ListOfStaffSSAsync", "Accountant") }
-        };
-
-            ViewBag.Breadcrumbs = breadcrumbs;
-            return PartialView("_ListOfStaffSSAsync", obj);
-
-        }
-
-        /// <summary>
-        /// This is nonAction method used for just get List of Departments
-        /// </summary>
-        /// <returns></returns>
-        /// 
-        [HttpGet]
-        private async Task DeparmentBindSSAsync()
-        {
-            DataSet ds = await objbal.DeparmentBindSSAsync();
-            List<SelectListItem> DepList = new List<SelectListItem>();
-            foreach (DataRow dr in ds.Tables[0].Rows)
-            {
-                DepList.Add(new SelectListItem
-                {
-                    Text = dr["DepartmentName"].ToString(),
-                    Value = dr["DepartmentId"].ToString()
-                });
-            }
-            ViewBag.Department = new SelectList(DepList, "Value", "Text");
-        }
-
-        /// <summary>
-        /// This non Action Method used to Fech List of Positions
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task PositionBindSSAsync()
-        {
-            DataSet ds = await objbal.PositionBindSSAsync();
-            List<SelectListItem> DepList = new List<SelectListItem>();
-            foreach (DataRow dr in ds.Tables[0].Rows)
-            {
-                DepList.Add(new SelectListItem
-                {
-                    Text = dr["StaffPosition"].ToString(),
-                    Value = dr["StaffPositionId"].ToString()
-                });
-            }
-            ViewBag.Positon = new SelectList(DepList, "Value", "Text");
-
-
-        }
-
-
-        /// <summary>
-        /// Display employees filtered by DepartmentID
-        /// </summary>
-        /// <param name="DepartmentID"></param>
-        /// <returns>PartialView</returns>
-        public ActionResult WithIdListOfStaffSSAsync(string DepartmentText, string PositionName)
-        {
-
-            DepartmentText = DepartmentText == "Select Department" ? null : DepartmentText;
-            PositionName = PositionName == "Select Position" ? null : PositionName;
-
-
-            List<Accountant> fullStaffList = Session[StaffListSessionKey] as List<Accountant>;
-            if (fullStaffList == null)
-            {
-
-                return PartialView("_ListOfStaffSSAsync", new Accountant { lstEmp = new List<Accountant>() });
-            }
-
-
-            List<Accountant> filteredStaff = fullStaffList;
-
-            if (!string.IsNullOrEmpty(DepartmentText))
-            {
-                filteredStaff = filteredStaff.Where(s => s.DepartmentName == DepartmentText).ToList();
-            }
-            if (!string.IsNullOrEmpty(PositionName))
-            {
-                filteredStaff = filteredStaff.Where(s => s.Designation == PositionName).ToList();
-            }
-
-
-            Accountant obj = new Accountant { lstEmp = filteredStaff };
-            return PartialView("_ListOfStaffSSAsync", obj);
-        }
-
-        /// <summary>
-        /// this is Non Action Method Used to Load And Store Attendance of Staff
-        /// </summary>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        private async Task LoadAndStoreFullAttendanceSSasync(string month, string year)
-        {
-            string branchCode = Session["BranchCode"].ToString();
-            DataSet ds = await objbal.LoadAndStoreFullAttendanceSSasync(branchCode, month, year);
-            List<Accountant> fullStaffAttendanceList = ConvertDataSetToAccountantListForAttendance(ds);
-            Session[StaffAttendanceListSessionKey] = fullStaffAttendanceList;
-        }
-
-        /// <summary>
-        /// this Non Action Method used to Convert DataSet to Accountant List For Attendance
-        /// </summary>
-        /// <param name="ds"></param>
-        /// <returns></returns>
-        private List<Accountant> ConvertDataSetToAccountantListForAttendance(DataSet ds)
-        {
-            List<Accountant> staffList = new List<Accountant>();
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    Accountant objP = new Accountant
-                    {
-                        StaffName = dr["StaffName"].ToString(),
-                        DepartmentName = dr["DepartmentName"].ToString(),
-                        Designation = dr["Designation"].ToString(),
-                        PaidDays = Convert.ToInt32(dr["TotalMonthDays"].ToString()),
-                        PaidLeaveCount = Convert.ToInt32(dr["PaidLeaveCount"].ToString()),
-                        //PendingLeaveCount = Convert.ToInt32(dr["PendingLeaveCount"].ToString()),
-                        PresentDays = Convert.ToInt32(dr["WorkedDays"]),
-                        AbsentDays = Convert.ToInt32(dr["AbsentDays"]),
-                        PayableDays = Convert.ToDecimal(dr["PayableDays"]),
-                        MonthlyBasicSalary = Convert.ToDecimal(dr["MonthlyBasicSalary"]),
-                        AdjustedNetSalary = Convert.ToDecimal(dr["AdjustedNetSalary"])
-                    };
-                    staffList.Add(objP);
-                }
-            }
-            return staffList;
-        }
-        /// <summary>
-        /// this method 
-        /// </summary>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public async Task<ActionResult> AttendenceOfStaffssAsync(string month, string year)
-        {
-            await LoadAndStoreFullAttendanceSSasync(month, year);
-
-            List<Accountant> fullStaffAttendanceList = Session[StaffAttendanceListSessionKey] as List<Accountant>;
-            Accountant obj = new Accountant { lstEmpAttendance = fullStaffAttendanceList };
-            return PartialView("_AttendenceOfStaffssAsync", obj);
-        }
-
-        /// <summary>
-        /// This method is used to Filter data From Session StaffAttendanceListSessionKey
-        /// </summary>
-        /// <param name="departmentText"></param>
-        /// <param name="positionName"></param>
-        /// <returns></returns>
-        public ActionResult WithIdListOfStaffAttendanceSSAsync(string departmentText, string positionName)
-        {
-            departmentText = departmentText == "Select Department" ? null : departmentText;
-            positionName = positionName == "Select Position" ? null : positionName;
-
-            List<Accountant> fullStaffList = Session[StaffAttendanceListSessionKey] as List<Accountant>;
-            if (fullStaffList == null)
-            {
-                return PartialView("_AttendenceOfStaffssAsync", new Accountant { lstEmpAttendance = new List<Accountant>() });
-            }
-
-            List<Accountant> filteredStaff = fullStaffList;
-
-            if (!string.IsNullOrEmpty(departmentText))
-            {
-                filteredStaff = filteredStaff.Where(s => s.DepartmentName == departmentText).ToList();
-            }
-            if (!string.IsNullOrEmpty(positionName))
-            {
-                filteredStaff = filteredStaff.Where(s => s.Designation == positionName).ToList();
-            }
-
-            Accountant obj = new Accountant { lstEmpAttendance = filteredStaff };
-            return PartialView("_AttendenceOfStaffssAsync", obj);
-        }
-
-        /// <summary>
-        /// This Method used to Show Staff Details Of Staff
-        /// </summary>
-        /// <param name="StaffCode"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public ActionResult DetailsOfStaffAsyncSS(string StaffCode)
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
-        {
-            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
-            new BreadcrumbItem { Name = "StaffPayRoll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
-            new BreadcrumbItem { Name = "ListOFStaff", Url = Url.Action("_ListOfStaffSSAsync", "Accountant") },
-            new BreadcrumbItem { Name = "ListOFStaff", Url = Url.Action("DetailsOfStaffAsyncSS", "Accountant") }
-        };
-                ViewBag.Breadcrumbs = breadcrumbs;
-                return View("mm");
-            }
-
-        }
-
-        /// <summary>
-        /// This Method used to Show Salary History of specific Staff
-        /// </summary>
-        /// <param name="StaffCode"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<ActionResult> ShowAllSalaryAsyncSS(string StaffCode = null)
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                DataSet ds = await objbal.ShowAllSalaryAsyncSS(StaffCode);
-                List<Accountant> salarySlips = new List<Accountant>();
-
-                if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-                {
-                    foreach (DataRow dr in ds.Tables[0].Rows)
-                    {
-                        Accountant obja = new Accountant
-                        {
-                            StaffCode = dr["StaffCode"].ToString(),
-                            StaffName = dr["StaffName"].ToString(),
-                            StaffPosition = dr["StaffPosition"].ToString(),
-                            GrossSalary = Convert.ToDecimal(dr["MonthlyGrossSalary"]),
-                            AdvanceAmount = Convert.ToDecimal(dr["AdvanceAmount"]),
-                            NetSalary = Convert.ToDecimal(dr["MonthlyNetSalary"]),
-                            SalaryCreditedDate = Convert.ToDateTime(dr["CreditedDate"]),
-
-                        };
-                        salarySlips.Add(obja);
-                    }
-                }
-                else
-                {
-                    ViewBag.Message = "No salary slips found for the given criteria.";
-                }
-
-                ViewBag.SalarySlips = salarySlips;
-            }
-
-            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
-        {
-            new BreadcrumbItem { Name = "Accountant Dashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
-            new BreadcrumbItem { Name = "Staff Pay Roll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
-            new BreadcrumbItem { Name = "List OF Staff", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
-            new BreadcrumbItem { Name = "Salary Details", Url = Url.Action("ShowAllSalaryAsyncSS", "Accountant") }
-        };
-            ViewBag.Breadcrumbs = breadcrumbs;
-
-
-
-            return View();
-
-
-        }
-
-
-        /// <summary>
-        /// Load And Store All Staff Attendance
-        /// </summary>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        [HttpGet]
-
-        public async Task LoadAndStoreAllFullAttendanceSSasync(string month, string year)
-        {
-            string branchCode = Session["BranchCode"].ToString();
-            DataSet ds = await objbal.ShowAttendanceOfAllStaffAsyncSS(branchCode, month, year);
-            List<Accountant> AllFullStaffAttendanceList = ConvertDataSetToAccountantAttendance(ds);
-            Session[AllStaffAttendanceListSessionKey] = AllFullStaffAttendanceList;
-        }
-
-        /// <summary>
-        /// This Method Used to Ds data into List
-        /// </summary>
-        /// <param name="ds"></param>
-        /// <returns></returns>
-        public List<Accountant> ConvertDataSetToAccountantAttendance(DataSet ds)
-        {
-            List<Accountant> staffList = new List<Accountant>();
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    DateTime date;
-                    bool isValidDate = DateTime.TryParse(dr["Date"].ToString(), out date);
-
-                    Accountant objP = new Accountant
-                    {
-                        StaffCode = dr["StaffCode"].ToString(),
-                        StaffName = dr["StaffName"].ToString(),
-                        Status = dr["Status"].ToString(),
-                        Date = isValidDate ? date.ToString("dd/MM/yyyy") : string.Empty,
-                    };
-                    staffList.Add(objP);
-                }
-            }
-            return staffList;
-        }
-
-        /// <summary>
-        /// This Method used to call _AttendenceOfAllStaffssAsync this view
-        /// </summary>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public async Task<ActionResult> AttendenceOfAllStaffssAsync(string month, string year)
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                await LoadAndStoreAllFullAttendanceSSasync(month, year);
-
-                List<Accountant> AllFullStaffAttendanceList = Session[AllStaffAttendanceListSessionKey] as List<Accountant>;
-                Accountant obj = new Accountant { lstAllEmpAttendance = AllFullStaffAttendanceList };
-                return PartialView("_AttendenceOfAllStaffssAsync", obj);
-            }
-        }
-
-        /// <summary>
-        /// This Method used to get specific staff attendance
-        /// </summary>
-        /// <param name="staffCode"></param>
-        /// <returns></returns>
-        public async Task<ActionResult> GetSpecificStaffAttendanceAsyncSS(string staffCode)
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                List<Accountant> AllFullStaffAttendanceList = Session[AllStaffAttendanceListSessionKey] as List<Accountant>;
-
-            
-                    // Filter the list for the specific staff code
-                    List<Accountant> SpecificStaffAttendanceList = AllFullStaffAttendanceList
-                        .Where(a => a.StaffCode == staffCode)
-                        .ToList();
-
-                    Accountant obj = new Accountant { lstAllEmpAttendance = SpecificStaffAttendanceList };
-                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
-        {
-            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
-            new BreadcrumbItem { Name = "Staff Pay Roll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
-            new BreadcrumbItem { Name = "AttendenceOfAllStaffssAsync", Url = Url.Action("AttendenceOfAllStaffssAsync", "Accountant") }
-        };
-
-                ViewBag.Breadcrumbs = breadcrumbs;
-                return View(obj);
-                
-
-            }
-        }
-
-
-        /// <summary>
-        /// Advance Payment View 
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ActionResult> AdvanceStaffPaySSAsync()
-        {
-            if (Session["StaffCode"] == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                await LoadAndStoreAdvanceSSasync();
-
-                List<Accountant> AdvancePayStaffList = Session[AdvancePayStaffListSessionKey] as List<Accountant>;
-                Accountant obj = new Accountant { lstAllEmpAdvancePay = AdvancePayStaffList };
-                return PartialView("_AdvanceStaffPaySSAsync", obj);
-            }
-        }
-
-        /// <summary>
-        /// This Method Used to call method From bal class
-        /// </summary>
-        /// <returns></returns>
-        public async Task LoadAndStoreAdvanceSSasync()
-        {
-            string branchCode = Session["BranchCode"].ToString();
-            DataSet ds = await objbal.LoadAndStoreAdvanceSSasync(branchCode);
-            List<Accountant> AdvancePayStaffList = ConvertDataSetToAccountantAdvance(ds);
-            Session[AdvancePayStaffListSessionKey] = AdvancePayStaffList;
-        }
-
-        /// <summary>
-        /// Bind data with Model
-        /// </summary>
-        /// <param name="ds"></param>
-        /// <returns></returns>
-        public List<Accountant> ConvertDataSetToAccountantAdvance(DataSet ds)
-        {
-            List<Accountant> staffList = new List<Accountant>();
-            if (ds != null && ds.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-
-
-                    Accountant objP = new Accountant
-                    {
-                        StaffCode = dr["StaffCode"].ToString(),
-                        StaffName = dr["StaffName"].ToString(),
-                        //Status = dr["Status"].ToString(),
-                        DepartmentName = dr["DepartmentName"].ToString(),
-                        StaffPosition = dr["StaffPosition"].ToString(),
-                        AdvanceAmount = Convert.ToDecimal(dr["AdvanceAmount"]),
-                        MonthlyBasicSalary = Convert.ToDecimal(dr["MonthlyBasicSalary"]),
-                        // Date = isValidDate ? date.ToString("dd/MM/yyyy") : string.Empty,
-                    };
-                    staffList.Add(objP);
-                }
-            }
-            return staffList;
-        }
-
-        #endregion// Shrikant Staff PayRoll modules End here
+       
+        #endregion 
     }
 }

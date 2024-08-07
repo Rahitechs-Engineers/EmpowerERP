@@ -46,40 +46,7 @@ namespace GSTEducationERPLibrary.Accountant
                 throw new Exception("An error occurred while registering the assigned project. Details: " + ex.Message);
             }
         }
-        //public async Task<List<Accountant>> GetData(Accountant objU)
-        //{
-        //    List<Accountant> items = new List<Accountant>();
-        //    Param.Clear();
-        //    Param.Add("@flag", "ViewUser");
-
-        //    DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-        //    foreach (DataRow sdr in ds.Tables[0].Rows)
-        //    {
-        //        items.Add(new Accountant
-        //        {
-        //            VoucherId = Convert.ToInt32(sdr["VoucherId"]),
-        //            VoucherCode = sdr["VoucherCode"].ToString(),
-        //            VendorName = sdr["VendorName"].ToString(),
-        //            Amount = float.Parse(sdr["Amount"].ToString()),
-        //            AmountPaidTo = sdr["AmountPaidTo"].ToString(),
-        //            Description = sdr["Description"].ToString(),
-        //            PaymentMode = sdr["PaymentMode"].ToString(),
-        //            BankId = Convert.ToInt32(sdr["BankId"]),
-        //            ReceiverBankAccountNumber = Convert.ToInt64(sdr["ReceiverBankAccountNumber"]),
-        //            ReceiverBankAccountHolderName = sdr["ReceiverBankAccountHolderName"].ToString(),
-        //            ReceiverBankIFSCCode = sdr["ReceiverBankIFSCCode"].ToString(),
-        //            ReceiverBankName = sdr["ReceiverBankName"].ToString(),
-        //            Balance = float.Parse(sdr["Balance"].ToString()),
-        //            Currency = sdr["Currency"].ToString(),
-        //            TransactionId = sdr["TransactionId"].ToString(),
-        //            VoucherType = sdr["VoucherType"].ToString(),
-        //            VoucherDate = DateTime.Parse(sdr["VoucherDate"].ToString()),
-        //            StaffCode = sdr["StaffCode"].ToString(),
-        //            StatusId = Convert.ToInt32(sdr["StatusId"])
-        //        });
-        //    }
-        //    return items;
-        //}
+       
         public async Task<DataSet> GetVoucher(Accountant objT)
         {
             try
@@ -120,9 +87,69 @@ namespace GSTEducationERPLibrary.Accountant
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
+        public async Task<DataSet> VoucherTypeAsyncSGS(Accountant objT)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                Param.Add("@flag", "GetVoucherType");
+                DataSet ds1 = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving assigned projects. Details: " + ex.Message);
+            }
+        }
+        public async Task<DataSet> BankAccountforVoucherAsyncSGS(Accountant objT)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                Param.Add("@flag", "GetBankData");
+                Param.Add("@StaffCode", objT.StaffCode);
+                DataSet ds1 = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving assigned projects. Details: " + ex.Message);
+            }
+        }
+        public async Task<DataSet> StaffNameforVoucherAsyncSGS(Accountant objT)
+        {
+            try
+            {
+                Dictionary<string, string> Param = new Dictionary<string, string>();
+                Param.Add("@Flag", "GetStaffData");
+               // Param.Add("@StaffCode", objT.StaffCode);
+                Param.Add("@BranchCode", objT.BranchCode.ToString());
+                DataSet ds1 = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
+                return ds1;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving assigned projects. Details: " + ex.Message);
+            }
+        }
+        public async Task<string> GetMaxVoucherCodeAsyncSGS(Accountant obj)
+        {
+            Dictionary<String, String> Param = new Dictionary<String, String>();
+            Param.Add("@Flag", "GetMaxVoucherCodeAsyncSGS");
+            //Param.Add("@BranchCode", ObjA.BranchCode);
+            SqlDataReader ds = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
+            string LastTransactionCode = "";
+            while (ds.Read())
+            {
+                LastTransactionCode = ds["VoucherCode"].ToString();
+            }
+            string newPurchaseCode = IncrementPurchaseCode(LastTransactionCode);
+            return newPurchaseCode;
+        }
         #region //this is vishlas region for the purchase module
+        //=================================================================vishals purchase module starts here===========================================================================
         /// <summary>
-        /// making the methode for the incremental purchase codes
+        /// making the methode for getting the max purcchase code
         /// </summary>
         /// <param name="PurchaseCode"></param>
         /// <returns>NewPurchaseCode</returns>
@@ -130,15 +157,22 @@ namespace GSTEducationERPLibrary.Accountant
         {
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "GetMaxPurCodeAsncVP");
-            SqlDataReader ds = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
+            Param.Add("@BranchCode", obj.BranchCode);
+            SqlDataReader dr = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
             string LastTransactionCode = "";
-            while (ds.Read())
+            while (dr.Read())
             {
-                LastTransactionCode = ds["TransactionCode"].ToString();
+                LastTransactionCode = dr["TransactionCode"].ToString();
             }
             string newPurchaseCode = IncrementPurchaseCode(LastTransactionCode);
             return newPurchaseCode;
         }
+        /// <summary>
+        /// this method increatemnt the code here
+        /// </summary>
+        /// <param name="lastPurchaseCode"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static string IncrementPurchaseCode(string lastPurchaseCode)
         {
             // Define a regular expression to extract the numeric part
@@ -195,6 +229,7 @@ namespace GSTEducationERPLibrary.Accountant
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "ListPurchaseDetailsAsyncVP");
             Param.Add("@PurchaseCode", ObjA.PurchaseCode);
+            Param.Add("@BranchCode", ObjA.BranchCode);
             SqlDataReader dr = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
             return dr;
         }
@@ -208,7 +243,7 @@ namespace GSTEducationERPLibrary.Accountant
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "ListPurchasedItemsAsyncVP");
             Param.Add("@PurchaseCode", ObjA.PurchaseCode);
-            //Param.Add("@BranchCode", ObjA.BranchCode);
+            Param.Add("@BranchCode", ObjA.BranchCode);
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
@@ -221,7 +256,6 @@ namespace GSTEducationERPLibrary.Accountant
         {
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "ListHSNCategoryAsyncVP");
-            //Param.Add("@BranchCode", ObjA.BranchCode);
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
@@ -233,7 +267,6 @@ namespace GSTEducationERPLibrary.Accountant
         {
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "ListTaxAsyncVP");
-            //Param.Add("@BranchCode", ObjA.BranchCode);
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
@@ -247,7 +280,6 @@ namespace GSTEducationERPLibrary.Accountant
         {
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "ListStatusForPurchaseAsyncVP");
-            //Param.Add("@BranchCode", ObjA.BranchCode);
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
         }
@@ -261,6 +293,7 @@ namespace GSTEducationERPLibrary.Accountant
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "ValidatePurchaseAsyncVP");
             Param.Add("@PurchaseCode", ObjA.PurchaseCode);
+            Param.Add("@BranchCode", ObjA.BranchCode);
             SqlDataReader dr = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
             return dr;
         }
@@ -275,6 +308,7 @@ namespace GSTEducationERPLibrary.Accountant
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "SavePurchaseAsyncVP");
             Param.Add("@TransactionCode", ObjA.TransactionCode);
+            //Param.Add("@TransactionCode", ObjA.BillNumber);
             Param.Add("@VendorName", ObjA.VendorName);
             Param.Add("@TransactionDate", ObjA.TransactionDate.ToString("yyyy-MM-dd"));
             Param.Add("@TransactionAmount", 0.ToString());
@@ -403,6 +437,7 @@ namespace GSTEducationERPLibrary.Accountant
             Dictionary<String, String> Param = new Dictionary<String, String>();
             Param.Add("@Flag", "ListVoucherAsyncVP");
             Param.Add("@VendorName", ObjA.VendorName);
+            Param.Add("@BranchCode", ObjA.BranchCode);
             //Param.Add("@BranchCode", ObjA.PaymentMode);
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
             return ds;
@@ -419,218 +454,7 @@ namespace GSTEducationERPLibrary.Accountant
             Param.Add("@ItemId", ObjA.ItemId.ToString());
             await DBHelper.ExecuteStoreProcedure("GSTAccountant", Param);
         }
-        #region//not using vishals methodes
-        ///// <summary>
-        ///// fetching the banks for add purchase pages and purchase module
-        ///// </summary>
-        ///// <param name="ObjA"></param>
-        ///// <returns> the all the banks name registerd in database</returns>
-        //public async Task<DataSet> ListBankAsyncVP(Accountant ObjA)
-        //{
-        //    Dictionary<String, String> Param = new Dictionary<String, String>();
-        //    Param.Add("@Flag", "ListBanksAsyncVP");
-        //    Param.Add("@BranchCode", ObjA.BranchCode);
-        //    DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-        //    return ds;
-        //}
-        ///// <summary>
-        ///// fetching the bank holder name for select bank 
-        ///// </summary>
-        ///// <param name="bank name"></param>
-        ///// <returns>returns the account holder name with last four digits for the selected bank</returns>
-        //public async Task<DataSet> ListBankHolderNameAsyncVP(Accountant ObjA)
-        //{
-        //    Dictionary<String, String> Param = new Dictionary<String, String>();
-        //    Param.Add("@Flag", "ListBankACHolderAsyncVP");
-        //    Param.Add("@BankName", ObjA.BankName);
-        //    Param.Add("@BranchCode", ObjA.BranchCode);
-        //    DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-        //    return ds;
-        //}
-        #endregion
+       
         #endregion //vishals region ends here
-
-
-        //------------------Shrikant StaffPayRoll Start ----------------------------------------------------------//
-
-        /// <summary>
-        /// This Method Used to return Dataset of Staff List
-        /// </summary>
-        /// <param name="BranchCode"></param>
-        /// <returns></returns>
-        public async Task<DataSet> StaffListSSAsync(string BranchCode)
-        {
-            Dictionary<string, string> Param = new Dictionary<string, string>();
-            Param.Add("@Flag", "StaffListSSAsync");
-            Param.Add("@BranchCode", BranchCode);
-            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-            return ds;
-        }
-        /// <summary>
-        /// This Method used to To Bind Deparment to the DropDown
-        /// </summary>
-        /// <returns></returns>
-        public async Task<DataSet> DeparmentBindSSAsync()
-        {
-            Dictionary<string, string> Param = new Dictionary<string, string>();
-            Param.Add("@Flag", "DeparmentBindSSAsync");
-            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-            return ds;
-        }
-        /// <summary>
-        /// This Method Used To Bind Position to the DropDown
-        /// </summary>
-        /// <returns></returns>
-        public async Task<DataSet> PositionBindSSAsync()
-        {
-            Dictionary<string, string> Param = new Dictionary<string, string>();
-            Param.Add("@Flag", "PositionBindSSAsync");
-            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-            return ds;
-
-        }
-
-        /// <summary>
-        /// This Method Used to bind Attendance of Staff
-        /// </summary>
-        /// <param name="BranchCode"></param>
-        /// <param name="month"></param>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public async Task<DataSet> LoadAndStoreFullAttendanceSSasync(string BranchCode, string month, string year)
-        {
-            Dictionary<string, string> Param = new Dictionary<string, string>();
-            Param.Add("@Flag", "StaffAttendanceSSAsync");
-            Param.Add("@BranchCode", BranchCode);
-            Param.Add("@MonthStr", month);
-            Param.Add("@YearStr", year);
-            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-            return ds;
-        }
-
-        /// <summary>
-        /// This Method used to show Details of Staff
-        /// </summary>
-        /// <param name="StaffCode"></param>
-        /// <returns></returns>
-        public async Task<DataSet> DetailsOfStaffAsyncSS(string StaffCode)
-        {
-            Dictionary<string, string> Param = new Dictionary<string, string>();
-            Param.Add("@Flag", "DetailsOfStaffAsyncSS");
-            Param.Add("@StaffCode", StaffCode);
-            DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-            return ds;
-        }
-
-        /// <summary>
-        /// this method used to show all staff Salary
-        /// </summary>
-        /// <param name="staffCode"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<DataSet> ShowAllSalaryAsyncSS(string staffCode)
-        {
-            try
-            {
-                Dictionary<string, string> Param = new Dictionary<string, string>();
-                {
-                    Param.Add("@Flag", "ShowAllSalaryAsyncSS");
-                    Param.Add("@StaffCode", staffCode ?? string.Empty);
-                    //Param.Add("@FromDate", fromDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
-                    //Param.Add("@ToDate", toDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
-                };
-
-                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// this method used to get salary details 
-        /// </summary>
-        /// <param name="staffCode"></param>
-        /// <param name="fromDate"></param>
-        /// <param name="toDate"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<DataSet> GetSelfSalarySlipsAsyncAG(string staffCode, DateTime? fromDate, DateTime? toDate)
-        {
-            try
-            {
-                Dictionary<string, string> Param = new Dictionary<string, string>();
-                {
-                    Param.Add("@Flag", "ListESSAccountantSalarySlipAG");
-                    Param.Add("@StaffCode", staffCode ?? string.Empty);
-                    //Param.Add("@FromDate", fromDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
-                    //Param.Add("@ToDate", toDate?.ToString("yyyy-MM-dd") ?? DBNull.Value.ToString());
-                };
-
-                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
-            }
-        }
-
-        /// <summary>
-        /// Show Attendance od all Staff
-        /// </summary>
-        /// <param name="BranchCode"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<DataSet> ShowAttendanceOfAllStaffAsyncSS(string BranchCode,string month, string year)
-        {
-            try
-            {
-                Dictionary<string, string> Param = new Dictionary<string, string>();
-                {
-                    Param.Add("@Flag", "ShowAttendanceOfAllStaffAsyncSS");
-                    Param.Add("@BranchCode", BranchCode);
-                    Param.Add("@MonthStr", month);
-                    Param.Add("@YearStr", year);
-
-                };
-
-                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
-            }
-        }
-        /// <summary>
-        /// Load and Store Advance Salary 
-        /// </summary>
-        /// <param name="BranchCode"></param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
-        public async Task<DataSet> LoadAndStoreAdvanceSSasync(string BranchCode)
-        {
-            try
-            {
-                Dictionary<string, string> Param = new Dictionary<string, string>();
-                {
-                    Param.Add("@Flag", "LoadAndStoreAdvanceSSasync");
-                    Param.Add("@BranchCode", BranchCode);
-
-                };
-
-                DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTAccountant", Param);
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error retrieving self salary slips: {ex.Message}");
-            }
-        }
-        //------------------Shrikant StaffPayRoll End ----------------------------------------------------------//
-
     }
 }

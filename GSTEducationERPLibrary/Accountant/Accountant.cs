@@ -15,9 +15,12 @@ namespace GSTEducationERPLibrary.Accountant
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
         public int VoucherId { get; set; }
         public string VoucherCode { get; set; }
+        [Required(ErrorMessage = "Vendor Name is Requered")]
+        [DisplayName("Vendor Name")]
         public string VendorName { get; set; }
         public float Amount { get; set; }
         public string AmountPaidTo { get; set; }
+        [Required(ErrorMessage = "Description is Requered")]
         public string Description { get; set; }
         public string PaymentMode { get; set; }
         public int BankId { get; set; }
@@ -47,7 +50,7 @@ namespace GSTEducationERPLibrary.Accountant
 	public List<Accountant> lstPendingVoucher { get; set; }
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
         //----------------------------------------vishla's properties here-----------------------------------------------------------------------------------
-        #region
+        #region//vishals region starts here for purchase
         /// <summary>
         /// vishals properties starts from here 
         /// </summary>
@@ -76,10 +79,10 @@ namespace GSTEducationERPLibrary.Accountant
         /// properties for the purchase  table here
         /// </summary>
         public string TransactionCode { get; set; }
-
+        [Required]
         [DataType(DataType.Date)]
         [DisplayName("Transaction Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime TransactionDate { get; set; }
         [DisplayName("Paid amount")]
         public double TransactionAmount { get; set; }
@@ -98,49 +101,6 @@ namespace GSTEducationERPLibrary.Accountant
         public List<Accountant> lstTransactionVP = new List<Accountant>();
         #endregion
         //---------------------------vishals properties ends here-----------------------------------------------------------------------------------------------
-
-        //------------------Shrikant StaffPayRoll Start ----------------------------------------------------------//
-
-        #region 
-        public string StaffName { get; set; }
-        public string DepartmentName { get; set; }
-        public string Designation { get; set; }
-        public string StaffPosition { get; set; }
-        public string BranchName { get; set; }
-        public string CenterName { get; set; }
-        public string ClientName { get; set; }
-        public long AccountNo { get; set; }
-        public string IFSCCode { get; set; }
-        public decimal GrossSalary { get; set; }
-        public decimal AdvanceAmount { get; set; }
-        public decimal TotalAllowances { get; set; }
-        public decimal TotalDeductions { get; set; }
-        public decimal NetSalary { get; set; }
-        public decimal MonthlyBasicSalary { get; set; }
-        public decimal AdjustedNetSalary { get; set; }
-        public DateTime SalaryCreditedDate { get; set; }
-        public string Date { get; set; }
-        public List<Accountant> lstEmp { get; set; }
-        public List<Accountant> lstEmpAttendance { get; set; }
-        public List<Accountant> lstAllEmpAttendance { get; set; }
-        public List<Accountant> lstAllEmpAdvancePay { get; set; }
-        public List<Accountant> DepartmentList { get; set; }
-        public int DepartmentID { get; set; }
-        public int PaidDays { get; set; }
-        public int StaffPositionId { get; set; }
-        public int LeaveCount { get; set; }
-        public int PaidLeaveCount { get; set; }
-        public int Year { get; set; }
-        public int Month { get; set; }
-        public int ApprovedLeaveCount { get; set; }
-        public int PendingLeaveCount { get; set; }
-        public int PresentDays { get; set; }
-        public int AbsentDays { get; set; }
-        public decimal PayableDays { get; set; }
-
-        #endregion
-        //------------------Shrikant StaffPayRoll End ----------------------------------------------------------//
-
 
     }
 }

@@ -34,9 +34,3 @@ D:\Vishal's Project\GSTEduERP2\EmpowerERP\Helper\obj\Debug\Helper.csproj.Assembl
 D:\Vishal's Project\GSTEduERP2\EmpowerERP\Helper\obj\Debug\Helper.csproj.CoreCompileInputs.cache
 D:\Vishal's Project\GSTEduERP2\EmpowerERP\Helper\obj\Debug\Helper.dll
 D:\Vishal's Project\GSTEduERP2\EmpowerERP\Helper\obj\Debug\Helper.pdb
-C:\Users\Admin\Desktop\Github\EmpowerERP2\EmpowerERP3\Helper\bin\Debug\Helper.dll
-C:\Users\Admin\Desktop\Github\EmpowerERP2\EmpowerERP3\Helper\bin\Debug\Helper.pdb
-C:\Users\Admin\Desktop\Github\EmpowerERP2\EmpowerERP3\Helper\obj\Debug\Helper.csproj.AssemblyReference.cache
-C:\Users\Admin\Desktop\Github\EmpowerERP2\EmpowerERP3\Helper\obj\Debug\Helper.csproj.CoreCompileInputs.cache
-C:\Users\Admin\Desktop\Github\EmpowerERP2\EmpowerERP3\Helper\obj\Debug\Helper.dll
-C:\Users\Admin\Desktop\Github\EmpowerERP2\EmpowerERP3\Helper\obj\Debug\Helper.pdb
