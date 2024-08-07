@@ -11,7 +11,6 @@ namespace GSTEducationERPLibrary.Account
 {
     public class Account
     {
-     
         #region variable declare
 
         [Required]
@@ -30,6 +29,5 @@ namespace GSTEducationERPLibrary.Account
         public String Count { get; set; }
 
         #endregion
-
     }
 }
