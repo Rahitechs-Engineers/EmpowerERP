@@ -66,19 +66,28 @@
                             Designation
                         </th>
                         <th>
-                            LeaveCount
+                            Paid Days
+
                         </th>
                         <th>
-                            Approved Leave Count
+                            No Of
+                            Days
+                            Present
+
                         </th>
                         <th>
-                            Pending Leave Count
+                            Paid
+                            Leave
+
                         </th>
                         <th>
-                            Absent Days
+                            Unpaid
+                            Days
                         </th>
                         <th>
-                            Payable Days
+                            Net
+                            Payable
+                            Days
                         </th>
                         <th>
                             Monthly Basic Salary
@@ -111,13 +120,13 @@
                                     @Html.DisplayFor(modelItem => item.Designation)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.LeaveCount)
+                                    @Html.DisplayFor(modelItem => item.PaidDays)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.ApprovedLeaveCount)
+                                    @Html.DisplayFor(modelItem => item.PresentDays)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.PendingLeaveCount)
+                                    @Html.DisplayFor(modelItem => item.PaidLeaveCount)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.AbsentDays)
@@ -192,20 +201,6 @@
                 $('#totalSelectedSalary').text(total.toFixed(2));
             }
 
-            $('#DepartmentID').change(function () {
-                var departmentId = $(this).val();
-                $.ajax({
-                    url: '@Url.Action("WithIdListOfStaffSSAsync", "Accountant")',
-                    type: 'GET',
-                    data: { DepartmentID: departmentId },
-                    success: function (result) {
-                        $('#staffListBody').html(result);
-                    },
-                    error: function (xhr, status, error) {
-                        console.error('Error:', error);
-                    }
-                });
-            });
 
             $('.icon').click(function () {
                 var action = $(this).data('action');

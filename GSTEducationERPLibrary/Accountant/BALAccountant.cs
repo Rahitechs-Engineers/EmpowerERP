@@ -584,7 +584,7 @@ namespace GSTEducationERPLibrary.Accountant
         /// <param name="BranchCode"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public async Task<DataSet> ShowAttendanceOfAllStaffAsyncSS(string BranchCode)
+        public async Task<DataSet> ShowAttendanceOfAllStaffAsyncSS(string BranchCode,string month, string year)
         {
             try
             {
@@ -592,6 +592,8 @@ namespace GSTEducationERPLibrary.Accountant
                 {
                     Param.Add("@Flag", "ShowAttendanceOfAllStaffAsyncSS");
                     Param.Add("@BranchCode", BranchCode);
+                    Param.Add("@MonthStr", month);
+                    Param.Add("@YearStr", year);
 
                 };
 

@@ -29,22 +29,25 @@
                             @Html.DisplayNameFor(model => model.StaffCode)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.StaffName)
+                           Name
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.DepartmentName)
+                            Department
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.Designation)
                         </th>
                         <th>
-                            @Html.DisplayNameFor(model => model.BankName)
+                            Bank Name
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.AccountNo)
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.IFSCCode)
+                        </th>
+                        <th>
+                            Branch Name
                         </th>
                         <th>
                             @Html.DisplayNameFor(model => model.GrossSalary)
@@ -85,6 +88,10 @@
                                 <td>
                                     @Html.DisplayFor(modelItem => item.IFSCCode)
                                 </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.BranchName)
+                                </td>
+
                                 <td>@item.GrossSalary.ToString("C", new CultureInfo("en-IN"))</td>
 
                                 <td style="text-align: center;">

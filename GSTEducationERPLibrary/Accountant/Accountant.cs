@@ -126,6 +126,7 @@ namespace GSTEducationERPLibrary.Accountant
         public List<Accountant> lstAllEmpAdvancePay { get; set; }
         public List<Accountant> DepartmentList { get; set; }
         public int DepartmentID { get; set; }
+        public int PaidDays { get; set; }
         public int StaffPositionId { get; set; }
         public int LeaveCount { get; set; }
         public int PaidLeaveCount { get; set; }
@@ -135,7 +136,7 @@ namespace GSTEducationERPLibrary.Accountant
         public int PendingLeaveCount { get; set; }
         public int PresentDays { get; set; }
         public int AbsentDays { get; set; }
-        public int PayableDays { get; set; }
+        public decimal PayableDays { get; set; }
 
         #endregion
         //------------------Shrikant StaffPayRoll End ----------------------------------------------------------//

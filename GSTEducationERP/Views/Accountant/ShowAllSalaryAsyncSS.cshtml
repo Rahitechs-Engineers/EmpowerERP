@@ -161,17 +161,26 @@
                 <div class="row">
                     <h2 class="col">Salary Details </h2>
                 </div>
-                <div class="row">
+                @*<div class="row">
                     <div class="col-md-3 form-group d-flex align-items-center justify-content-start" id="rowmonth">
                         <label style="font-size: 15px; margin-right: 10px;" id="monthLabel">Month And Year</label>
                         <input type="month" name="month" id="monthandyear" class="form-control">
                     </div>
-                </div>
+                </div>*@
+                <div class="row">
+                    @foreach (var slip in ViewBag.SalarySlips)
+                    {
+                        <div class="col-md-12">
+                            <h3>Staff Name: @slip.StaffName</h3>
+                            <h3>Staff Position: @slip.StaffPosition</h3>
+                        </div>
+                        break;
+                    }
 
+                </div>
             </div>
-        </div>
         <div class="card-body">
-            <div>
+        
 
 
                 <div class="container-fluid" style="overflow-x: auto;">
@@ -183,8 +192,8 @@
                                 <thead>
                                     <tr>
                                         <th hidden>Staff Code</th>
-                                        <th>Staff Name</th>
-                                        <th>Staff Position</th>
+                                        @*<th>Staff Name</th>
+                                        <th>Staff Position</th>*@
                                        
                                         <th>Gross Salary</th>
                                        
@@ -198,8 +207,8 @@
                                     {
                                         <tr>
                                             <td hidden>@slip.StaffCode</td>
-                                            <td>@slip.StaffName</td>
-                                            <td>@slip.StaffPosition</td>
+                                           @* <td>@slip.StaffName</td>
+                                            <td>@slip.StaffPosition</td>*@
                                           
                                             <td>@slip.GrossSalary.ToString("C", new CultureInfo("en-IN"))</td>
                                            

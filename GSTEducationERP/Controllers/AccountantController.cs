@@ -1170,6 +1170,7 @@ namespace GSTEducationERP.Controllers
                         DepartmentName = dr["Department"].ToString(),
                         Designation = dr["Designation"].ToString(),
                         BankName = dr["Bank"].ToString(),
+                        BranchName = dr["Branch Name"].ToString(),
                         AccountNo = Convert.ToInt64(dr["Account Number"].ToString()),
                         IFSCCode = dr["IFSCCode"].ToString(),
                         GrossSalary = Convert.ToInt64(dr["GrossSalary"])
@@ -1312,11 +1313,12 @@ namespace GSTEducationERP.Controllers
                         StaffName = dr["StaffName"].ToString(),
                         DepartmentName = dr["DepartmentName"].ToString(),
                         Designation = dr["Designation"].ToString(),
+                        PaidDays = Convert.ToInt32(dr["TotalMonthDays"].ToString()),
                         PaidLeaveCount = Convert.ToInt32(dr["PaidLeaveCount"].ToString()),
-                        //ApprovedLeaveCount = Convert.ToInt32(dr["ApprovedLeaveCount"].ToString()),
                         //PendingLeaveCount = Convert.ToInt32(dr["PendingLeaveCount"].ToString()),
+                        PresentDays = Convert.ToInt32(dr["WorkedDays"]),
                         AbsentDays = Convert.ToInt32(dr["AbsentDays"]),
-                        PayableDays = Convert.ToInt32(dr["PayableDays"]),
+                        PayableDays = Convert.ToDecimal(dr["PayableDays"]),
                         MonthlyBasicSalary = Convert.ToDecimal(dr["MonthlyBasicSalary"]),
                         AdjustedNetSalary = Convert.ToDecimal(dr["AdjustedNetSalary"])
                     };
@@ -1470,7 +1472,7 @@ namespace GSTEducationERP.Controllers
         public async Task LoadAndStoreAllFullAttendanceSSasync(string month, string year)
         {
             string branchCode = Session["BranchCode"].ToString();
-            DataSet ds = await objbal.ShowAttendanceOfAllStaffAsyncSS(branchCode);
+            DataSet ds = await objbal.ShowAttendanceOfAllStaffAsyncSS(branchCode, month, year);
             List<Accountant> AllFullStaffAttendanceList = ConvertDataSetToAccountantAttendance(ds);
             Session[AllStaffAttendanceListSessionKey] = AllFullStaffAttendanceList;
         }
@@ -1540,14 +1542,22 @@ namespace GSTEducationERP.Controllers
             {
                 List<Accountant> AllFullStaffAttendanceList = Session[AllStaffAttendanceListSessionKey] as List<Accountant>;
 
-               
+            
                     // Filter the list for the specific staff code
                     List<Accountant> SpecificStaffAttendanceList = AllFullStaffAttendanceList
                         .Where(a => a.StaffCode == staffCode)
                         .ToList();
 
                     Accountant obj = new Accountant { lstAllEmpAttendance = SpecificStaffAttendanceList };
-                    return View(obj);
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem { Name = "AccountantDashboard", Url = Url.Action("AccountantDashboardAsyncSGS", "Accountant") },
+            new BreadcrumbItem { Name = "Staff Pay Roll", Url = Url.Action("GetStaffForPaySSAsync", "Accountant") },
+            new BreadcrumbItem { Name = "AttendenceOfAllStaffssAsync", Url = Url.Action("AttendenceOfAllStaffssAsync", "Accountant") }
+        };
+
+                ViewBag.Breadcrumbs = breadcrumbs;
+                return View(obj);
                 
 
             }
