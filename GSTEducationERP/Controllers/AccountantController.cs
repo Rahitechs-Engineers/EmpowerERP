@@ -23,7 +23,17 @@ namespace GSTEducationERP.Controllers
             public string Name { get; set; }
             public string Url { get; set; }
         }
+<<<<<<< HEAD
+<<<<<<< HEAD
 
+
+
+=======
+       
+>>>>>>> 66d0e4c38599ef06cb45f8fd86ad0bce370e359f
+=======
+
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
         // GET: Accountant
         public ActionResult AccountantDashboardAsyncSGS()
         {
@@ -1100,6 +1110,478 @@ namespace GSTEducationERP.Controllers
             }
         }
         //------------------------------------Vishal's Purchase Modules ends here------------------------------------------------------------
+<<<<<<< HEAD
+<<<<<<< HEAD
+        #endregion
+
+        #region//Mukesh Expense Modal Start Here
+
+        public async Task<ActionResult> ExpenseDashboardAsyncMB()
+        {
+            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+                 {
+                     new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncSGS" },
+                     new BreadcrumbItem { Name = "Expense List", Url = "ExpenseDashboardAsyncMB" },
+                 };
+            ViewBag.Breadcrumbs = breadcrumbs;
+            return await Task.Run(() => View("ExpenseDashboardAsyncMB"));
+        }
+
+        //public string ExpId;
+        /// <summary>
+        /// List of Regular, Refund,Reference and Other Expenses
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns> ExpenseView</returns>
+        [HttpGet]
+        public async Task<ActionResult> ListOfExpensesAsyncMB(string Id)
+        {
+
+            if (Session["StaffCode"] == null)
+            {
+                return await Task.Run(() => RedirectToAction("Login", "Account"));
+            }
+            else
+            {
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+                 {
+                     new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncSGS" },
+                     new BreadcrumbItem { Name = "Expense List", Url = "ExpenseDashboardAsyncMB" },
+                 };
+                ViewBag.Breadcrumbs = breadcrumbs;
+                ViewBag.Currency = "&#x20b9;";
+                objac.ExpID = Id;
+                Session["ID"] = Id;
+                DataSet ds = await objbal.ListOfExpensesAsyncMB(objac);
+                List<Accountant> lstRegularExpense = new List<Accountant>();
+
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+
+                    Accountant objP = new Accountant();
+                    objP.TransactionCode = (ds.Tables[0].Rows[i]["TransactionCode"].ToString());
+                    objP.ExpenseType = ds.Tables[0].Rows[i]["ExpenseType"].ToString();
+                    objP.ReferenceByName = ds.Tables[0].Rows[i]["Name"].ToString();
+                    objP.ReferenceToName = ds.Tables[0].Rows[i]["ReferenceToCandidate"].ToString();
+                    objP.VendorName = ds.Tables[0].Rows[i]["Name"].ToString();
+                    objP.Date = Convert.ToDateTime(ds.Tables[0].Rows[i]["TransactionDate"].ToString());
+                    objP.PaymentMode = ds.Tables[0].Rows[i]["PaymentMode"].ToString();
+                    objP.TranscationId = ds.Tables[0].Rows[i]["TransactionID_checqueNumber"].ToString();
+                    objP.TranscationChequedate = (ds.Tables[0].Rows[i]["ChequeClearenceDate"].ToString());
+                    objP.Amount = int.Parse(ds.Tables[0].Rows[i]["TransactionAmount"].ToString());
+                    objP.Balance = int.Parse(ds.Tables[0].Rows[i]["BalanceAmount"].ToString());
+                    objP.Status = ds.Tables[0].Rows[i]["Status"].ToString();
+                    objP.Description = ds.Tables[0].Rows[i]["Description"].ToString();
+                    objP.TotalAmount = objP.Amount + objP.Balance;
+                    lstRegularExpense.Add(objP);
+                }
+                objac.lstRegularExpense = lstRegularExpense;
+                Session["ListforFilter"] = lstRegularExpense;
+                Session["Currency"] = "&#x20b9;";
+                return PartialView("ListOfExpensesAsyncMB", objac);
+
+
+
+            }
+
+        }
+
+        /// <summary>
+        /// Filter use for list the filter of Expenses with status and date
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="startDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns>listofexpense</returns>
+        [HttpGet]
+        public async Task<ActionResult> Filterforlist(string status, DateTime? startDate, DateTime? endDate)
+        {
+            try
+            {
+                List<Accountant> purchases = Session["ListforFilter"] as List<Accountant>;
+
+                if (status == "SelectAll")
+                {
+                    purchases = purchases.ToList();
+                }
+                if (!string.IsNullOrEmpty(status) && status != "SelectAll")
+                {
+                    purchases = purchases.Where(p => p.Status == status).ToList();
+                }
+
+                if (startDate.HasValue)
+                {
+                    purchases = purchases.Where(p => p.Date >= startDate.Value).ToList();
+                }
+
+                if (endDate.HasValue)
+                {
+                    purchases = purchases.Where(p => p.Date <= endDate.Value).ToList();
+                }
+                ViewBag.Currency = Session["Currency"].ToString();
+                Accountant obj = new Accountant { lstRegularExpense = purchases };
+                obj.ExpID = Session["ID"].ToString();
+                return await Task.Run(() => PartialView("ListOfExpensesAsyncMB", obj));
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = ex.Message;
+                return await Task.Run(() => View("error"));
+            }
+        }
+
+        /// <summary>
+        /// here we can pass the data to Add Expense modal
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> AddExpensesAsyncMB()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return await Task.Run(() => RedirectToAction("Login", "Account"));
+            }
+            else
+            {
+
+                Accountant obj = new Accountant();
+                obj.Date = DateTime.Now;
+                await GetExpenceCategoryMB();
+                await GetRefundCandidate();
+                await GetReferenceByStudentsAsyncMB();
+                await ListVoucherAsyncMB();
+                await GetStaffNameAsyncMB();
+                return PartialView(obj);
+            }
+
+        }
+
+        /// <summary>
+        /// get the refund candidate 
+        /// </summary>
+        /// <returns>AddExpenseView</returns>
+        [HttpGet]
+
+        public async Task GetRefundCandidate()
+        {
+            DataSet ds = await objbal.GetRefundCandidateMB();
+            List<SelectListItem> lstRefundCandidate = new List<SelectListItem>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                lstRefundCandidate.Add(new SelectListItem { Text = dr["FullName"].ToString(), Value = dr["CandidateCode"].ToString() });
+            }
+
+            await Task.Run(() => ViewBag.RefundCandidatelst = lstRefundCandidate);
+
+        }
+
+        /// <summary>
+        /// get the refund candiadate paid fee 
+        /// </summary>
+        /// <param name="CandidateCode"></param>
+        /// <returns> addexpenseview</returns>
+        [HttpGet]
+        public async Task<JsonResult> GetRefundCandidatesPaidFee(string CandidateCode)
+        {
+            Accountant obj = new Accountant();
+            obj.CandidateCode = CandidateCode;
+            SqlDataReader dr = await objbal.GetRefundCandidatesPaidFee(obj);
+            string CandidatePaidFee = string.Empty;
+
+            while (dr.Read())
+            {
+                CandidatePaidFee = dr["TransactionAmount"].ToString();
+            }
+
+            return Json(new { success = true, CandidatePaidFee = CandidatePaidFee }, JsonRequestBehavior.AllowGet);
+
+        }
+
+        /// <summary>
+        /// Get the Reference By Candiadate 
+        /// </summary>
+        /// <returns>AddExpenseView</returns>
+        [HttpGet]
+        public async Task GetReferenceByStudentsAsyncMB()
+        {
+            DataSet ds = await objbal.GetReferenceByCandidatesAsyncMB();
+            List<SelectListItem> lstReferenceByStudent = new List<SelectListItem>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                lstReferenceByStudent.Add(new SelectListItem { Text = dr["FullName"].ToString(), Value = dr["RefBy"].ToString() });
+            }
+            await Task.Run(() => ViewBag.ReferenceByStudentlst = lstReferenceByStudent);
+        }
+
+        /// <summary>
+        /// Get the staffname for giving them Advance
+        /// </summary>
+        /// <returns>AddExpenseView </returns>
+        [HttpGet]
+        public async Task GetStaffNameAsyncMB()
+        {
+            DataSet ds = await objbal.GetStaffNameAsyncMB();
+            List<SelectListItem> lstStaff = new List<SelectListItem>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                lstStaff.Add(new SelectListItem { Text = dr["StaffName"].ToString(), Value = dr["StaffCode"].ToString() });
+            }
+            await Task.Run(() => ViewBag.lstStaff = lstStaff);
+        }
+
+        /// <summary>
+        /// Get Reference To Candidate 
+        /// </summary>
+        /// <param name="CandidateCode"></param>
+        /// <returns>AddExpenseView</returns>
+        [HttpGet]
+
+        public async Task<JsonResult> GettheReferenceToCandidateAsyncMB(string CandidateCode)
+        {
+            Accountant obj = new Accountant();
+            obj.CandidateCode = CandidateCode;
+            DataSet ds = await objbal.GetReferenceToCandidatesAsyncMB(obj);
+            List<SelectListItem> ReferenceToCandidate = new List<SelectListItem>();
+
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                ReferenceToCandidate.Add(new SelectListItem { Text = dr["FullName"].ToString(), Value = dr["RefTo"].ToString() });
+            }
+
+            return Json(new { success = true, candidates = ReferenceToCandidate }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Get Expense Category
+        /// </summary>
+        /// <returns>AddExpenseView</returns>
+        [HttpGet]
+        public async Task GetExpenceCategoryMB()
+        {
+            DataSet ds = await objbal.GetExpenceCategoryMB();
+            List<SelectListItem> Courselist = new List<SelectListItem>();
+            foreach (DataRow dr in ds.Tables[0].Rows)
+            {
+                Courselist.Add(new SelectListItem { Text = dr["ExpenseCategory"].ToString(), Value = dr["ExpenseCategoryId"].ToString() });
+            }
+            await Task.Run(() => ViewBag.CourseList = Courselist);
+
+        }
+
+        /// <summary>
+        /// Get Expense Type when we select expense Category
+        /// </summary>
+        /// <param name="ExpCategoryId"></param>
+        /// <returns>AddExpenseView</returns>
+        [HttpGet]
+        public async Task<JsonResult> GetExpenceTypeAsynMB(int ExpCategoryId)
+        {
+            Accountant obj = new Accountant();
+            obj.ExpID = Convert.ToInt32(ExpCategoryId).ToString();
+            SqlDataReader dr = await objbal.GetTheExpenceTypeAsyncMB(obj);
+            string expenseType = string.Empty;
+
+            while (dr.Read())
+            {
+                expenseType = dr["ExpenseType"].ToString();
+            }
+
+            return Json(new { success = true, expenseType = expenseType }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+        /// <summary>
+        /// Save All Expenses Here 
+        /// </summary>
+        /// <param name="objA"></param>
+        /// <param name="ReferenceToCandidateCode"></param>
+        /// <param name="EmployeeCode"></param>
+        /// <returns>ExpenseDashboardView</returns>
+        [HttpPost]
+        public async Task<JsonResult> AddExpensesAsyncMB(Accountant objA, String ReferenceToCandidateCode, string EmployeeCode)
+        {
+            if (Session["StaffCode"] == null)
+            {
+                return Json(new { success = false, redirect = Url.Action("Login", "Account") });
+            }
+            else
+            {
+                try
+                {
+                    string maxCode = null;
+                    string newCode;
+                    SqlDataReader dr = await objbal.GetMaxExpenseCodeForAutoIncrement();
+                    if (dr.Read())
+                    {
+                        maxCode = dr["MaxCode"].ToString();
+                    }
+
+
+                    if (string.IsNullOrEmpty(maxCode))
+                    {
+                        newCode = "EXP001";
+                    }
+                    else
+                    {
+                        int numericPart = int.Parse(maxCode.Substring(3)) + 1;
+                        newCode = "EXP" + numericPart.ToString("D3");
+                    }
+
+                    objA.TransactionCode = newCode;
+                    if (objA.ExpID == "3")
+                    {
+                        objA.ReferenceToName = ReferenceToCandidateCode;
+
+                    }
+
+                    if (objA.ExpID == "5")
+                    {
+                        objA.Comment = EmployeeCode;
+
+                    }
+                    if (objA.ExpID == "4")
+                    {
+                        objA.StaffCode_CandidateCode = EmployeeCode;
+
+                    }
+
+                    objA.LoginStaffCode = Session["StaffCode"].ToString();
+
+
+                    await objbal.SavetheExpenceMB(objA);
+
+                    return Json(new { success = true, newCode = newCode });
+                }
+                catch (Exception ex)
+                {
+                    // Log the error
+                    Console.WriteLine(ex.Message);
+                    return Json(new { success = false, message = ex.Message });
+                }
+            }
+
+
+        }
+
+        //pop up for the match voucher start here
+        [HttpGet]
+        public async Task<ActionResult> ExpenseMatchVoucherAsyncVM(string TCode, float Amount)
+        {
+            Accountant obj = new Accountant();
+            obj.TransactionCode = TCode;
+            obj.Amount = Amount;
+            await ListVoucherAsyncMB();
+            return PartialView("_MatchVoucherAsyncVMB", obj);
+        }
+
+        /// <summary>
+        /// List the voucher to match with transcation 
+        /// </summary>
+        /// <returns>MatchVoucher</returns>
+        [HttpGet]
+        private async Task ListVoucherAsyncMB()
+        {
+            if (Session["StaffCode"] == null)
+            {
+                //return RedirectToAction("Login", "Account");
+            }
+            else
+            {
+                Accountant objac = new Accountant();
+
+                //fetching the banks here for the add purchase 
+                DataSet ds = await objbal.ListVouchersAsyncMB();
+                List<SelectListItem> VoucherList = new List<SelectListItem>();
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    VoucherList.Add(new SelectListItem { Text = $"{dr["VoucherCode"].ToString() + "-" + dr["VendorName"].ToString() + "-" + dr["Balance"].ToString()}", Value = dr["VoucherCode"].ToString() });
+                }
+                ViewBag.VoucherCode = VoucherList;
+                //return await Task.Run(() => Json(VoucherList, JsonRequestBehavior.AllowGet));
+            }
+        }
+
+        /// <summary>
+        /// MatchVoucher with Transcation
+        /// </summary>
+        /// <param name="TCode"></param>
+        /// <param name="Amount"></param>
+        /// <returns></returns>
+
+        //[HttpGet]
+        //public async Task<ActionResult> ExpenseMatchVoucherAsyncVM(string TCode, float Amount)
+        //{
+        //    Accountant obj = new Accountant();
+        //    obj.TransactionCode = TCode;
+        //    obj.Amount = Amount;
+
+        //    await ListVoucherAsyncMB();
+        //    return PartialView("_MatchVoucherAsyncVM", obj);
+        //}
+
+
+        /// <summary>
+        /// Update the voucher which are selected
+        /// </summary>
+        /// <param name="paidAmount"></param>
+        /// <param name="voucherCodes"></param>
+        /// <param name="TranscationCode"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> UpdateTheVoucherAmountAsyncMB(float? paidAmount, List<string> voucherCodes, string TranscationCode)
+        {
+
+            Accountant obj = new Accountant();
+            List<(string VoucherCode, double Balance)> voucherBalances = new List<(string, double)>();
+
+            // Fetch balances for the selected vouchers
+            foreach (var voucherCode in voucherCodes)
+            {
+                obj.VoucherCode = voucherCode;
+                SqlDataReader dr = await objbal.GetVoucherAmountAsyncMB(obj);
+                while (dr.Read())
+                {
+                    voucherBalances.Add((voucherCode, double.Parse(dr["Balance"].ToString())));
+                }
+            }
+
+            double remainingPaidAmount = paidAmount.Value;
+
+            foreach (var (VoucherCode, Balance) in voucherBalances)
+            {
+                if (remainingPaidAmount <= 0)
+                {
+                    break;
+                }
+
+                double amountToUse = Math.Min(remainingPaidAmount, Balance);
+                remainingPaidAmount -= amountToUse;
+                double newBalance = Balance - amountToUse;
+
+                obj.VoucherCode = VoucherCode;
+                obj.Amount = float.Parse(amountToUse.ToString());
+                obj.TransactionCode = TranscationCode;
+
+                await objbal.VoucherLinkWithTransaction(obj);
+            }
+
+            return Json(new { success = true, redirectUrl = Url.Action("ExpenseDashboardAsyncMB", "Accountant") }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        /// <summary>
+        /// here we can show the detail expense 
+        /// </summary>
+        /// <param name="TCode"></param>
+        /// <param name="ExpId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public async Task<ActionResult> ViewTransactionAsyncMB(string TCode, string ExpId)
+        {
+            Accountant objac = new Accountant();
+=======
         #endregion
         #region//Jay
         //----------------Jayash-  Accountant -----------------------------------start //
@@ -1110,10 +1592,121 @@ namespace GSTEducationERP.Controllers
         [HttpGet]
         public async Task<ActionResult> GetPersonalAttendanceAsyncJY(string year, string month)
         {
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
             if (Session["StaffCode"] == null)
             {
                 return RedirectToAction("Login", "Account");
             }
+<<<<<<< HEAD
+            else
+            {
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+                 {
+                     new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncSGS" },
+                     new BreadcrumbItem { Name = "Expense", Url = "ExpenseDashboardAsyncMB" },
+                     new BreadcrumbItem { Name = "View Detail Transactions", Url = "ViewTransactionAsyncMB" },
+                 };
+                ViewBag.Breadcrumbs = breadcrumbs;
+                objac.TransactionCode = TCode;
+                SqlDataReader dr;
+                dr = await objbal.ListExpenseDetailsAsyncMB(objac);
+                if (dr.Read())
+                {
+                    DateTime transactionDate = Convert.ToDateTime(dr["TransactionDate"]);
+                    ViewBag.TransactionDate = transactionDate.ToString("dd-MM-yyyy");
+                    ViewBag.TransactionCode = TCode;
+                    ViewBag.VendorName = dr["VendorName"].ToString();
+                    ViewBag.TransactionAmount = dr["TransactionAmount"].ToString() == "0" ? 0 : long.Parse(dr["TransactionAmount"].ToString());
+                    ViewBag.BalanceAmount = dr["BalanceAmount"].ToString() == "0" ? 0 : long.Parse(dr["BalanceAmount"].ToString());
+                    ViewBag.ReferenceToCandidate = dr["RefToCandidate"].ToString();
+                    ViewBag.RefundCandidate = dr["RefundCandidate"].ToString();
+                    ViewBag.Description = dr["Description"].ToString();
+                }
+                Session["TCode"] = TCode;
+                objac.ExpID = ExpId;
+
+                // Fetch the list of purchased items
+                var (listitem, listtransaction) = await ListExpenseDetailsAsyncMB();
+                //List<Accountant> listitems = await ListExpenseDetailsAsyncMB();
+                objac.ListGiveExpenseMB = listitem;
+                objac.ListMatchVoucheToExpense = listtransaction;
+                ViewBag.transactionList = listtransaction;
+
+                // Giving the currency hard coded
+                ViewBag.Currency = "&#x20b9;";
+
+
+                return await Task.Run(() => View("ViewTransactionAsyncMB", objac));
+            }
+        }
+
+        /// <summary>
+        /// here we can deatils transaction details with match voucher
+        /// </summary>
+        /// <returns></returns>
+        private async Task<(List<Accountant>, List<Accountant>)> ListExpenseDetailsAsyncMB()
+        {
+            Accountant objA = new Accountant();
+            List<Accountant> lstitems = new List<Accountant>();
+            List<Accountant> lsttransaction = new List<Accountant>();
+
+            objA.TransactionCode = Session["TCode"].ToString();
+            DataSet ds = await objbal.ListExpenseVoucherAsyncMB(objA);
+
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                {
+                    Accountant objP = new Accountant();
+                    objP.VendorName = (ds.Tables[0].Rows[i]["VendorName"].ToString());
+                    objP.ReferenceToName = (ds.Tables[0].Rows[i]["RefToCandidate"].ToString());
+                    objP.StudentName = (ds.Tables[0].Rows[i]["RefundCandidate"].ToString());
+                    objP.TransactionCode = Session["TCode"].ToString();
+                    objP.Amount = int.Parse(ds.Tables[0].Rows[i]["TransactionAmount"].ToString());
+                    objP.Balance = int.Parse(ds.Tables[0].Rows[i]["BalanceAmount"].ToString());
+                    objP.Description = (ds.Tables[0].Rows[i]["Description"].ToString());
+                    objP.TransactionAmount = objP.Amount + objP.Balance;
+
+                    lstitems.Add(objP);
+                }
+            }
+
+            if (ds != null && ds.Tables.Count > 0 && ds.Tables[1].Rows.Count > 0)
+            {
+                for (int i = 0; i < ds.Tables[1].Rows.Count; i++)
+                {
+                    Accountant objT = new Accountant();
+
+                    string mode = ds.Tables[1].Rows[i]["PaymentMode"].ToString();
+                    objT.Date = Convert.ToDateTime(ds.Tables[1].Rows[i]["Date"]);
+                    objT.VoucherCode = ds.Tables[1].Rows[i]["VoucherCode"].ToString();
+                    objT.PaymentMode = mode;
+                    if (mode == "BANK")
+                    {
+                        objT.TransactionId = ds.Tables[1].Rows[i]["TransactionId_ChequeNo"].ToString();
+                    }
+                    else if (mode == "CHEQUE")
+                    {
+                        objT.TransactionId = ds.Tables[1].Rows[i]["TransactionId_ChequeNo"].ToString();
+                        objT.ChequeDate = string.IsNullOrEmpty(ds.Tables[1].Rows[i]["ChequeDate"].ToString()) ? DateTime.MinValue : Convert.ToDateTime(ds.Tables[1].Rows[i]["ChequeDate"]);
+                        objT.ChequeClearenceDate = string.IsNullOrEmpty(ds.Tables[1].Rows[i]["ChequeClearenceDate"].ToString()) ? DateTime.MinValue : Convert.ToDateTime(ds.Tables[1].Rows[i]["ChequeClearenceDate"]);
+                    }
+                    objT.TransactionAmount = int.Parse(ds.Tables[1].Rows[i]["Amount"].ToString());
+                    objT.Balance = int.Parse(ds.Tables[1].Rows[i]["BalanceAmount"].ToString());
+
+
+                    lsttransaction.Add(objT);
+                }
+            }
+            return (lstitems, lsttransaction);
+        }
+
+        #endregion
+=======
+       
+        #endregion 
+>>>>>>> 66d0e4c38599ef06cb45f8fd86ad0bce370e359f
+=======
 
             // Get the current date
             DateTime currentDate = DateTime.Now;
@@ -1271,5 +1864,6 @@ namespace GSTEducationERP.Controllers
 
 
         #endregion
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
     }
 }

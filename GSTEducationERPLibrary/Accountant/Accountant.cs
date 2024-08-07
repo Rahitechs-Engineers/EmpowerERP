@@ -10,8 +10,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace GSTEducationERPLibrary.Accountant
 {
-	public class Accountant
-	{
+    public class Accountant
+    {
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
         public int VoucherId { get; set; }
         public string VoucherCode { get; set; }
@@ -44,7 +44,7 @@ namespace GSTEducationERPLibrary.Accountant
         public string StaffCode { get; set; }
         public int StatusId { get; set; }
         public List<Accountant> lstVoucher { get; set; }
-	public List<Accountant> lstPendingVoucher { get; set; }
+        public List<Accountant> lstPendingVoucher { get; set; }
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
         //----------------------------------------vishla's properties here-----------------------------------------------------------------------------------
         #region
@@ -102,6 +102,41 @@ namespace GSTEducationERPLibrary.Accountant
         //----------------Jayash-  Accountant -----------------------------------start //
         public List<Accountant> LstAttendence { get; set; }
 
+<<<<<<< HEAD
+        #region//Mukesh Expense Modal Start Here
+        //---------------------Mukesh Expence Properties---------------------------------------//
+        public string ExpID { get; set; }
+        public string ExpenseType { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Transaction Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public DateTime Date { get; set; }
+        public string TranscationId { get; set; }
+
+        [DataType(DataType.Date)]
+        [DisplayName("Transaction Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public string Comment { get; set; }
+        public string StudentName { get; set; }
+        public string PaidFee { get; set; }
+        public string ReferenceByName { get; set; }
+        public string ReferenceToName { get; set; }
+        public string CandidateCode { get; set; }
+        public string TranscationChequedate { get; set; }
+        public float TotalAmount { get; set; }
+        public string LoginStaffCode { get; set; }
+        public string StaffCode_CandidateCode { get; set; }
+
+
+        public List<Accountant> lstRegularExpense { get; set; }
+        public List<Accountant> lstExpenseMB { get; set; }
+        public List<Accountant> ListGiveExpenseMB { get; set; }
+        public List<Accountant> ListMatchVoucheToExpense { get; set; }
+
+        public List<Accountant> lstExpenseMB1 { get; set; }
+
+=======
         public string ProvisionalReceiptNo { get; set; }
         public string addressPart1 { get; set; }
         public string addressPart2 { get; set; }
@@ -147,6 +182,7 @@ namespace GSTEducationERPLibrary.Accountant
         public int CurrentInstallment { get; set; }
 
         //----------------Jayash-  Accountant -----------------------------------End //
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
         #endregion
     }
 }

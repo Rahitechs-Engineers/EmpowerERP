@@ -1162,10 +1162,22 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+<<<<<<< HEAD
+<<<<<<< HEAD
+    <Content Include="Views\Accountant\AddExpensesAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\ExpenseDashboardAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\ListOfExpensesAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\ViewTransactionAsyncMB.cshtml" />
+    <Content Include="Views\Accountant\_MatchVoucherAsyncVMB.cshtml" />
+=======
+    <Content Include="Views\Accountant\_PurchaseListAsyncVP.cshtml" />
+>>>>>>> 66d0e4c38599ef06cb45f8fd86ad0bce370e359f
+=======
     <Content Include="Views\Accountant\GetPersonalAttendanceAsyncJY.cshtml" />
     <Content Include="Views\Accountant\GetStaffForPaySSAsync.cshtml" />
     <Content Include="Views\Accountant\Index.cshtml" />
     <Content Include="Views\Accountant\ProvisionalReciptAsyncJY.cshtml" />
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
