@@ -36,6 +36,5 @@ namespace GSTEducationERPLibrary.Account
             DataSet ds = await DBHelper.ExecuteStoreProcedureReturnDS("GSTTrainer", Param);
             return ds;
         }
-
     }
 }
