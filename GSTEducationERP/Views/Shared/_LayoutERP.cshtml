@@ -431,7 +431,8 @@
                                     </a>
                                 </li>
 
-                            } else if (staffPositionId == 2) //--coordinator
+                            }
+                            else if (staffPositionId == 2) //--coordinator
                             {
                                 <li class="nav-item">
                                     <a href="@Url.Action("CoordinatorDashboardPRAsync","Coordinator")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Coordinator/CoordinatorDashboardPRAsync") ? "active" : "")">
@@ -587,7 +588,8 @@
                                     </a>
                                 </li>
 
-                            } else if (staffPositionId == 5)  //---------placement
+                            }
+                            else if (staffPositionId == 5)  //---------placement
                             {
                                 <li class="nav-item">
                                     <a href="@Url.Action("PlcementDashboardPCAsync", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/PlcementDashboardPCAsync") ? "active" : "")">
@@ -692,7 +694,8 @@
                                     </a>
                                 </li>
 
-                            } else if (staffPositionId == 7)  //---------Accountant
+                            }
+                            else if (staffPositionId == 7)  //---------Accountant
                             {
                                 <li class="nav-item">
                                     <a href="@Url.Action("AccountantDashboardAsyncSGS", "Accountant")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/PlcementDashboardPCAsync") ? "active" : "")">
@@ -739,7 +742,7 @@
                                 </li>
 
                                 <li class="nav-item">
-                                    <a href="@Url.Action("ListAllMock", "Placement")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Placement/ListAllMock") ? "active" : "")">
+                                    <a href="@Url.Action("GetStaffForPaySSAsync", "Accountant")" class="nav-link @(Request.Url.AbsolutePath.Contains("/Accountant/GetStaffForPaySSAsync") ? "active" : "")">
                                         <i class="nav-icon fas fa-check-double"></i>
                                         <p>
                                             Staff Payroll

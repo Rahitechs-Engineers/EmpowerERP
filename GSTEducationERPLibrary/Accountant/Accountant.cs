@@ -99,5 +99,48 @@ namespace GSTEducationERPLibrary.Accountant
         #endregion
         //---------------------------vishals properties ends here-----------------------------------------------------------------------------------------------
 
+        //------------------Shrikant StaffPayRoll Start ----------------------------------------------------------//
+
+        #region 
+        public string StaffName { get; set; }
+        public string DepartmentName { get; set; }
+        public string Designation { get; set; }
+        public string StaffPosition { get; set; }
+        public string BranchName { get; set; }
+        public string CenterName { get; set; }
+        public string ClientName { get; set; }
+        public long AccountNo { get; set; }
+        public string IFSCCode { get; set; }
+        public decimal GrossSalary { get; set; }
+        public decimal AdvanceAmount { get; set; }
+        public decimal TotalAllowances { get; set; }
+        public decimal TotalDeductions { get; set; }
+        public decimal NetSalary { get; set; }
+        public decimal MonthlyBasicSalary { get; set; }
+        public decimal AdjustedNetSalary { get; set; }
+        public DateTime SalaryCreditedDate { get; set; }
+        public string Date { get; set; }
+        public List<Accountant> lstEmp { get; set; }
+        public List<Accountant> lstEmpAttendance { get; set; }
+        public List<Accountant> lstAllEmpAttendance { get; set; }
+        public List<Accountant> lstAllEmpAdvancePay { get; set; }
+        public List<Accountant> DepartmentList { get; set; }
+        public int DepartmentID { get; set; }
+        public int PaidDays { get; set; }
+        public int StaffPositionId { get; set; }
+        public int LeaveCount { get; set; }
+        public int PaidLeaveCount { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int ApprovedLeaveCount { get; set; }
+        public int PendingLeaveCount { get; set; }
+        public int PresentDays { get; set; }
+        public int AbsentDays { get; set; }
+        public decimal PayableDays { get; set; }
+
+        #endregion
+        //------------------Shrikant StaffPayRoll End ----------------------------------------------------------//
+
+
     }
 }
