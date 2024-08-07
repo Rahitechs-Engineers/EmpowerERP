@@ -1,0 +1,466 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+@{
+    ViewBag.Title = "Receipt";
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Receipt</title>
+    <style>
+        #signature-pad {
+            width: 400px;
+            height: 200px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            background-color: #EEF7FF; /* Set the background color */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .receipt {
+            width: 1000px;
+            margin: 20px auto;
+            border: 1px solid black;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .receipt h2 {
+                text-align: center;
+                text-decoration: underline;
+            }
+
+        .receipt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .receipt-header img {
+                width: 150px;
+            }
+
+            .receipt-header .details {
+                text-align: right;
+            }
+
+        .receipt p {
+            margin: 15px 0; /* Increase space between paragraphs globally */
+        }
+
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 30px; /* Increase top margin for table */
+        }
+
+            .receipt-table th, .receipt-table td {
+                border: 1px solid #33CCCC; /* Border color */
+                padding: 10px; /* Increase padding for table cells */
+                text-align: center;
+            }
+
+            .receipt-table th {
+                background-color: #3ABEF9;
+            }
+
+        .receipt-footer {
+            margin-top: 30px; /* Increase top margin for footer */
+        }
+
+            .receipt-footer p {
+                margin: 15px 0; /* Increase space between paragraphs in footer */
+            }
+
+            .receipt-footer .authorized-signatory {
+                text-align: right;
+                margin-top: 50px; /* Increase top margin for authorized signatory */
+            }
+
+        .receipt-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px; /* Increase top margin for receipt details */
+        }
+
+        .left-details {
+            flex: 1;
+            padding-left: 30px;
+        }
+
+        .right-details {
+            text-align: right;
+            padding-right: 30px;
+        }
+
+        .address {
+            text-align: right; /* Align content to the right */
+        }
+
+        .address-part {
+            margin-bottom: 5px; /* Space between address parts */
+        }
+
+        /* Additional styles for increased spacing */
+        .receipt-header {
+            margin-bottom: 30px; /* Increase bottom margin for receipt header */
+        }
+
+        .logo-container img {
+            max-width: 100px; /* Adjust logo size if necessary */
+        }
+    </style>
+
+    <!--<style>
+         #signature-pad {
+            width: 400px;
+            height: 200px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            background-color: #EEF7FF; /* Set the background color */
+        }
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+
+        .receipt {
+            width: 1000px;
+            margin: 20px auto;
+            border: 1px solid black;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .receipt h2 {
+            text-align: center;
+            text-decoration: underline;
+        }
+
+        .receipt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .receipt-header img {
+            width: 150px;
+        }
+
+        .receipt-header .details {
+            text-align: right;
+        }
+
+        .receipt p {
+            margin: 5px 0;
+        }
+
+        .receipt-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+            .receipt-table th, .receipt-table td {
+                border: 1px solid #33CCCC /*#A7E6FF*/;
+                padding: 8px;
+                text-align: center;
+            }
+
+            .receipt-table th {
+                background-color: #3ABEF9;
+            }
+
+        .receipt-footer {
+            margin-top: 20px;
+        }
+
+        .receipt-footer p {
+            margin: 5px 0;
+        }
+
+        .receipt-footer .authorized-signatory {
+            text-align: right;
+            margin-top: 40px;
+        }
+        .receipt-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .left-details {
+            flex: 1;
+            padding-left: 30px;
+        }
+
+        .right-details {
+            text-align: right;
+            padding-right: 30px;
+        }
+        .address {
+            text-align: right; /* Align content to the right */
+        }
+
+        .address-part {
+            margin-bottom: 5px; /* Space between address parts */
+        }
+        .receipt-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .left-details {
+            flex: 1;
+            padding-left: 30px;
+        }
+
+        .right-details {
+            text-align: right;
+            padding-right: 30px;
+        }
+
+        .left-details p {
+            margin: 15px 0; /* Increase space between paragraphs in left-details */
+        }-->
+    @*@media print {
+            .receipt {
+                width: 100%;
+                border: none;
+                box-shadow: none;
+            }
+        }*@
+    <!--</style>-->
+</head>
+<body>
+    <div class="card-body">
+        <div class="receipt">
+            <div class="receipt-header">
+                @*<img src="~/Content/Admin/img/GyaSoftLogo.png" alt=" Logo" />*@
+                <div class="logo-container">
+                    @*<img src="@Url.Content(Model.ClientLogo)" alt="Client Logo" />*@
+                    <img src="~/Content/Admin/img/@Model.ClientLogo" />
+
+                </div>
+                <div class="address">
+                    <p>@Model.addressPart1</p>
+                    <p>@Model.addressPart2</p>
+                    <p>@Model.addressPart3</p>
+                </div>
+
+            </div>
+            <h2>Provisional Receipt Voucher</h2>
+            <div class="receipt-details">
+                <div class="left-details" style="font-size:1.1rem">
+                    <p>Provisional Receipt No:- @Model.ProvisionalReceiptNo</p>
+                    <p>Received from:- @Model.Name</p>
+                    <p>Total Amount:- @Model.Amount.ToString("C")</p>
+                    <p>Drawn On:- @Model.DrawnOn</p>
+                    <p>Cheque no:- @Model.TransactionId</p>
+                </div>
+                <div class="right-details" style="font-size:1.1rem">
+                    <p>Receipt Date:- @Model.ProvisionalReceiptDate.ToString("d MMMM yyyy")</p>
+                    <p>PaymentMode:- @Model.PaymentMode</p>
+                    <p>Cheque Date:- @Model.ChequeDate.ToString("d MMMM yyyy")</p>
+                    @if (Model.Course == "XXX1")
+                    {
+                        <p hidden>Course:- @Model.Course</p>
+                    }
+                    else
+                    {
+
+
+                        <p>Course:- @Model.Course</p>
+                    }
+                    @if (Model.Batch == "XXX1")
+                    {
+                        <p hidden>Batch:- @Model.Batch</p>
+                    }
+                    else
+                    {
+
+
+                        <p>Batch:- @Model.Batch</p>
+                    }
+
+                </div>
+            </div>
+            <table class="receipt-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Admission Type</th>
+                        <th>Credit Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@Model.Name</td>
+                        <td>@Model.AdmissionType</td>
+                        <td>@Model.Amount.ToString("C")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="receipt-footer">
+                <p>Amount In Words:-<span id="inWordsAmount"></span></p>
+                @if (Model.CurrentInstallment == 0)
+                {
+                    <p id="currentInstallment" hidden>Current Installment: @Model.CurrentInstallment.ToString()</p>
+                }
+                else
+                {
+                    <p id="currentInstallment">Current Installment: @Model.CurrentInstallment.ToString()</p>
+                }
+
+
+
+
+
+                @if (Model.TotalFee == 000000000000)
+                {
+                    <p hidden> Total Fee:- @Model.TotalFee.ToString("C")</p>
+                }
+                else
+                {
+                    <p> Total Fee:- @Model.TotalFee.ToString("C")</p>
+                }
+
+                @if (Model.RemainingFee == 000000000000)
+                {
+                    <p hidden>Remaining Fee:- @Model.RemainingFee.ToString("C")</p>
+                }
+                else
+                {
+
+                    <p>Remaining Fee:- @Model.RemainingFee.ToString("C")</p>
+                }
+
+
+
+                @if (Model.NextInstallmentDate != DateTime.Now)
+                {
+                    <p hidden>Next Installment Date :- @Model.NextInstallmentDate.ToString("d MMMM yyyy")</p>
+                }
+                else
+                {
+                    <p>Next Installment Date :- @Model.NextInstallmentDate.ToString("d MMMM yyyy")</p>
+
+                }
+                @if (Model.NextInstallmentAmount == 000000000000)
+                {
+                    <p hidden>Next Installment Amount :- @Model.NextInstallmentAmount.ToString("C")</p>
+                }
+                else
+                {
+
+
+                    <p>Next Installment Amount :- @Model.NextInstallmentAmount.ToString("C")</p>
+                }
+                <div class="authorized-signatory">
+
+
+                </div>
+                <div style="text-align: right;">
+                    <p style="padding-right:90px">Authorized Signatory</p>
+                </div>
+            </div>
+            <p style="font-size:8px; text-align:center;">Note: Receipt valid subject to realization of cheque. Fees once paid are non-refundable.</p>
+
+        </div>
+
+    </div>
+</body>
+</html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+<script>
+
+
+    $(document).ready(function () {
+        var amount = @Model.Amount; // Assuming Amount is a property in your model
+        var inWords = convertNumberToWords(amount);
+        $('#inWordsAmount').text(inWords); // Assuming you have an element with id 'inWordsAmount'
+        });
+
+        function convertNumberToWords(number) {
+        var units = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+        var teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+        var tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+
+        if (number == 0) {
+        return 'Zero';
+        }
+
+        var words = '';
+
+        if (number < 10) {
+        words += units[number];
+        } else if (number < 20) {
+        words += teens[number - 10];
+        } else if (number < 100) {
+        words += tens[Math.floor(number / 10)];
+        if (number % 10 > 0) {
+        words += ' ' + units[number % 10];
+        }
+        } else if (number < 1000) {
+        words += units[Math.floor(number / 100)] + ' Hundred';
+        if (number % 100 > 0) {
+        words += ' ' + convertNumberToWords(number % 100);
+        }
+        } else if (number < 1000000) {
+        words += convertNumberToWords(Math.floor(number / 1000)) + ' Thousand';
+        if (number % 1000 > 0) {
+        words += ' ' + convertNumberToWords(number % 1000);
+        }
+        } else if (number < 1000000000) {
+        words += convertNumberToWords(Math.floor(number / 1000000)) + ' Million';
+        if (number % 1000000 > 0) {
+        words += ' ' + convertNumberToWords(number % 1000000);
+        }
+        } else {
+        words += convertNumberToWords(Math.floor(number / 1000000000)) + ' Billion';
+        if (number % 1000000000 > 0) {
+        words += ' ' + convertNumberToWords(number % 1000000000);
+        }
+        }
+
+        return words;
+        }
+
+</script>
+<script type="text/javascript">
+    function getInstallmentWithSuffix(installment) {
+        if (installment === 0) {
+            return installment;
+        }
+
+        const suffixes = ["<sup>th</sup>", "<sup>st</sup>", "<sup>nd</sup>", "<sup>rd</sup>"];
+        const v = installment % 100;
+
+        return installment + (suffixes[(v - 20) % 10] || suffixes[v] || suffixes[0]);
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        var installment = @Model.CurrentInstallment;
+        if (installment > 10) {
+            installment = 10;
+        }
+        var installmentText = getInstallmentWithSuffix(installment);
+        var installmentElement = document.getElementById("currentInstallment");
+
+        if (installment === 0) {
+            installmentElement.hidden = true;
+        } else {
+            installmentElement.hidden = false;
+            installmentElement.innerHTML = "Current Installment: " + installmentText;
+        }
+    });
+</script>
+

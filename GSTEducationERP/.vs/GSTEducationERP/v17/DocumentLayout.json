@@ -1,5 +1,6 @@
 {
   "Version": 1,
+<<<<<<< HEAD
   "WorkspaceRootPath": "E:\\NewERPProject\\EmpowerERP\\GSTEducationERP\\",
   "Documents": [
     {
@@ -51,30 +52,43 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERP\\controllers\\accountantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+=======
+  "WorkspaceRootPath": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\controllers\\accountantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:controllers\\accountantcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|d:\\vishal\u0027s project\\gsteduerp2\\empowererp\\gsteducationerp\\views\\accountant\\detailspurchaseasyncvp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\detailspurchaseasyncvp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|d:\\erpprojectjay\\empowererp3\\gsteducationerp\\views\\accountant\\provisionalreciptasyncjy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\provisionalreciptasyncjy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Swapnil Bandu Gajare\\AppData\\Local\\Temp\\.vsdbgsrc\\0968561cbfc1ab17cf9dffed4235abf4c06086fc3626a10c2aeebd7a41e9880e\\MSSQL.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|d:\\erpprojectjay\\empowererp3\\gsteducationerp\\views\\shared\\_layouterp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\shared\\_layouterp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{27C47EC8-F2C2-4C59-B9FF-735D6B0D968F}|..\\Helper\\Helper.csproj|d:\\vishal\u0027s project\\gsteduerp2\\empowererp\\helper\\mssql.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERP\\views\\accountant\\_matchvoucherasyncvm.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\_matchvoucherasyncvm.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{86A092F9-0B5F-4F73-8392-3BC5D95A0A3E}|..\\GSTEducationERPLibrary\\GSTEducationERPLibrary.csproj|d:\\erpprojectjay\\empowererp3\\gsteducationerplibrary\\accountant\\balaccountant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERP\\views\\accountant\\_purchaselistasyncvp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\_purchaselistasyncvp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{86A092F9-0B5F-4F73-8392-3BC5D95A0A3E}|..\\GSTEducationERPLibrary\\GSTEducationERPLibrary.csproj|d:\\erpprojectjay\\empowererp3\\gsteducationerplibrary\\accountant\\accountant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+<<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERP\\views\\accountant\\viewpurchaseasyncvp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{0B6A9BA1-57C6-447B-B980-D304906D4916}|GSTEducationERP.csproj|solutionrelative:views\\accountant\\viewpurchaseasyncvp.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
 >>>>>>> 66d0e4c38599ef06cb45f8fd86ad0bce370e359f
+=======
+      "AbsoluteMoniker": "D:0:0:{86A092F9-0B5F-4F73-8392-3BC5D95A0A3E}|..\\GSTEducationERPLibrary\\GSTEducationERPLibrary.csproj|d:\\erpprojectjay\\empowererp3\\gsteducationerplibrary\\account\\balaccount.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86A092F9-0B5F-4F73-8392-3BC5D95A0A3E}|..\\GSTEducationERPLibrary\\GSTEducationERPLibrary.csproj|d:\\erpprojectjay\\empowererp3\\gsteducationerplibrary\\account\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
     }
   ],
   "DocumentGroupContainers": [
@@ -102,6 +116,7 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+<<<<<<< HEAD
               "Title": "Accountant.cs",
               "DocumentMoniker": "D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERPLibrary\\Accountant\\Accountant.cs",
               "RelativeDocumentMoniker": "..\\GSTEducationERPLibrary\\Accountant\\Accountant.cs",
@@ -198,12 +213,14 @@
               "WhenOpened": "2024-08-06T09:24:45.541Z",
 =======
               "DocumentIndex": 3,
+=======
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
               "Title": "AccountantController.cs",
-              "DocumentMoniker": "D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERP\\Controllers\\AccountantController.cs",
+              "DocumentMoniker": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\Controllers\\AccountantController.cs",
               "RelativeDocumentMoniker": "Controllers\\AccountantController.cs",
-              "ToolTip": "D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERP\\Controllers\\AccountantController.cs",
+              "ToolTip": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\Controllers\\AccountantController.cs",
               "RelativeToolTip": "Controllers\\AccountantController.cs",
-              "ViewState": "AQIAAEIBAAAAAAAAAAAcwGsBAAAqAAAA",
+              "ViewState": "AQIAAIIEAAAAAAAAAIAwwJgEAABYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-30T16:09:50.29Z",
               "IsPinned": true,
@@ -212,6 +229,7 @@
             },
             {
               "$type": "Document",
+<<<<<<< HEAD
 <<<<<<< HEAD
               "DocumentIndex": 1,
               "Title": "ExpenseDashboardAsyncMB.cshtml",
@@ -234,7 +252,22 @@
               "WhenOpened": "2024-07-31T09:34:12.401Z",
               "IsPinned": true,
 >>>>>>> 66d0e4c38599ef06cb45f8fd86ad0bce370e359f
+=======
+              "DocumentIndex": 1,
+              "Title": "ProvisionalReciptAsyncJY.cshtml",
+              "DocumentMoniker": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\Views\\Accountant\\ProvisionalReciptAsyncJY.cshtml",
+              "RelativeDocumentMoniker": "Views\\Accountant\\ProvisionalReciptAsyncJY.cshtml",
+              "ToolTip": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\Views\\Accountant\\ProvisionalReciptAsyncJY.cshtml",
+              "RelativeToolTip": "Views\\Accountant\\ProvisionalReciptAsyncJY.cshtml",
+              "ViewState": "AQIAAJcBAAAAAAAAAAAgwK8BAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-08-05T11:06:12.604Z",
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
             },
             {
               "$type": "Document",
@@ -250,6 +283,7 @@
               "WhenOpened": "2024-08-06T09:02:46.136Z"
 =======
               "DocumentIndex": 4,
+<<<<<<< HEAD
               "Title": "DetailsPurchaseAsyncVP.cshtml",
               "DocumentMoniker": "D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERP\\Views\\Accountant\\DetailsPurchaseAsyncVP.cshtml",
               "RelativeDocumentMoniker": "Views\\Accountant\\DetailsPurchaseAsyncVP.cshtml",
@@ -297,42 +331,84 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-08-01T12:11:34.124Z",
               "IsPinned": true
+=======
+              "Title": "BALAccountant.cs",
+              "DocumentMoniker": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERPLibrary\\Accountant\\BALAccountant.cs",
+              "RelativeDocumentMoniker": "..\\GSTEducationERPLibrary\\Accountant\\BALAccountant.cs",
+              "ToolTip": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERPLibrary\\Accountant\\BALAccountant.cs",
+              "RelativeToolTip": "..\\GSTEducationERPLibrary\\Accountant\\BALAccountant.cs",
+              "ViewState": "AQIAAMMBAAAAAAAAAAAmwNcBAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-03T11:53:56.804Z"
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "MSSQL.cs",
-              "DocumentMoniker": "C:\\Users\\Swapnil Bandu Gajare\\AppData\\Local\\Temp\\.vsdbgsrc\\0968561cbfc1ab17cf9dffed4235abf4c06086fc3626a10c2aeebd7a41e9880e\\MSSQL.cs",
-              "ToolTip": "C:\\Users\\Swapnil Bandu Gajare\\AppData\\Local\\Temp\\.vsdbgsrc\\0968561cbfc1ab17cf9dffed4235abf4c06086fc3626a10c2aeebd7a41e9880e\\MSSQL.cs [Read Only]",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAhwCMAAAAYAAAA",
+              "Title": "Accountant.cs",
+              "DocumentMoniker": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERPLibrary\\Accountant\\Accountant.cs",
+              "RelativeDocumentMoniker": "..\\GSTEducationERPLibrary\\Accountant\\Accountant.cs",
+              "ToolTip": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERPLibrary\\Accountant\\Accountant.cs",
+              "RelativeToolTip": "..\\GSTEducationERPLibrary\\Accountant\\Accountant.cs",
+              "ViewState": "AQIAAGMAAAAAAAAAAAAAAHkAAAA6AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-06T16:14:58.527Z",
-              "EditorCaption": " [Read Only]"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "MSSQL.cs",
-              "DocumentMoniker": "D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\Helper\\MSSQL.cs",
-              "RelativeDocumentMoniker": "..\\Helper\\MSSQL.cs",
-              "ToolTip": "D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\Helper\\MSSQL.cs",
-              "RelativeToolTip": "..\\Helper\\MSSQL.cs",
-              "ViewState": "AQIAABMAAAAAAAAAAAAEwCsAAAAmAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-08-06T16:06:52.053Z"
+              "WhenOpened": "2024-08-03T11:53:34.518Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "_MatchVoucherAsyncVM.cshtml",
-              "DocumentMoniker": "D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERP\\Views\\Accountant\\_MatchVoucherAsyncVM.cshtml",
-              "RelativeDocumentMoniker": "Views\\Accountant\\_MatchVoucherAsyncVM.cshtml",
-              "ToolTip": "D:\\Vishal\u0027s Project\\GSTEduERP2\\EmpowerERP\\GSTEducationERP\\Views\\Accountant\\_MatchVoucherAsyncVM.cshtml",
-              "RelativeToolTip": "Views\\Accountant\\_MatchVoucherAsyncVM.cshtml",
-              "ViewState": "AQIAAM4AAAAAAAAAAAAAAN0AAAA6AAAA",
+              "Title": "Account.cs",
+              "DocumentMoniker": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERPLibrary\\Account\\Account.cs",
+              "RelativeDocumentMoniker": "..\\GSTEducationERPLibrary\\Account\\Account.cs",
+              "ToolTip": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERPLibrary\\Account\\Account.cs",
+              "RelativeToolTip": "..\\GSTEducationERPLibrary\\Account\\Account.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAmwCAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-03T11:52:34.43Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "BALAccount.cs",
+              "DocumentMoniker": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERPLibrary\\Account\\BALAccount.cs",
+              "RelativeDocumentMoniker": "..\\GSTEducationERPLibrary\\Account\\BALAccount.cs",
+              "ToolTip": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERPLibrary\\Account\\BALAccount.cs",
+              "RelativeToolTip": "..\\GSTEducationERPLibrary\\Account\\BALAccount.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAA3wCgAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-08-03T11:51:14.023Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Web.config",
+              "DocumentMoniker": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\Web.config",
+              "RelativeDocumentMoniker": "Web.config",
+              "ToolTip": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\Web.config",
+              "RelativeToolTip": "Web.config",
+              "ViewState": "AQIAACEAAAAAAAAAAAAAADMAAAB0AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-07-30T16:25:05.585Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "_LayoutERP.cshtml",
+              "DocumentMoniker": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\Views\\Shared\\_LayoutERP.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_LayoutERP.cshtml",
+              "ToolTip": "D:\\ERPPRojectJay\\EmpowerERP3\\GSTEducationERP\\Views\\Shared\\_LayoutERP.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_LayoutERP.cshtml",
+              "ViewState": "AQIAAPUCAAAAAAAAAAAEwBIDAAA9AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+<<<<<<< HEAD
               "WhenOpened": "2024-08-01T08:05:21.583Z"
 >>>>>>> 66d0e4c38599ef06cb45f8fd86ad0bce370e359f
+=======
+              "WhenOpened": "2024-07-30T16:20:21.49Z",
+              "EditorCaption": ""
+>>>>>>> 0cf263b568412b961a747309b73861cf33eba645
             }
           ]
         }
