@@ -1,0 +1,70 @@
+﻿@model GSTEducationERPLibrary.Accountant.Accountant
+
+@{
+    ViewBag.Title = "GetStaffForPaySSAsync";
+    Layout = "~/Views/Shared/_LayoutERP.cshtml";
+}
+
+<h2>GetStaffForPaySSAsync</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StaffName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Department)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Designation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BankName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IFSCCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GrossSalary)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.lstEmp) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.StaffName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Department)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Designation)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BankName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IFSCCode)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GrossSalary)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

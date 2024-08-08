@@ -41,7 +41,7 @@ namespace Helper
                 }
                 SqlDataAdapter da = new SqlDataAdapter();
                 da.SelectCommand = cmd;
-                await Task.Run(() => da.Fill(ds));
+                await Task.Run(() =>  da.Fill(ds));
 
             }
             catch (Exception ex)

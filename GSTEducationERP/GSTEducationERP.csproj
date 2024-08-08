@@ -1163,6 +1163,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Accountant\AddBankPartialView.cshtml" />
     <Content Include="Views\Accountant\AddNewBankAccountAsyncAN.cshtml" />
     <Content Include="Views\Accountant\BankAccountListAsyncAN.cshtml" />
@@ -1173,6 +1174,9 @@
     <Content Include="Views\Accountant\CashRecievedViewAN.cshtml" />
     <Content Include="Views\Accountant\CashTransactionsAsyncAN.cshtml" />
     <Content Include="Views\Accountant\BankAccountStatementAsyncAN.cshtml" />
+=======
+    <Content Include="Views\Accountant\_PurchaseListAsyncVP.cshtml" />
+>>>>>>> 4909f8885d1c69a47f3544ca2beb564852974bc3
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

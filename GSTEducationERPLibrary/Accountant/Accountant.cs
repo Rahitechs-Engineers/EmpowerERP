@@ -15,9 +15,12 @@ namespace GSTEducationERPLibrary.Accountant
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
         public int VoucherId { get; set; }
         public string VoucherCode { get; set; }
+        [Required(ErrorMessage = "Vendor Name is Requered")]
+        [DisplayName("Vendor Name")]
         public string VendorName { get; set; }
         public float Amount { get; set; }
         public string AmountPaidTo { get; set; }
+        [Required(ErrorMessage = "Description is Requered")]
         public string Description { get; set; }
         public string PaymentMode { get; set; }
         public int BankId { get; set; }
@@ -47,7 +50,7 @@ namespace GSTEducationERPLibrary.Accountant
 	public List<Accountant> lstPendingVoucher { get; set; }
         //------------------SHREYAYAS Voucher Start --------------------------------------------------------------//
         //----------------------------------------vishla's properties here-----------------------------------------------------------------------------------
-        #region
+        #region//vishals region starts here for purchase
         /// <summary>
         /// vishals properties starts from here 
         /// </summary>
@@ -76,10 +79,10 @@ namespace GSTEducationERPLibrary.Accountant
         /// properties for the purchase  table here
         /// </summary>
         public string TransactionCode { get; set; }
-
+        [Required]
         [DataType(DataType.Date)]
         [DisplayName("Transaction Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime TransactionDate { get; set; }
         [DisplayName("Paid amount")]
         public double TransactionAmount { get; set; }
