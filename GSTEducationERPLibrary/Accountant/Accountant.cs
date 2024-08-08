@@ -158,6 +158,7 @@ namespace GSTEducationERPLibrary.Accountant
         public string EmailId { get; set; }
         public string TransactionType { get; set; }
         public string Rupees { get; set; }
+        public string ExpenseCategory { get; set; }
 
         #endregion
 

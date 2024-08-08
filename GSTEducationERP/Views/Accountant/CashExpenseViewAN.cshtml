@@ -6,16 +6,6 @@
     <meta charset="utf-8" />
     <title>Payment Successful</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
         .receipt-container {
             background-color: white;
             padding: 20px;
@@ -66,14 +56,15 @@
     <div class="receipt-container">
         <div class="receipt-header">Payment successful</div>
         <div class="receipt-details">
-            <p><strong>Payment type:</strong> @Model.PaymentMode</p>
-            <p><strong>Date:</strong> @Model.Date</p>
-            <p><strong>Transaction ID:</strong> @Model.TransactionCode</p>
-            <p><strong>Amount paid:</strong> @Model.Amount</p>
+            <p><strong>Vendor Name:</strong> @Model.VendorName</p>
+            <p hidden><strong>Transaction ID:</strong> @Model.TransactionCode</p>
+            <p><strong>Paid Date:</strong> @Model.Date</p>
+            <p><strong>Paid Amount:</strong> @Model.Amount</p>
             <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Status:</strong> @Model.Status</p>
+            <p><strong>Expense Category:</strong> @Model.ExpenseCategory</p>
         </div>
         <div class="receipt-buttons">
-            <button class="print-btn" onclick="window.print()">PRINT</button>
             <button class="close-btn" onclick="window.close()">CLOSE</button>
         </div>
     </div>

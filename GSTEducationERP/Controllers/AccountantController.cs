@@ -1262,10 +1262,6 @@ namespace GSTEducationERP.Controllers
                     objDetails.BankAmount = float.Parse(dr["Balance"].ToString());
                 }
                 dr.Close();
-
-                //Accountant objDetails = new Accountant();
-                //objDetails.BankId = BankId;
-                //objDetails.BranchCode = Session["BranchCode"].ToString();
                 DataSet ds = await objbal.BankTransactionHistory(objDetails);
                 List<Accountant> lstBankTrans = new List<Accountant>();
                 for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
@@ -1303,13 +1299,20 @@ namespace GSTEducationERP.Controllers
         /// <returns>List of Cash Transactions</returns>
         public async Task<ActionResult> CashTransactionsAsyncAN()
         {
-            List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
+            if (Session["StaffCode"] == null)
+            {
+                return await Task.Run(() => RedirectToAction("Login", "Account"));
+            }
+            else
+            {
+                List<BreadcrumbItem> breadcrumbs = new List<BreadcrumbItem>
               {
                   new BreadcrumbItem { Name = "Dashboard", Url = "AccountantDashboardAsyncSGS" },
                   new BreadcrumbItem { Name = "Cash Transactions", Url = "CashTransactionsAsyncAN" },
               };
-            ViewBag.Breadcrumbs = breadcrumbs;
-            return await Task.Run(() => View());
+                ViewBag.Breadcrumbs = breadcrumbs;
+                return await Task.Run(() => View());
+            }
         }
 
         /// <summary>
@@ -1397,15 +1400,17 @@ namespace GSTEducationERP.Controllers
                 Accountant objView = new Accountant();
                 objView.TransactionCode = TransactionCode;
                 objView.BranchCode = Session["BranchCode"].ToString();
-                SqlDataReader dr = await objbal.BankAccountTransactionDetailsAsync(objView);
+                SqlDataReader dr = await objbal.CashDeductionTransferViewAN(objView);
 
                 if (dr.Read())
                 {
-                    objView.PaymentMode = dr["PaymentMode"].ToString();
+                    objView.VendorName = dr["VendorName"].ToString();
                     objView.TransactionCode = dr["TransactionCode"].ToString();
                     objView.Date = Convert.ToDateTime(dr["TransactionDate"].ToString());
                     objView.Amount = float.Parse(dr["TransactionAmount"].ToString());
                     objView.Description = dr["Description"].ToString();
+                    objView.Status = dr["Status"].ToString();
+                    objView.ExpenseCategory = dr["ExpenseCategory"].ToString();
                 }
 
                 dr.Close();
@@ -1450,30 +1455,6 @@ namespace GSTEducationERP.Controllers
             }
         }
 
-        /// <summary>
-        /// Filter of Start Date and End Date on Table List
-        /// </summary>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns>Date Filter</returns>
-        [HttpPost]
-        public async Task<JsonResult> FilterDateCashTransactionsAN(DateTime startDate, DateTime endDate)
-        {
-
-            try
-            {
-                objac.BranchCode = Session["BranchCode"].ToString();
-                DataSet ds = await objbal.FilterDateCashTransactions(startDate, endDate,    objac.BranchCode);
-                DataTable dt = new DataTable();
-                dt = ds.Tables[0];
-                var jsondata = JsonConvert.SerializeObject(dt);
-                return await Task.Run(() => Json(jsondata));
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
 
         /// <summary>
         /// Delete Bank Account if if they don't have any Transactions Yet

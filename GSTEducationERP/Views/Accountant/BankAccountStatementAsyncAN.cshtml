@@ -86,7 +86,6 @@
 
 
         <div class="card" style="width:50%; margin: 0 auto;">
-
             <table>
                 <tr>
                     <td><p><strong>Bank Name:</strong> @Model.BankName</p></td>
@@ -103,18 +102,15 @@
             <table id="example1" class="table table-bordered table-striped custom-table">
                 <thead>
                     <tr>
-
                         <th>Transaction Date</th>
-                        <th hidden>Transaction Date</th>
-                        @*<th>Transaction Code</th>*@
-
+                        <th hidden>Transaction Date</th>           
                         <th>Name</th>
                         <th>Transaction Id</th>
                         <th>Description</th>
                         <th>Status</th>
                         <th>Amount</th>
                         <th>Balance</th>
-                        @*<th>Transaction Type</th>*@
+                    
                     </tr>
                 </thead>
                 <tbody>
@@ -123,16 +119,14 @@
                         <tr class="@(item.TransactionType == "Credit" ? "credit" : "debit")">
 
                             <td>@Html.DisplayFor(modelItem => item.Date)</td>
-                            <td hidden>@Html.DisplayFor(modelItem => item.Date)</td>
-                            @*<td>@Html.DisplayFor(modelItem => item.TransactionCode)</td>*@
-
+                            <td hidden>@Html.DisplayFor(modelItem => item.Date)</td>                       
                             <td>@Html.DisplayFor(modelItem => item.ReceiverBankAccountHolderName)</td>
                             <td>@Html.DisplayFor(modelItem => item.TransactionId)</td>
                             <td>@Html.DisplayFor(modelItem => item.Description)</td>
                             <td>@Html.DisplayFor(modelItem => item.Status)</td>
                             <td>@Html.DisplayFor(modelItem => item.Amount)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Balance)</td>
-                            @*<td>@Html.DisplayFor(modelItem => item.TransactionType)</td>*@
+                            <td>@String.Format("{0:N2} ₹", item.Balance)</td>
+                 
                         </tr>
                     }
                 </tbody>

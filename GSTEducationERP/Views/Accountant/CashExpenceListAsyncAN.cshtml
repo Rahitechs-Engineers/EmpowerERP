@@ -84,7 +84,7 @@
                 </video>
             </a>*@
 
-                            <a href="#" class="icon bank-transaction" id="CashRecieptTransaction" data-bank-id="@item.BankId" data-toggle="modal" data-target="#CashHistory" title="View Cash Reciept">
+                            <a href="#" class="icon cash-Expense" data-bank-id="@item.TransactionCode" data-toggle="modal" data-target="#CashHistory" title="View Cash Reciept">
                                 <video width="25" height="25" playsinline loop>
                                     <source src="~/Content/Admin/icon/view.mp4" type="video/mp4">
                                 </video>
@@ -109,10 +109,10 @@
     </div>
 </div>-->
 <div class="modal fade" id="CashHistory" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel" style="color: #33CCCC;">Update Applied Leave</h5>
+                <h5 class="modal-title" id="exampleModalLabel" style="color: #33CCCC;">Cash Deduction</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -124,27 +124,31 @@
         </div>
     </div>
 </div>
+
+
 <script>
-    $("#CashRecieptTransaction").on('click', function (e) {
-        e.preventDefault();
-        var bankId = $(this).data('bank-id');
+    $(document).ready(function () {
         debugger;
-        $.ajax({
-            url: '/Accountant/BankAccountTransactionDetailsAsyncAN',
-            type: 'GET',
-            data: {
-                BankId: bankId
-            },
-            success: function (data) {
-                debugger;
-                $('#CashHistory .modal-body').html(data);
-                $('#CashHistory .modal-header h2').text('Bank History');
-                $('#CashHistory').modal('show');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                console.error("Error: " + textStatus, errorThrown);
-                alert("An error occurred while fetching bank details.");
-            }
+        $(document).on('click', '.cash-Expense', function (e) {
+            e.preventDefault();
+            var transactionid = $(this).data('bank-id');
+            console.log("Transaction ID: " + transactionid);
+            debugger;
+            $.ajax({
+                url: '/Accountant/CashExpenseViewAN',
+                type: 'GET',
+                data: { TransactionCode: transactionid },
+                success: function (data) {
+                    console.log("Data received:", data);
+                    $('#CashHistory .modal-body').html(data);
+                    $('#CashHistory .modal-header h5').text('Cash Deduction');
+                    $('#CashHistory').modal('show');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error("Error: " + textStatus, errorThrown);
+                    alert("An error occurred while fetching bank details.");
+                }
+            });
         });
     });
 </script>

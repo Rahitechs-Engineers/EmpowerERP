@@ -525,7 +525,6 @@ namespace GSTEducationERPLibrary.Accountant
             return ds;
         }
 
-        //Remaining Date Filter in Stored Procedure
         public async Task<DataSet> FilterDateCashTransactions(DateTime startDate, DateTime endDate, object BranchCode)
         {
             Dictionary<string, string> Param = new Dictionary<string, string>();
@@ -542,6 +541,15 @@ namespace GSTEducationERPLibrary.Accountant
         {
             Dictionary<string, string> Param = new Dictionary<string, string>();
             Param.Add("@Flag", "CashRecievedTransferViewAN");
+            Param.Add("@TransactionCode", obj.TransactionCode);
+            SqlDataReader dr = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
+            return dr;
+        }
+        
+        public async Task<SqlDataReader> CashDeductionTransferViewAN(Accountant obj)
+        {
+            Dictionary<string, string> Param = new Dictionary<string, string>();
+            Param.Add("@Flag", "CashGoneTransferViewAN");
             Param.Add("@TransactionCode", obj.TransactionCode);
             SqlDataReader dr = await DBHelper.ExecuteStoreProcedureReturnDataReader("GSTAccountant", Param);
             return dr;
